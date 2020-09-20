@@ -55,3 +55,4 @@ FetchContent_MakeAvailable(imgui)
 # setup compilation targets
 add_executable(mesh_editor main.cpp)
 target_link_libraries(mesh_editor PRIVATE glfw glad)
+target_compile_features(mesh_editor PRIVATE cxx_std_17)
