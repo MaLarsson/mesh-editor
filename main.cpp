@@ -44,7 +44,7 @@ static int CompileShader(unsigned type, std::string_view data) {
   return id;
 }
 
-int main() {
+int main__() {
   glfwSetErrorCallback(ErrorCallback);
 
   if (!glfwInit()) return 1;
@@ -135,5 +135,12 @@ int main() {
   glfwDestroyWindow(window);
   glfwTerminate();
 
+  return 0;
+}
+
+#include "src/import/ifc/parser.h"
+
+int main() {
+  ifc::Parser parser("test.ifc");
   return 0;
 }
