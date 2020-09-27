@@ -12,10 +12,10 @@
 namespace ifc {
 
 class Parser {
- public:
+public:
   Parser(std::string_view filename);
 
- private:
+private:
   std::vector<std::unique_ptr<IfcEntity>> entities;
 };
 
