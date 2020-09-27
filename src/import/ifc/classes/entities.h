@@ -4,18 +4,19 @@
 #define IMPORT_IFC_CLASSES_ENTITIES_H_
 
 #include "types.h"
-#include "utility.h"
+
+#include <vector>
 
 namespace ifc {
 
-struct Entity {};
+struct IfcEntity {};
 
-struct RepresentationItem : Entity {};
-struct GeometricRepresentationItem : RepresentationItem {};
-struct Point : GeometricRepresentationItem {};
+struct IfcRepresentationItem : IfcEntity {};
+struct IfcGeometricRepresentationItem : IfcRepresentationItem {};
+struct IfcPoint : IfcGeometricRepresentationItem {};
 
-struct CartesianPoint : Point {
-  Vec3<LengthMeasure> Coordinates;
+struct IfcCartesianPoint : IfcPoint {
+  std::vector<IfcLengthMeasure> Coordinates;
 };
 
 } // namespace ifc

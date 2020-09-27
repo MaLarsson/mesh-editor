@@ -16,7 +16,7 @@ class Parser {
   Parser(std::string_view filename);
 
  private:
-  std::vector<std::unique_ptr<Entity>> entities;
+  std::vector<std::unique_ptr<IfcEntity>> entities;
 };
 
 } // namespace ifc

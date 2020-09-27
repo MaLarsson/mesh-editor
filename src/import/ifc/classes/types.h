@@ -5,7 +5,7 @@
 
 namespace ifc {
 
-using LengthMeasure = double;
+using IfcLengthMeasure = double;
 
 } // namespace ifc
 
