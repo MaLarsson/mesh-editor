@@ -3,37 +3,14 @@
 #ifndef IMPORT_IFC_LEXER_H_
 #define IMPORT_IFC_LEXER_H_
 
+#include "token.h"
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string_view>
 
 namespace ifc {
-
-enum TokenType {
-  TOKEN_LPAREN,
-  TOKEN_RPAREN,
-  TOKEN_EQUAL,
-
-  TOKEN_EOF,
-  TOKEN_TYPE,
-  TOKEN_IDENT,
-
-  TOKEN_KW_HEADER,
-  TOKEN_KW_ENDSEC,
-  TOKEN_KW_DATA,
-
-  TOKEN_UNKNOWN
-};
-
-struct Token {
-  TokenType type;
-
-  union {
-    int number;
-    std::string_view string;
- } value{0};
-};
 
 class Lexer {
 public:
@@ -54,26 +31,26 @@ public:
     }
   }
 
-  Token getNextToken() {
-    Token tok;
+  tok::Token getNextToken() {
+    tok::Token tok;
 
     if (pos == file_size) {
-      tok.type = TOKEN_EOF;
+      tok.kind = tok::TOKEN_EOF;
       return tok;
     }
 
     switch (file[pos]) {
     case '(':
-      tok.type = TOKEN_LPAREN;
+      tok.kind = tok::TOKEN_LPAREN;
       break;
     case ')':
-      tok.type = TOKEN_RPAREN;
+      tok.kind = tok::TOKEN_RPAREN;
       break;
     case '=':
-      tok.type = TOKEN_EQUAL;
+      tok.kind = tok::TOKEN_EQUAL;
       break;
     case '#':
-      tok.type = TOKEN_IDENT;
+      tok.kind = tok::TOKEN_IDENTIFIER;
       tok.value.number = 0;
       while (isdigit(file[++pos])) {
         tok.value.number *= 10;
@@ -83,7 +60,7 @@ public:
       break;
     case 'I':
       if (file[pos + 1] == 'F' && file[pos + 2] == 'C') {
-        tok.type = TOKEN_TYPE;
+        tok.kind = tok::TOKEN_ENTITY;
         char* start = &file[pos];
         int identifier_length = 1;
         while (isalpha(file[++pos]))
@@ -93,7 +70,7 @@ public:
       }
       break;
     default:
-      tok.type = TOKEN_UNKNOWN;
+      tok.kind = tok::TOKEN_UNKNOWN;
       break;
     }
 

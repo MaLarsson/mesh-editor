@@ -8,26 +8,36 @@ namespace ifc {
 
 Parser::Parser(std::string_view filename) {
   Lexer lexer(filename);
-  Token tok = lexer.getNextToken();
+  tok::Token tok = lexer.getNextToken();
 
   int id = -1;
 
-  while (tok.type != TOKEN_EOF) {
-    Token next_token = lexer.getNextToken();
+  while (tok.kind != tok::TOKEN_EOF) {
+    tok::Token next_token = lexer.getNextToken();
 
-    if (tok.type == TOKEN_IDENT && next_token.type == TOKEN_EQUAL) {
-      // std::cout << tok.value.number << '\n';
+    if (tok.kind == tok::TOKEN_IDENTIFIER && next_token.kind == tok::TOKEN_EQUAL) {
       id = tok.value.number;
-    } else if (tok.type == TOKEN_TYPE) {
+    } else if (tok.kind == tok::TOKEN_ENTITY) {
+      // TODO: do this for all entities, not just cartesion points
       if (tok.value.string == "IFCCARTESIANPOINT") {
-        // std::cout << id << ": " << tok.value.string << '\n';
+
+        // TODO: set the size in the begining, dont keep increasing like this
+        if (entities.size() < id) {
+          entities.resize(id);
+        }
 
         IfcEntity* entity = AllocateEntity(tok.value.string);
-        entities.push_back(std::unique_ptr<IfcEntity>(entity));
+        entities[id - 1] = std::unique_ptr<IfcEntity>(entity);
       }
     }
 
     tok = next_token;
+  }
+
+  for (auto&& entity : entities) {
+    if (entity.get() != nullptr) {
+      // std::cout << "certesian point!\n";
+    }
   }
 }
 
