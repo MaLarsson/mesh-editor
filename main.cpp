@@ -141,6 +141,6 @@ int main__() {
 #include "src/import/ifc/parser.h"
 
 int main() {
-  ifc::Parser parser("test.ifc");
+  ifc::Parser parser("../test.ifc");
   return 0;
 }
