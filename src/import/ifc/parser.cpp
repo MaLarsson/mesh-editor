@@ -18,6 +18,8 @@ Parser::Parser(std::string_view filename) {
     if (tok.kind == tok::TOKEN_IDENTIFIER && next_token.kind == tok::TOKEN_EQUAL) {
       id = tok.value.number;
     } else if (tok.kind == tok::TOKEN_ENTITY) {
+      std::cout << tok.value.string << '\n';
+
       // TODO: do this for all entities, not just cartesion points
       if (tok.value.string == "IFCCARTESIANPOINT") {
 
@@ -29,15 +31,11 @@ Parser::Parser(std::string_view filename) {
         IfcEntity* entity = AllocateEntity(tok.value.string);
         entities[id - 1] = std::unique_ptr<IfcEntity>(entity);
       }
+    } else if (tok.kind == tok::TOKEN_ERROR) {
+      std::cout << "ERROR!\n";
     }
 
     tok = next_token;
-  }
-
-  for (auto&& entity : entities) {
-    if (entity.get() != nullptr) {
-      // std::cout << "certesian point!\n";
-    }
   }
 }
 

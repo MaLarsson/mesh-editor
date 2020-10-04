@@ -14,7 +14,7 @@ namespace ifc {
 
 class Lexer {
 public:
-  Lexer(std::string_view filename) : pos(0) {
+  Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0) {
     FILE* file_handle = fopen(filename.data(), "rb");
 
     if (file_handle) {
@@ -33,13 +33,14 @@ public:
 
   tok::Token getNextToken() {
     tok::Token tok;
+    eatWhitespace();
 
     if (pos == file_size) {
       tok.kind = tok::TOKEN_EOF;
       return tok;
     }
 
-    switch (file[pos]) {
+    switch (file[pos++]) {
     case '(':
       tok.kind = tok::TOKEN_LPAREN;
       break;
@@ -49,24 +50,21 @@ public:
     case '=':
       tok.kind = tok::TOKEN_EQUAL;
       break;
+    case ',':
+      tok.kind = tok::TOKEN_COMMA;
+      break;
     case '#':
-      tok.kind = tok::TOKEN_IDENTIFIER;
-      tok.value.number = 0;
-      while (isdigit(file[++pos])) {
-        tok.value.number *= 10;
-        tok.value.number += (file[pos] - '0');
+      if (!isdigit(file[pos])) {
+        tok.kind = tok::TOKEN_ERROR;
+      } else {
+        tok.kind = tok::TOKEN_IDENTIFIER;
+        tok.value.number = parseInteger();
       }
-      --pos;
       break;
     case 'I':
-      if (file[pos + 1] == 'F' && file[pos + 2] == 'C') {
+      if (file[pos] == 'F' && file[pos + 1] == 'C') {
         tok.kind = tok::TOKEN_ENTITY;
-        char* start = &file[pos];
-        int identifier_length = 1;
-        while (isalpha(file[++pos]))
-          ++identifier_length;
-        --pos;
-        tok.value.string = std::string_view(start, identifier_length);
+        tok.value.string = parseEntityString();
       }
       break;
     default:
@@ -74,9 +72,34 @@ public:
       break;
     }
 
-    ++pos;
-
     return tok;
+  }
+
+  void eatWhitespace() {
+    for (; isspace(file[pos]); ++pos) {
+      if (pos == file_size)
+        return;
+    }
+  }
+
+  int parseInteger() {
+    int number = 0;
+
+    for (; isdigit(file[pos]); ++pos) {
+      number *= 10;
+      number += (file[pos] - '0');
+    }
+
+    return number;
+  }
+
+  std::string_view parseEntityString() {
+    char* start = &file[pos - 1];
+    typename std::string_view::size_type identifier_length = 1;
+    for (; isalpha(file[pos]); ++pos)
+      ++identifier_length;
+
+    return {start, identifier_length};
   }
 
 private:

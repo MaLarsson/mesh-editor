@@ -11,6 +11,7 @@ enum TokenKind {
   TOKEN_LPAREN,
   TOKEN_RPAREN,
   TOKEN_EQUAL,
+  TOKEN_COMMA,
 
   TOKEN_EOF,
   TOKEN_ENTITY,
@@ -20,6 +21,7 @@ enum TokenKind {
   TOKEN_KW_ENDSEC,
   TOKEN_KW_DATA,
 
+  TOKEN_ERROR,
   TOKEN_UNKNOWN
 };
 
