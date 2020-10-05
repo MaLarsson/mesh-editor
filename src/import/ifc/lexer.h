@@ -53,6 +53,12 @@ public:
     case ',':
       tok.kind = tok::TOKEN_COMMA;
       break;
+    case ';':
+      tok.kind = tok::TOKEN_SEMICOLON;
+      break;
+    case '$':
+      tok.kind = tok::TOKEN_NULL;
+      break;
     case '#':
       if (!isdigit(file[pos])) {
         tok.kind = tok::TOKEN_ERROR;
@@ -68,7 +74,12 @@ public:
       }
       break;
     default:
-      tok.kind = tok::TOKEN_UNKNOWN;
+      if (isdigit(file[pos - 1])) {
+        tok.kind = tok::TOKEN_FLOAT_LITERAL;
+        tok.value.floating_point = parseNumber();
+      } else {
+        tok.kind = tok::TOKEN_UNKNOWN;
+      }
       break;
     }
 
@@ -89,6 +100,30 @@ public:
       number *= 10;
       number += (file[pos] - '0');
     }
+
+    return number;
+  }
+
+  double parseNumber() {
+    double number = 0;
+    bool decimal = false;
+    double decimal_divider = 10;
+
+    // TODO: ugh... deal with the pos problem...
+    for (; isdigit(file[pos - 1]) || file[pos - 1] == '.'; ++pos) {
+      if (file[pos - 1] == '.') {
+        decimal = true;
+      } else if (decimal) {
+        double dec = (file[pos - 1] - '0') / decimal_divider;
+        decimal_divider *= 10;
+        number += dec;
+      } else {
+        number *= 10;
+        number += (file[pos - 1] - '0');
+      }
+    }
+
+    --pos;
 
     return number;
   }

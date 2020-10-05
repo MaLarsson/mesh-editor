@@ -13,10 +13,13 @@ Parser::Parser(std::string_view filename) {
   int id = -1;
 
   while (tok.kind != tok::TOKEN_EOF) {
+    std::cout << tok.kind << '\n';
     tok::Token next_token = lexer.getNextToken();
 
     if (tok.kind == tok::TOKEN_IDENTIFIER && next_token.kind == tok::TOKEN_EQUAL) {
       id = tok.value.number;
+    } else if (tok.kind == tok::TOKEN_FLOAT_LITERAL) {
+      std::cout << "float: " << tok.value.floating_point << '\n';
     } else if (tok.kind == tok::TOKEN_ENTITY) {
       std::cout << tok.value.string << '\n';
 

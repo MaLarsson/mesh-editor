@@ -12,17 +12,22 @@ enum TokenKind {
   TOKEN_RPAREN,
   TOKEN_EQUAL,
   TOKEN_COMMA,
+  TOKEN_SEMICOLON,
 
-  TOKEN_EOF,
+  TOKEN_NULL,
   TOKEN_ENTITY,
   TOKEN_IDENTIFIER,
+  TOKEN_STRING_LITERAL,
+  TOKEN_INT_LITERAL,
+  TOKEN_FLOAT_LITERAL,
 
   TOKEN_KW_HEADER,
   TOKEN_KW_ENDSEC,
   TOKEN_KW_DATA,
 
   TOKEN_ERROR,
-  TOKEN_UNKNOWN
+  TOKEN_UNKNOWN,
+  TOKEN_EOF
 };
 
 struct Token {
@@ -33,6 +38,7 @@ struct Token {
 
   union {
     int number;
+    double floating_point;
     std::string_view string;
  } value{0};
 };
