@@ -40,7 +40,7 @@ struct Token {
     int number;
     double floating_point;
     std::string_view string;
- } value{0};
+  } value{0};
 };
 
 } // namespace ifc::tok

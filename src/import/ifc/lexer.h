@@ -75,8 +75,14 @@ public:
       break;
     default:
       if (isdigit(file[pos - 1])) {
-        tok.kind = tok::TOKEN_FLOAT_LITERAL;
-        tok.value.floating_point = parseNumber();
+        Number num = parseNumber();
+        if (num.is_floating_point) {
+          tok.kind = tok::TOKEN_FLOAT_LITERAL;
+          tok.value.floating_point = num.value;
+        } else {
+          tok.kind = tok::TOKEN_INT_LITERAL;
+          tok.value.number = static_cast<int>(num.value);
+        }
       } else {
         tok.kind = tok::TOKEN_UNKNOWN;
       }
@@ -104,7 +110,12 @@ public:
     return number;
   }
 
-  double parseNumber() {
+  struct Number {
+    double value;
+    bool is_floating_point;
+  };
+
+  Number parseNumber() {
     double number = 0;
     bool decimal = false;
     double decimal_divider = 10;
@@ -125,7 +136,7 @@ public:
 
     --pos;
 
-    return number;
+    return {number, decimal};
   }
 
   std::string_view parseEntityString() {

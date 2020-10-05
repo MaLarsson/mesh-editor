@@ -139,8 +139,14 @@ int main__() {
 }
 
 #include "src/import/ifc/parser.h"
+#include <chrono>
 
 int main() {
-  ifc::Parser parser("../test2.ifc");
+  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+  ifc::Parser parser("../test.ifc");
+  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << '\n';
+
   return 0;
 }
