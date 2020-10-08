@@ -5,54 +5,69 @@ _IfcVersion = "IFC4X1"
 _IfcSchemaFile = _IfcVersion + ".exp"
 _CppTypeFile = "type.h"
 _CppEntityFile = "entity.h"
-_Type = "TYPE"
-_Entity = "ENTITY"
-_EndEntity = "END_ENTITY"
-_Containers = ["ARRAY", "LIST", "SET", "SELECT"]
+_Type = "TYPE "
+_Entity = "ENTITY "
+_End = "END_"
+_Types = ["BOOLEAN", "NUMBER", "REAL", "INTEGER", "STRING", "BINARY"]
+_Containers = ["ARRAY", "LIST", "SET", "ENUMERATION", "SELECT", "LOGICAL"]
 _TypeMap = {
     "BOOLEAN": "bool",
     "NUMBER": "double",
     "REAL": "double",
     "INTEGER": "int",
-    "BINARY": "std::vector<std::byte>",
     "STRING": "std::string",
+    "BINARY": "std::vector<std::byte>",
+    "ARRAY": "std::array",
     "LIST": "std::vector",
     "SET": "std::unordered_set",
     "SELECT": "std::variant"
 }
 
-"""Classes"""
-# FACTORY
-class AbsConverterFactory:
+"""Converter factory"""
+class ConverterFactory:
     def get_converter(self, block):
         converter = None
         if block.startswith(_Type):
-            tokens = block[0:-2].split()
-            name = tokens[1]
-            type = tokens[-1]
-            container = tokens[3]
-            if type == "ENUMERATION":
-                converter = EnumTypeConverter()
-            elif container in _Containers:
-                converter = ContainerTypeConverter(name, type, container)
-            else:
-                converter = BasicTypeConverter(name, type)
+            converter = self.get_type_converter(block)
         elif block.startswith(_Entity):
             converter = EntityConverter()
-
-        if converter is None:
-            print("Failed to get converter for -\n" + block)
-
         return converter
 
-# ABSTRACT CONVERTER
+    def get_type_converter(self, block):
+        type = container = converter = None
+        block = block.replace(";", "")
+        tokens = block.split()
+        name = tokens[1]
+        for t in tokens[3:]:
+            if name == "IfcSizeSelect": print(tokens)
+            if t in _Types or t.startswith("Ifc"):
+                type = t
+            elif t in _Containers:
+                container = t
+            elif t.startswith("STRING"):
+                type = "STRING"
+
+        if container in ["ENUMERATION", "SELECT", "LOGICAL"]:
+            converter = DomainTypeConverter()
+        elif container in _Containers:
+            converter = ContainerTypeConverter(name, type, container)
+        elif type is not None:
+            converter = BasicTypeConverter(name, type)
+        return converter
+
+
+"""Abstract converter"""
 class AbsConverter:
     output = None
     def convert(self):
         pass
 
-# REAL, INTEGER, STRING, IFC TYPE
-class BasicTypeConverter(AbsConverter):
+"""Abstract type converter"""
+class AbsTypeConverter(AbsConverter):
+    pass
+
+"""Basic type converter"""
+class BasicTypeConverter(AbsTypeConverter):
     name = ""
     type = ""
     prefix = "using"
@@ -61,19 +76,23 @@ class BasicTypeConverter(AbsConverter):
         self.name = name
         self.type = type
 
-    def convert(self):
+    def get_cpp_type(self, type):
         t = None
         try:
-            t = _TypeMap[self.type]
+            t = _TypeMap[type]
         except KeyError:
-            if self.type.startswith("Ifc"): t = self.type
+            if type.startswith("Ifc"):
+                t = type
+        return t
 
+    def convert(self):
+        t = self.get_cpp_type(self.type)
         if t is None:
             print("Failed to get type for: " + self.type)
         else:
-            self.output = self.prefix + " " + self.name + " " + t + ";"
+            self.output = self.prefix + " " + self.name + " = " + t + ";"
 
-
+"""Container type converter"""
 class ContainerTypeConverter(BasicTypeConverter):
     container = ""
 
@@ -82,19 +101,36 @@ class ContainerTypeConverter(BasicTypeConverter):
         self.container = container
 
     def convert(self):
-        pass
+        c = self.get_cpp_type(self.container)
+        t = self.get_cpp_type(self.type)
+
+        if t is None or c is None:
+            print("Failed to get type for: ", self.container, self.type)
+        else:
+            self.output = self.prefix + " " + self.name + " = " + c + "<" + t + ">;"
 
 
-class EnumTypeConverter(AbsConverter):
+"""Domain type converter"""
+class DomainTypeConverter(AbsTypeConverter):
+    container = ""
+    options = ""
+
+    def get_prefix(self):
+        prefix = None
+        if self.container == "ENUMERATION":
+            prefix = "enum class "
+        elif self.container == "SELECT":
+            prefix = "using"
+        return prefix
+
+
     def convert(self):
         pass
 
-# ENTITY
+"""Entity converter"""
 class EntityConverter(AbsConverter):
     def convert(self):
         pass
-
-
 
 """Functions"""
 def write_cpp_types(buf, file):
@@ -104,33 +140,38 @@ def write_cpp_entities(buf, file):
     pass
 
 def convert_ifc_schema(ifc_schema, cpp_type, cpp_entity):
+    buf_t = ""
+    buf_e = ""
+
     with open(ifc_schema, 'r') as file:
-        f = AbsConverterFactory()
-        buf_t = ""
-        buf_e = ""
+        f = ConverterFactory()
         block = None
-        state = 0
+        is_type = True
         for line in file:
             if line.startswith(_Type):
+                is_type = True
                 block = line
-                state = 1
-            if line.startswith(_Entity):
+            elif line.startswith(_Entity):
+                is_type = False
                 block = line
-            elif line.startswith(_EndEntity):
-                state = 2
             elif block is not None:
-                block += line
+                if line.startswith(_End):
+                    c = f.get_converter(block)
+                    if c is not None:
+                        c.convert()
+                        if c.output is not None:
+                            if is_type:
+                                buf_t += c.output + "\n"
+                            else:
+                                buf_e += c.output + "\n\n"
+                    block = None
+                else:
+                    block += line
 
-            if state > 0:
-                c = f.get_converter(block)
-                c.convert()
-                if c.output is not None:
-                    if state == 1:
-                        buf_t += c.output
-                    elif state == 2:
-                        buf_e += c.output
-                state = 0
-                block = None
+"""
+        with open(cpp_type, 'w') as file:
+            file.write(buf_t)
+"""
 
 """Main"""
 convert_ifc_schema(_IfcSchemaFile, _CppTypeFile, _CppEntityFile)
