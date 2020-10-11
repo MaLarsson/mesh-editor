@@ -143,10 +143,13 @@ int main__() {
 
 int main() {
   std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
   ifc::Parser parser("../test.ifc");
+  parser.parse();
+
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << '\n';
-
+  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]\n";
+  std::cout << "token size: " << sizeof(ifc::tok::Token) << '\n';
   return 0;
 }

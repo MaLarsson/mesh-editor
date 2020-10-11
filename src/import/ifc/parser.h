@@ -4,6 +4,7 @@
 #define IMPORT_IFC_PARSER_H_
 
 #include "classes/entities.h"
+#include "lexer.h"
 
 #include <memory>
 #include <string_view>
@@ -15,8 +16,13 @@ class Parser {
 public:
   Parser(std::string_view filename);
 
+  void parse();
+
 private:
-  std::vector<std::unique_ptr<IfcEntity>> entities;
+  Lexer m_lexer;
+  std::vector<std::unique_ptr<IfcEntity>> m_entities;
+
+  void reserveEntityCount();
 };
 
 } // namespace ifc

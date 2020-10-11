@@ -14,7 +14,7 @@ namespace ifc {
 
 class Lexer {
 public:
-  Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0) {
+  Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
     FILE* file_handle = fopen(filename.data(), "rb");
 
     if (file_handle) {
@@ -31,13 +31,38 @@ public:
     }
   }
 
-  tok::Token getNextToken() {
+  ~Lexer() { free(file); }
+
+  // Parses the next token and append it to the list of tokens and return the next token in the token stream.
+  // Note that calling this method when the previous token was of the token TOKEN_EOF is undefined behaviour.
+  tok::Token* getNextToken() {
+    if (m_token_index == m_tokens.size())
+      parseToken();
+
+    return &m_tokens[m_token_index++];
+  }
+
+  // Will do the same thing as getNextToken but will not advance the token index.
+  tok::Token* peekNextToken() {
+    if (m_token_index == m_tokens.size())
+      parseToken();
+
+    return &m_tokens[m_token_index];
+  }
+
+  // Returns the previous token in the token stream.
+  tok::Token* getPrevToken() { return &m_tokens[m_token_index - 2]; }
+
+  // Parses a token out from the source file.
+  // IF we're already at the end of the file a token of the kind TOKEN_EOF will be added to the token stream.
+  void parseToken() {
     tok::Token tok;
     eatWhitespace();
 
     if (pos == file_size) {
       tok.kind = tok::TOKEN_EOF;
-      return tok;
+      m_tokens.push_back(tok);
+      return;
     }
 
     switch (file[pos++]) {
@@ -89,9 +114,10 @@ public:
       break;
     }
 
-    return tok;
+    m_tokens.push_back(tok);
   }
 
+  // Advance the position in the source file until the beginning of the next token.
   void eatWhitespace() {
     for (; isspace(file[pos]); ++pos) {
       if (pos == file_size)
@@ -99,6 +125,7 @@ public:
     }
   }
 
+  // Parse an integer out of the source file.
   int parseInteger() {
     int number = 0;
 
@@ -110,11 +137,15 @@ public:
     return number;
   }
 
+  // Representation of a number parsed from the source file.
+  // If the value has any decimals in the source file i.e. `0.0` the is_floating_point flag will be set.
   struct Number {
     double value;
     bool is_floating_point;
   };
 
+  // Parse a number out of the source file.
+  // Can be either an integer of a floating point number.
   Number parseNumber() {
     double number = 0;
     bool decimal = false;
@@ -139,19 +170,27 @@ public:
     return {number, decimal};
   }
 
+  // Parse a string out the the source file.
+  // Returns a pointer pair pointing the the start and end of the string in the source file.
   std::string_view parseEntityString() {
     char* start = &file[pos - 1];
     typename std::string_view::size_type identifier_length = 1;
+
     for (; isalpha(file[pos]); ++pos)
       ++identifier_length;
 
     return {start, identifier_length};
   }
 
+  void reset() { m_token_index = 0; }
+
 private:
   char* file;
   int pos;
   int file_size;
+
+  std::vector<tok::Token> m_tokens;
+  int m_token_index = 0;
 };
 
 } // namespace ifc

@@ -33,9 +33,6 @@ enum TokenKind {
 struct Token {
   TokenKind kind;
 
-  int line;
-  int column;
-
   union {
     int number;
     double floating_point;
