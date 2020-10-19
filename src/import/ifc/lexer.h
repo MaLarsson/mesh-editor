@@ -15,14 +15,14 @@ namespace ifc {
 class Lexer {
 public:
   Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
-    FILE* file_handle = fopen(filename.data(), "rb");
+    m_tokens.reserve(70000000); // TODO, something smart ...
 
-    if (file_handle) {
+    if (FILE* file_handle = fopen(filename.data(), "rb")) {
       std::cout << "opened file\n";
 
       fseek(file_handle, 0, SEEK_END);
       file_size = ftell(file_handle);
-      fseek(file_handle, 0, SEEK_SET);
+      rewind(file_handle);
 
       file = (char*)malloc(file_size);
       fread(file, 1, file_size, file_handle);
@@ -32,6 +32,26 @@ public:
   }
 
   ~Lexer() { free(file); }
+
+  void generateTokens() {
+    if (!file)
+      return;
+
+    parseToken();
+
+    while (m_tokens.back().kind != tok::TOKEN_EOF) {
+      if (m_tokens.back().kind == tok::TOKEN_ENTITY)
+        ++entity_count;
+
+      parseToken();
+    }
+  }
+
+  tok::Token* begin() { return nullptr; }
+  const tok::Token* begin() const { return nullptr; }
+
+  tok::Token* end() { return nullptr; }
+  const tok::Token* end() const { return nullptr; }
 
   // Parses the next token and append it to the list of tokens and return the next token in the token stream.
   // Note that calling this method when the previous token was of the token TOKEN_EOF is undefined behaviour.
@@ -119,9 +139,7 @@ public:
 
   // Advance the position in the source file until the beginning of the next token.
   void eatWhitespace() {
-    for (; isspace(file[pos]); ++pos) {
-      if (pos == file_size)
-        return;
+    for (; pos != file_size && isspace(file[pos]); ++pos) {
     }
   }
 
@@ -184,6 +202,8 @@ public:
 
   void reset() { m_token_index = 0; }
 
+  int getEntityCount() const { return entity_count; }
+
 private:
   char* file;
   int pos;
@@ -191,6 +211,7 @@ private:
 
   std::vector<tok::Token> m_tokens;
   int m_token_index = 0;
+  int entity_count = 0;
 };
 
 } // namespace ifc

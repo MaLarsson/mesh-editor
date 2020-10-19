@@ -54,8 +54,9 @@ Parser::Parser(std::string_view filename) : m_lexer(filename) {
 }
 
 void Parser::parse() {
-  reserveEntityCount();
-  m_lexer.reset();
+  m_lexer.generateTokens();
+  std::cout << "entities: " << m_lexer.getEntityCount() << "\n";
+  m_entities.reserve(m_lexer.getEntityCount());
 
   int id = -1;
 
@@ -64,20 +65,9 @@ void Parser::parse() {
       id = tok->value.number;
     } else if (tok->kind == tok::TOKEN_ENTITY && m_lexer.getPrevToken()->kind == tok::TOKEN_EQUAL) {
       IfcEntity* entity = AllocateEntity("IFCCARTESIANPOINT");
-      m_entities[id - 1] = std::unique_ptr<IfcEntity>(entity);
+      m_entities.push_back(std::unique_ptr<IfcEntity>(entity));
     }
   }
-}
-
-void Parser::reserveEntityCount() {
-  int count = 0;
-
-  for (tok::Token* tok = m_lexer.getNextToken(); tok->kind != tok::TOKEN_EOF; tok = m_lexer.getNextToken()) {
-    if (tok->kind == tok::TOKEN_IDENTIFIER && tok->value.number > count)
-      count = tok->value.number;
-  }
-
-  m_entities.resize(count);
 }
 
 } // namespace ifc

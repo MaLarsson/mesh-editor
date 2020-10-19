@@ -21,8 +21,6 @@ public:
 private:
   Lexer m_lexer;
   std::vector<std::unique_ptr<IfcEntity>> m_entities;
-
-  void reserveEntityCount();
 };
 
 } // namespace ifc
