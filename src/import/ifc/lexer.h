@@ -37,21 +37,71 @@ public:
     if (!file)
       return;
 
-    parseToken();
+    //parseToken();
+    parseToken2();
 
     while (m_tokens.back().kind != tok::TOKEN_EOF) {
       if (m_tokens.back().kind == tok::TOKEN_ENTITY)
         ++entity_count;
 
-      parseToken();
+      //parseToken();
+      parseToken2();
     }
   }
 
-  tok::Token* begin() { return nullptr; }
-  const tok::Token* begin() const { return nullptr; }
+  void parseToken2() {
+    tok::Token tok;
+    eatWhitespace();
 
-  tok::Token* end() { return nullptr; }
-  const tok::Token* end() const { return nullptr; }
+    if (pos == file_size) {
+      tok.kind = tok::TOKEN_EOF;
+      m_tokens.push_back(tok);
+      return;
+    }
+
+    switch (file[pos++]) {
+    case '(':
+      tok.kind = tok::TOKEN_ARGUMENTS;
+      tok.value.string = parseArguments();
+      break;
+    case '#':
+      tok.kind = tok::TOKEN_IDENTIFIER;
+      tok.value.number = parseInteger();
+      break;
+    case 'I':
+      if (file[pos] == 'F' && file[pos + 1] == 'C') {
+        tok.kind = tok::TOKEN_ENTITY;
+        tok.value.string = parseEntityString();
+      }
+      break;
+    }
+
+    m_tokens.push_back(tok);
+  }
+
+  std::string_view parseArguments() {
+    char* start = &file[pos];
+    size_t length = 0;
+    int level = 1;
+
+    for (; pos != file_size; ++pos) {
+      switch (file[pos]) {
+      case ')':
+        --level;
+        break;
+      case '(':
+        ++level;
+        [[fallthrough]];
+      default:
+        ++length;
+      }
+
+      if (level == 0)
+        break;
+    }
+
+    return {start, length};
+  }
 
   // Parses the next token and append it to the list of tokens and return the next token in the token stream.
   // Note that calling this method when the previous token was of the token TOKEN_EOF is undefined behaviour.
@@ -147,7 +197,7 @@ public:
   int parseInteger() {
     int number = 0;
 
-    for (; isdigit(file[pos]); ++pos) {
+    for (; pos != file_size && isdigit(file[pos]); ++pos) {
       number *= 10;
       number += (file[pos] - '0');
     }
@@ -204,7 +254,7 @@ public:
 
   int getEntityCount() const { return entity_count; }
 
-private:
+public:
   char* file;
   int pos;
   int file_size;

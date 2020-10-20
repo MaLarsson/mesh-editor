@@ -55,15 +55,17 @@ Parser::Parser(std::string_view filename) : m_lexer(filename) {
 
 void Parser::parse() {
   m_lexer.generateTokens();
-  std::cout << "entities: " << m_lexer.getEntityCount() << "\n";
-  m_entities.reserve(m_lexer.getEntityCount());
+  m_entities.reserve(m_lexer.entity_count);
+
+  std::cout << "entities: " << m_lexer.entity_count << "\n";
+  std::cout << "tokens: " << m_lexer.m_tokens.size() << "\n";
 
   int id = -1;
 
-  for (tok::Token* tok = m_lexer.getNextToken(); tok->kind != tok::TOKEN_EOF; tok = m_lexer.getNextToken()) {
-    if (tok->kind == tok::TOKEN_IDENTIFIER && m_lexer.peekNextToken()->kind == tok::TOKEN_EQUAL) {
-      id = tok->value.number;
-    } else if (tok->kind == tok::TOKEN_ENTITY && m_lexer.getPrevToken()->kind == tok::TOKEN_EQUAL) {
+  for (const tok::Token& tok : m_lexer.m_tokens) {
+    if (tok.kind == tok::TOKEN_IDENTIFIER) {
+      id = tok.value.number;
+    } else if (tok.kind == tok::TOKEN_ENTITY) {
       IfcEntity* entity = AllocateEntity("IFCCARTESIANPOINT");
       m_entities.push_back(std::unique_ptr<IfcEntity>(entity));
     }
