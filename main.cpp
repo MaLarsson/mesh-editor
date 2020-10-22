@@ -150,6 +150,9 @@ int main() {
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
   std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]\n";
+
   std::cout << "token size: " << sizeof(ifc::tok::Token) << '\n';
+  std::cout << "cartesian point size: " << sizeof(ifc::IfcCartesianPoint) << '\n';
+
   return 0;
 }

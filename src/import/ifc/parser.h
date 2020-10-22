@@ -3,6 +3,7 @@
 #ifndef IMPORT_IFC_PARSER_H_
 #define IMPORT_IFC_PARSER_H_
 
+#include "../../utility/allocator.h"
 #include "classes/entities.h"
 #include "lexer.h"
 
@@ -19,8 +20,9 @@ public:
   void parse();
 
 private:
+  SlabAllocator m_alloc;
   Lexer m_lexer;
-  std::vector<std::unique_ptr<IfcEntity>> m_entities;
+  std::vector<IfcEntity*> m_entities;
 };
 
 } // namespace ifc

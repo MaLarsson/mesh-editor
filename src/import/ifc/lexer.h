@@ -24,7 +24,7 @@ public:
       file_size = ftell(file_handle);
       rewind(file_handle);
 
-      file = (char*)malloc(file_size);
+      file = static_cast<char*>(malloc(file_size));
       fread(file, 1, file_size, file_handle);
 
       fclose(file_handle);

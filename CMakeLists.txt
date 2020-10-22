@@ -56,7 +56,7 @@ FetchContent_MakeAvailable(imgui)
 add_executable(mesh_editor
   main.cpp
   src/import/ifc/parser.cpp
-  src/import/ifc/entity_factory.cpp
+  src/import/ifc/factory.cpp
 )
 
 target_link_libraries(mesh_editor PRIVATE glfw glad)

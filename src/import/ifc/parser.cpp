@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "entity_factory.h"
+#include "factory.h"
 #include "lexer.h"
 
 #include <iostream>
@@ -66,10 +66,12 @@ void Parser::parse() {
     if (tok.kind == tok::TOKEN_IDENTIFIER) {
       id = tok.value.number;
     } else if (tok.kind == tok::TOKEN_ENTITY) {
-      IfcEntity* entity = AllocateEntity("IFCCARTESIANPOINT");
-      m_entities.push_back(std::unique_ptr<IfcEntity>(entity));
+      IfcEntity* entity = AllocateEntity("IFCCARTESIANPOINT", m_alloc);
+      m_entities.push_back(entity);
     }
   }
+
+  std::cout << "alloc mem: " << m_alloc.memoryUsed() << '\n';
 }
 
 } // namespace ifc
