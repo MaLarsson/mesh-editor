@@ -3,9 +3,8 @@
 #ifndef IMPORT_IFC_CLASSES_ENTITIES_H_
 #define IMPORT_IFC_CLASSES_ENTITIES_H_
 
+#include "../../utility/small_vector.h"
 #include "types.h"
-
-#include <vector>
 
 namespace ifc {
 
@@ -16,7 +15,7 @@ struct IfcGeometricRepresentationItem : IfcRepresentationItem {};
 struct IfcPoint : IfcGeometricRepresentationItem {};
 
 struct IfcCartesianPoint : IfcPoint {
-  std::vector<IfcLengthMeasure> Coordinates;
+  SmallVector<IfcLengthMeasure, 3> Coordinates;
 };
 
 } // namespace ifc

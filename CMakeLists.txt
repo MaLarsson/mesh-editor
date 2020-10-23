@@ -55,6 +55,9 @@ FetchContent_MakeAvailable(imgui)
 # setup compilation targets
 add_executable(mesh_editor
   main.cpp
+
+  src/utility/MemTrackAllocator.cpp
+
   src/import/ifc/parser.cpp
   src/import/ifc/factory.cpp
 )

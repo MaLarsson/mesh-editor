@@ -139,6 +139,8 @@ int main__() {
 }
 
 #include "src/import/ifc/parser.h"
+#include "src/utility/MemTrackAllocator.h"
+
 #include <chrono>
 
 int main() {
@@ -150,6 +152,8 @@ int main() {
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
   std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]\n";
+
+  DEBUG_PRINT_CURRENT_MEM_USAGE_GB();
 
   std::cout << "token size: " << sizeof(ifc::tok::Token) << '\n';
   std::cout << "cartesian point size: " << sizeof(ifc::IfcCartesianPoint) << '\n';

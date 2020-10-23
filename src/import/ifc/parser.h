@@ -4,12 +4,12 @@
 #define IMPORT_IFC_PARSER_H_
 
 #include "../../utility/allocator.h"
+#include "../../utility/small_vector.h"
 #include "classes/entities.h"
 #include "lexer.h"
 
 #include <memory>
 #include <string_view>
-#include <vector>
 
 namespace ifc {
 
@@ -22,7 +22,7 @@ public:
 private:
   SlabAllocator m_alloc;
   Lexer m_lexer;
-  std::vector<IfcEntity*> m_entities;
+  SmallVector<IfcEntity*, 0> m_entities;
 };
 
 } // namespace ifc

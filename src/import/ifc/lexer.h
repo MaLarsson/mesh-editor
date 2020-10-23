@@ -3,6 +3,7 @@
 #ifndef IMPORT_IFC_LEXER_H_
 #define IMPORT_IFC_LEXER_H_
 
+#include "../../utility/small_vector.h"
 #include "token.h"
 
 #include <iostream>
@@ -259,7 +260,7 @@ public:
   int pos;
   int file_size;
 
-  std::vector<tok::Token> m_tokens;
+  SmallVector<tok::Token> m_tokens;
   int m_token_index = 0;
   int entity_count = 0;
 };

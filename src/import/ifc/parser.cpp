@@ -70,8 +70,6 @@ void Parser::parse() {
       m_entities.push_back(entity);
     }
   }
-
-  std::cout << "alloc mem: " << m_alloc.memoryUsed() << '\n';
 }
 
 } // namespace ifc

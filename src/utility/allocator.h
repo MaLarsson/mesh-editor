@@ -3,8 +3,10 @@
 #ifndef UTILITY_ALLOCATOR_H_
 #define UTILITY_ALLOCATOR_H_
 
+#include "MemTrackAllocator.h"
+#include "small_vector.h"
+
 #include <cstddef>
-#include <vector>
 
 class SlabAllocator {
   static constexpr int slab_size = 4096;
@@ -13,8 +15,10 @@ public:
   SlabAllocator() = default;
 
   ~SlabAllocator() {
-    for (void* slab : slabs)
+    for (void* slab : slabs) {
       free(slab);
+      DEBUG_EDIT_MEM_USAGE(-slab_size);
+    }
   }
 
   SlabAllocator(const SlabAllocator&) = delete;
@@ -27,6 +31,7 @@ public:
       head = static_cast<std::byte*>(malloc(slab_size));
       end = head + slab_size;
       slabs.push_back(head);
+      DEBUG_EDIT_MEM_USAGE(slab_size);
     }
 
     void* ptr = head;
@@ -37,10 +42,8 @@ public:
 
   template <typename T> T* allocate() { return static_cast<T*>(allocate(sizeof(T))); }
 
-  int memoryUsed() const { return slabs.size() * slab_size; }
-
 private:
-  std::vector<void*> slabs;
+  SmallVector<void*> slabs;
   std::byte* head = nullptr;
   std::byte* end = nullptr;
 };
