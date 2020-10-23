@@ -15,7 +15,8 @@ using MemTrackAllocator = std::allocator<T>;
 #define DEBUG_PRINT_CURRENT_MEM_USAGE_MB()
 #define DEBUG_PRINT_CURRENT_MEM_USAGE_GB()
 
-#define DEBUG_EDIT_MEM_USAGE(n)
+#define DEBUG_ADD_MEM_USAGE(n)
+#define DEBUG_REMOVE_MEM_USAGE(n)
 
 #else // NDEBUG
 
@@ -33,12 +34,12 @@ struct MemTrackAllocator {
   MemTrackAllocator(const MemTrackAllocator<U> other) {}
 
   static T* allocate(std::size_t n) {
-    EditMemUsage(n * sizeof(T));
+    AddMemUsage(n * sizeof(T));
     return std::allocator_traits<std::allocator<T>>::allocate(std::allocator<T>{}, n);
   }
 
   void deallocate(T* mem, std::size_t n) {
-    EditMemUsage(-(n * sizeof(T)));
+    RemoveMemUsage(n * sizeof(T));
     std::allocator_traits<std::allocator<T>>::deallocate(std::allocator<T>{}, mem, n);
   }
 
@@ -47,15 +48,19 @@ struct MemTrackAllocator {
 };
 
 std::size_t CurrentMemUsage();
-void EditMemUsage(std::size_t n);
 
-#define DEBUG_PRINT_CURRENT_MEM_USAGE_BYTES() std::cout << "current mem usage: " << CurrentMemUsage() << "[bytes]\n"
-#define DEBUG_PRINT_CURRENT_MEM_USAGE_MB()                                                                             \
-  std::cout << "current mem usage: " << static_cast<double>(CurrentMemUsage()) / 1'000'000 << "[MB]\n"
-#define DEBUG_PRINT_CURRENT_MEM_USAGE_GB()                                                                             \
-  std::cout << "current mem usage: " << static_cast<double>(CurrentMemUsage()) / 1'000'000'000 << "[GB]\n"
+void AddMemUsage(std::size_t n);
+void RemoveMemUsage(std::size_t n);
 
-#define DEBUG_EDIT_MEM_USAGE(n) EditMemUsage(n)
+#define DEBUG_PRINT_CURRENT_MEM_USAGE_(n, x)                                                                           \
+  std::cout << "current mem usage: " << static_cast<double>(CurrentMemUsage()) / n << x
+
+#define DEBUG_PRINT_CURRENT_MEM_USAGE_BYTES() DEBUG_PRINT_CURRENT_MEM_USAGE_(1, "[bytes]\n")
+#define DEBUG_PRINT_CURRENT_MEM_USAGE_MB() DEBUG_PRINT_CURRENT_MEM_USAGE_(1'000'000, "[MB]\n")
+#define DEBUG_PRINT_CURRENT_MEM_USAGE_GB() DEBUG_PRINT_CURRENT_MEM_USAGE_(1'000'000'000, "[GB]\n")
+
+#define DEBUG_ADD_MEM_USAGE(n) AddMemUsage(n)
+#define DEBUG_REMOVE_MEM_USAGE(n) RemoveMemUsage(n)
 
 #endif // NDEBUG
 

@@ -17,7 +17,7 @@ public:
   ~SlabAllocator() {
     for (void* slab : slabs) {
       free(slab);
-      DEBUG_EDIT_MEM_USAGE(-slab_size);
+      DEBUG_REMOVE_MEM_USAGE(slab_size);
     }
   }
 
@@ -31,7 +31,7 @@ public:
       head = static_cast<std::byte*>(malloc(slab_size));
       end = head + slab_size;
       slabs.push_back(head);
-      DEBUG_EDIT_MEM_USAGE(slab_size);
+      DEBUG_ADD_MEM_USAGE(slab_size);
     }
 
     void* ptr = head;
