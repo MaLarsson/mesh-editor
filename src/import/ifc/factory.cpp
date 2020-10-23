@@ -7,10 +7,10 @@
 
 namespace ifc {
 
-static std::unordered_map<std::string_view, std::function<IfcEntity*(SlabAllocator&)>> factory{
-    {"IFCCARTESIANPOINT", [](SlabAllocator& alloc) -> IfcEntity* { return alloc.allocate<IfcCartesianPoint>(); }},
-    {"IFCSOMETHING", [](SlabAllocator& alloc) -> IfcEntity* { return nullptr; }}};
+static std::unordered_map<std::string_view, std::function<IfcEntity*(BumpPtrAllocator&)>> factory{
+    {"IFCCARTESIANPOINT", [](BumpPtrAllocator& alloc) -> IfcEntity* { return alloc.allocate<IfcCartesianPoint>(); }},
+    {"IFCSOMETHING", [](BumpPtrAllocator& alloc) -> IfcEntity* { return nullptr; }}};
 
-IfcEntity* AllocateEntity(std::string_view type, SlabAllocator& alloc) { return factory[type](alloc); }
+IfcEntity* AllocateEntity(std::string_view type, BumpPtrAllocator& alloc) { return factory[type](alloc); }
 
 } // namespace ifc

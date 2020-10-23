@@ -3,7 +3,7 @@
 #ifndef IMPORT_IFC_LEXER_H_
 #define IMPORT_IFC_LEXER_H_
 
-#include "../../utility/small_vector.h"
+#include "../../utility/SmallVector.h"
 #include "token.h"
 
 #include <iostream>
@@ -16,7 +16,7 @@ namespace ifc {
 class Lexer {
 public:
   Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
-    m_tokens.reserve(70000000); // TODO, something smart ...
+    //m_tokens.reserve(70000000); // TODO, something smart ...
 
     if (FILE* file_handle = fopen(filename.data(), "rb")) {
       std::cout << "opened file\n";
@@ -26,13 +26,17 @@ public:
       rewind(file_handle);
 
       file = static_cast<char*>(malloc(file_size));
-      fread(file, 1, file_size, file_handle);
+      DEBUG_ADD_MEM_USAGE(file_size);
 
+      fread(file, 1, file_size, file_handle);
       fclose(file_handle);
     }
   }
 
-  ~Lexer() { free(file); }
+  ~Lexer() {
+    free(file);
+    DEBUG_REMOVE_MEM_USAGE(file_size);
+  }
 
   void generateTokens() {
     if (!file)
@@ -245,7 +249,7 @@ public:
     char* start = &file[pos - 1];
     typename std::string_view::size_type identifier_length = 1;
 
-    for (; isalpha(file[pos]); ++pos)
+    for (; isalnum(file[pos]); ++pos)
       ++identifier_length;
 
     return {start, identifier_length};

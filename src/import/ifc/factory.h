@@ -3,14 +3,14 @@
 #ifndef IMPORT_IFC_FACTORY_H_
 #define IMPORT_IFC_FACTORY_H_
 
-#include "../../utility/allocator.h"
+#include "../../utility/BumpPtrAllocator.h"
 #include "classes/entities.h"
 
 #include <string_view>
 
 namespace ifc {
 
-IfcEntity* AllocateEntity(std::string_view type, SlabAllocator& alloc);
+IfcEntity* AllocateEntity(std::string_view type, BumpPtrAllocator& alloc);
 
 } // namespace ifc
 

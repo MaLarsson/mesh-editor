@@ -3,8 +3,8 @@
 #ifndef IMPORT_IFC_PARSER_H_
 #define IMPORT_IFC_PARSER_H_
 
-#include "../../utility/allocator.h"
-#include "../../utility/small_vector.h"
+#include "../../utility/BumpPtrAllocator.h"
+#include "../../utility/SmallVector.h"
 #include "classes/entities.h"
 #include "lexer.h"
 
@@ -20,7 +20,7 @@ public:
   void parse();
 
 private:
-  SlabAllocator m_alloc;
+  BumpPtrAllocator m_alloc;
   Lexer m_lexer;
   SmallVector<IfcEntity*, 0> m_entities;
 };

@@ -31,7 +31,7 @@ struct MemTrackAllocator {
   MemTrackAllocator() = default;
 
   template <typename U>
-  MemTrackAllocator(const MemTrackAllocator<U> other) {}
+  MemTrackAllocator(const MemTrackAllocator<U>& other) {}
 
   static T* allocate(std::size_t n) {
     AddMemUsage(n * sizeof(T));

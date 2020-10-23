@@ -1,30 +1,30 @@
 #pragma once
 
-#ifndef UTILITY_ALLOCATOR_H_
-#define UTILITY_ALLOCATOR_H_
+#ifndef UTILITY_BUMP_PTR_ALLOCATOR_H_
+#define UTILITY_BUMP_PTR_ALLOCATOR_H_
 
 #include "MemTrackAllocator.h"
-#include "small_vector.h"
+#include "SmallVector.h"
 
 #include <cstddef>
 
-class SlabAllocator {
+class BumpPtrAllocator {
   static constexpr int slab_size = 4096;
 
 public:
-  SlabAllocator() = default;
+  BumpPtrAllocator() = default;
 
-  ~SlabAllocator() {
+  ~BumpPtrAllocator() {
     for (void* slab : slabs) {
       free(slab);
       DEBUG_REMOVE_MEM_USAGE(slab_size);
     }
   }
 
-  SlabAllocator(const SlabAllocator&) = delete;
-  SlabAllocator(SlabAllocator&&) = delete;
-  SlabAllocator& operator=(const SlabAllocator&) = delete;
-  SlabAllocator& operator=(SlabAllocator&&) = delete;
+  BumpPtrAllocator(const BumpPtrAllocator&) = delete;
+  BumpPtrAllocator(BumpPtrAllocator&&) = delete;
+  BumpPtrAllocator& operator=(const BumpPtrAllocator&) = delete;
+  BumpPtrAllocator& operator=(BumpPtrAllocator&&) = delete;
 
   void* allocate(int size) {
     if (size >= (end - head)) {
@@ -40,7 +40,8 @@ public:
     return ptr;
   }
 
-  template <typename T> T* allocate() { return static_cast<T*>(allocate(sizeof(T))); }
+  template <typename T>
+  T* allocate() { return static_cast<T*>(allocate(sizeof(T))); }
 
 private:
   SmallVector<void*> slabs;
@@ -48,4 +49,4 @@ private:
   std::byte* end = nullptr;
 };
 
-#endif // UTILITY_ALLOCATOR_H_
+#endif // UTILITY_BUMP_PTR_ALLOCATOR_H_
