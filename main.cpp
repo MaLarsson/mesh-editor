@@ -138,7 +138,7 @@ int main__() {
   return 0;
 }
 
-#include "src/import/ifc/parser.h"
+#include "src/import/ifc/Parser.h"
 #include "src/utility/MemTrackAllocator.h"
 
 #include <chrono>

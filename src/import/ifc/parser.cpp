@@ -1,6 +1,6 @@
-#include "parser.h"
-#include "factory.h"
-#include "lexer.h"
+#include "Parser.h"
+#include "Factory.h"
+#include "Lexer.h"
 
 #include <iostream>
 
@@ -55,7 +55,7 @@ Parser::Parser(std::string_view filename) : m_lexer(filename) {
 
 void Parser::parse() {
   m_lexer.generateTokens();
-  m_entities.reserve(m_lexer.entity_count);
+  m_entities.reserve(m_lexer.entity_count * 2); // TODO: test for map with load factor 0.5
 
   std::cout << "entities: " << m_lexer.entity_count << "\n";
   std::cout << "tokens: " << m_lexer.m_tokens.size() << "\n";

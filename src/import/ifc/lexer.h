@@ -4,7 +4,7 @@
 #define IMPORT_IFC_LEXER_H_
 
 #include "../../utility/SmallVector.h"
-#include "token.h"
+#include "Token.h"
 
 #include <iostream>
 #include <stdio.h>

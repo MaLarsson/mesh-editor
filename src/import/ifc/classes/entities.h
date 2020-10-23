@@ -4,7 +4,7 @@
 #define IMPORT_IFC_CLASSES_ENTITIES_H_
 
 #include "../../utility/SmallVector.h"
-#include "types.h"
+#include "Types.h"
 
 namespace ifc {
 

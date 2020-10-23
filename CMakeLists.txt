@@ -58,8 +58,8 @@ add_executable(mesh_editor
 
   src/utility/MemTrackAllocator.cpp
 
-  src/import/ifc/parser.cpp
-  src/import/ifc/factory.cpp
+  src/import/ifc/Parser.cpp
+  src/import/ifc/Factory.cpp
 )
 
 target_link_libraries(mesh_editor PRIVATE glfw glad)

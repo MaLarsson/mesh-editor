@@ -5,8 +5,8 @@
 
 #include "../../utility/BumpPtrAllocator.h"
 #include "../../utility/SmallVector.h"
-#include "classes/entities.h"
-#include "lexer.h"
+#include "classes/Entities.h"
+#include "Lexer.h"
 
 #include <memory>
 #include <string_view>

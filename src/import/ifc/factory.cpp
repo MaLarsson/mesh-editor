@@ -1,5 +1,5 @@
-#include "factory.h"
-#include "classes/entities.h"
+#include "Factory.h"
+#include "classes/Entities.h"
 
 #include <functional>
 #include <string_view>
