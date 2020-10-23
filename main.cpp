@@ -151,7 +151,8 @@ int main() {
 
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]\n";
+  std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
+            << "[ms]\n";
 
   DEBUG_PRINT_CURRENT_MEM_USAGE_GB();
 

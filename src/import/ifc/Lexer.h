@@ -15,8 +15,9 @@ namespace ifc {
 
 class Lexer {
 public:
-  Lexer(std::string_view filename) : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
-    //m_tokens.reserve(70000000); // TODO, something smart ...
+  Lexer(std::string_view filename)
+      : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
+    // m_tokens.reserve(70000000); // TODO, something smart ...
 
     if (FILE* file_handle = fopen(filename.data(), "rb")) {
       std::cout << "opened file\n";
@@ -42,14 +43,14 @@ public:
     if (!file)
       return;
 
-    //parseToken();
+    // parseToken();
     parseToken2();
 
     while (m_tokens.back().kind != tok::TOKEN_EOF) {
       if (m_tokens.back().kind == tok::TOKEN_ENTITY)
         ++entity_count;
 
-      //parseToken();
+      // parseToken();
       parseToken2();
     }
   }
@@ -108,8 +109,9 @@ public:
     return {start, length};
   }
 
-  // Parses the next token and append it to the list of tokens and return the next token in the token stream.
-  // Note that calling this method when the previous token was of the token TOKEN_EOF is undefined behaviour.
+  // Parses the next token and append it to the list of tokens and return the next token in the
+  // token stream. Note that calling this method when the previous token was of the token TOKEN_EOF
+  // is undefined behaviour.
   tok::Token* getNextToken() {
     if (m_token_index == m_tokens.size())
       parseToken();
@@ -129,7 +131,8 @@ public:
   tok::Token* getPrevToken() { return &m_tokens[m_token_index - 2]; }
 
   // Parses a token out from the source file.
-  // IF we're already at the end of the file a token of the kind TOKEN_EOF will be added to the token stream.
+  // IF we're already at the end of the file a token of the kind TOKEN_EOF will be added to the
+  // token stream.
   void parseToken() {
     tok::Token tok;
     eatWhitespace();
@@ -211,7 +214,8 @@ public:
   }
 
   // Representation of a number parsed from the source file.
-  // If the value has any decimals in the source file i.e. `0.0` the is_floating_point flag will be set.
+  // If the value has any decimals in the source file i.e. `0.0` the is_floating_point flag will be
+  // set.
   struct Number {
     double value;
     bool is_floating_point;

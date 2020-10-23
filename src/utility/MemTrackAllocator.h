@@ -30,8 +30,7 @@ struct MemTrackAllocator {
 
   MemTrackAllocator() = default;
 
-  template <typename U>
-  MemTrackAllocator(const MemTrackAllocator<U>& other) {}
+  template <typename U> MemTrackAllocator(const MemTrackAllocator<U>& other) {}
 
   static T* allocate(std::size_t n) {
     AddMemUsage(n * sizeof(T));
@@ -52,7 +51,7 @@ std::size_t CurrentMemUsage();
 void AddMemUsage(std::size_t n);
 void RemoveMemUsage(std::size_t n);
 
-#define DEBUG_PRINT_CURRENT_MEM_USAGE_(n, x)                                                                           \
+#define DEBUG_PRINT_CURRENT_MEM_USAGE_(n, x)                                                       \
   std::cout << "current mem usage: " << static_cast<double>(CurrentMemUsage()) / n << x
 
 #define DEBUG_PRINT_CURRENT_MEM_USAGE_BYTES() DEBUG_PRINT_CURRENT_MEM_USAGE_(1, "[bytes]\n")
