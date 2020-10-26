@@ -41,7 +41,9 @@ public:
   }
 
   template <typename T>
-  T* allocate() { return static_cast<T*>(allocate(sizeof(T))); }
+  T* allocate() {
+    return static_cast<T*>(allocate(sizeof(T)));
+  }
 
 private:
   SmallVector<void*> slabs;

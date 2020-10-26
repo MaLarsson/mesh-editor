@@ -40,8 +40,7 @@ public:
   }
 
   void generateTokens() {
-    if (!file)
-      return;
+    if (!file) return;
 
     // parseToken();
     parseToken2();
@@ -102,8 +101,7 @@ public:
         ++length;
       }
 
-      if (level == 0)
-        break;
+      if (level == 0) break;
     }
 
     return {start, length};
@@ -113,16 +111,18 @@ public:
   // token stream. Note that calling this method when the previous token was of the token TOKEN_EOF
   // is undefined behaviour.
   tok::Token* getNextToken() {
-    if (m_token_index == m_tokens.size())
+    if (m_token_index == m_tokens.size()) {
       parseToken();
+    }
 
     return &m_tokens[m_token_index++];
   }
 
   // Will do the same thing as getNextToken but will not advance the token index.
   tok::Token* peekNextToken() {
-    if (m_token_index == m_tokens.size())
+    if (m_token_index == m_tokens.size()) {
       parseToken();
+    }
 
     return &m_tokens[m_token_index];
   }

@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "../../utility/ThreadPool.h"
 #include "Factory.h"
 #include "Lexer.h"
 
@@ -27,6 +28,8 @@ void Parser::parse() {
       // m_entities.insert(id, AllocateEntity(tok.value.string, m_alloc));
     }
   }
+
+  ThreadPool pool(4);
 }
 
 } // namespace ifc
