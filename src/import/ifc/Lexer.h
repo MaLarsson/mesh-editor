@@ -16,38 +16,38 @@ namespace ifc {
 class Lexer {
 public:
   Lexer(std::string_view filename)
-      : file(nullptr), pos(0), file_size(0), m_tokens{}, m_token_index(0) {
+      : m_file(nullptr), m_pos(0), m_file_size(0), m_token_index(0), m_entity_count(0) {
     // m_tokens.reserve(70000000); // TODO, something smart ...
 
     if (FILE* file_handle = fopen(filename.data(), "rb")) {
       std::cout << "opened file\n";
 
       fseek(file_handle, 0, SEEK_END);
-      file_size = ftell(file_handle);
+      m_file_size = ftell(file_handle);
       rewind(file_handle);
 
-      file = static_cast<char*>(malloc(file_size));
-      DEBUG_ADD_MEM_USAGE(file_size);
+      m_file = static_cast<char*>(malloc(m_file_size));
+      DEBUG_ADD_MEM_USAGE(m_file_size);
 
-      fread(file, 1, file_size, file_handle);
+      fread(m_file, 1, m_file_size, file_handle);
       fclose(file_handle);
     }
   }
 
   ~Lexer() {
-    free(file);
-    DEBUG_REMOVE_MEM_USAGE(file_size);
+    free(m_file);
+    DEBUG_REMOVE_MEM_USAGE(m_file_size);
   }
 
   void generateTokens() {
-    if (!file) return;
+    if (!m_file) return;
 
     // parseToken();
     parseToken2();
 
     while (m_tokens.back().kind != tok::TOKEN_EOF) {
       if (m_tokens.back().kind == tok::TOKEN_ENTITY)
-        ++entity_count;
+        ++m_entity_count;
 
       // parseToken();
       parseToken2();
@@ -58,13 +58,13 @@ public:
     tok::Token tok;
     eatWhitespace();
 
-    if (pos == file_size) {
+    if (m_pos == m_file_size) {
       tok.kind = tok::TOKEN_EOF;
       m_tokens.push_back(tok);
       return;
     }
 
-    switch (file[pos++]) {
+    switch (m_file[m_pos++]) {
     case '(':
       tok.kind = tok::TOKEN_ARGUMENTS;
       tok.value.string = parseArguments();
@@ -74,7 +74,7 @@ public:
       tok.value.number = parseInteger();
       break;
     case 'I':
-      if (file[pos] == 'F' && file[pos + 1] == 'C') {
+      if (m_file[m_pos] == 'F' && m_file[m_pos + 1] == 'C') {
         tok.kind = tok::TOKEN_ENTITY;
         tok.value.string = parseEntityString();
       }
@@ -85,12 +85,12 @@ public:
   }
 
   std::string_view parseArguments() {
-    char* start = &file[pos];
+    char* start = &m_file[m_pos];
     size_t length = 0;
     int level = 1;
 
-    for (; pos != file_size; ++pos) {
-      switch (file[pos]) {
+    for (; m_pos != m_file_size; ++m_pos) {
+      switch (m_file[m_pos]) {
       case ')':
         --level;
         break;
@@ -137,13 +137,13 @@ public:
     tok::Token tok;
     eatWhitespace();
 
-    if (pos == file_size) {
+    if (m_pos == m_file_size) {
       tok.kind = tok::TOKEN_EOF;
       m_tokens.push_back(tok);
       return;
     }
 
-    switch (file[pos++]) {
+    switch (m_file[m_pos++]) {
     case '(':
       tok.kind = tok::TOKEN_LPAREN;
       break;
@@ -163,7 +163,7 @@ public:
       tok.kind = tok::TOKEN_NULL;
       break;
     case '#':
-      if (!isdigit(file[pos])) {
+      if (!isdigit(m_file[m_pos])) {
         tok.kind = tok::TOKEN_ERROR;
       } else {
         tok.kind = tok::TOKEN_IDENTIFIER;
@@ -171,13 +171,13 @@ public:
       }
       break;
     case 'I':
-      if (file[pos] == 'F' && file[pos + 1] == 'C') {
+      if (m_file[m_pos] == 'F' && m_file[m_pos + 1] == 'C') {
         tok.kind = tok::TOKEN_ENTITY;
         tok.value.string = parseEntityString();
       }
       break;
     default:
-      if (isdigit(file[pos - 1])) {
+      if (isdigit(m_file[m_pos - 1])) {
         Number num = parseNumber();
         if (num.is_floating_point) {
           tok.kind = tok::TOKEN_FLOAT_LITERAL;
@@ -197,7 +197,7 @@ public:
 
   // Advance the position in the source file until the beginning of the next token.
   void eatWhitespace() {
-    for (; pos != file_size && isspace(file[pos]); ++pos) {
+    for (; m_pos != m_file_size && isspace(m_file[m_pos]); ++m_pos) {
     }
   }
 
@@ -205,9 +205,9 @@ public:
   int parseInteger() {
     int number = 0;
 
-    for (; pos != file_size && isdigit(file[pos]); ++pos) {
+    for (; m_pos != m_file_size && isdigit(m_file[m_pos]); ++m_pos) {
       number *= 10;
-      number += (file[pos] - '0');
+      number += (m_file[m_pos] - '0');
     }
 
     return number;
@@ -229,20 +229,20 @@ public:
     double decimal_divider = 10;
 
     // TODO: ugh... deal with the pos problem...
-    for (; isdigit(file[pos - 1]) || file[pos - 1] == '.'; ++pos) {
-      if (file[pos - 1] == '.') {
+    for (; isdigit(m_file[m_pos - 1]) || m_file[m_pos - 1] == '.'; ++m_pos) {
+      if (m_file[m_pos - 1] == '.') {
         decimal = true;
       } else if (decimal) {
-        double dec = (file[pos - 1] - '0') / decimal_divider;
+        double dec = (m_file[m_pos - 1] - '0') / decimal_divider;
         decimal_divider *= 10;
         number += dec;
       } else {
         number *= 10;
-        number += (file[pos - 1] - '0');
+        number += (m_file[m_pos - 1] - '0');
       }
     }
 
-    --pos;
+    --m_pos;
 
     return {number, decimal};
   }
@@ -250,10 +250,10 @@ public:
   // Parse a string out the the source file.
   // Returns a pointer pair pointing the the start and end of the string in the source file.
   std::string_view parseEntityString() {
-    char* start = &file[pos - 1];
+    char* start = &m_file[m_pos - 1];
     typename std::string_view::size_type identifier_length = 1;
 
-    for (; isalnum(file[pos]); ++pos)
+    for (; isalnum(m_file[m_pos]); ++m_pos)
       ++identifier_length;
 
     return {start, identifier_length};
@@ -261,16 +261,16 @@ public:
 
   void reset() { m_token_index = 0; }
 
-  int getEntityCount() const { return entity_count; }
+  int getEntityCount() const { return m_entity_count; }
 
 public:
-  char* file;
-  int pos;
-  int file_size;
+  char* m_file;
+  int m_pos;
+  int m_file_size;
 
   SmallVector<tok::Token> m_tokens;
   int m_token_index = 0;
-  int entity_count = 0;
+  int m_entity_count;
 };
 
 } // namespace ifc

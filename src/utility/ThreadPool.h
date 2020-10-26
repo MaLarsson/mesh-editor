@@ -15,7 +15,7 @@
 
 class ThreadPool {
 public:
-  ThreadPool(int threads) {
+  ThreadPool(int threads) : m_terminate(false) {
     for (int i = 0; i < threads; ++i) {
       m_workers.emplace_back([this]() {
         for (;;) {
@@ -52,7 +52,9 @@ public:
   template <typename F, typename... Args>
   auto enqueue(F&& f, Args&&... args) {
     auto task = std::make_shared<std::packaged_task<std::invoke_result_t<F, Args...>()>>(
-        std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        [f = std::forward<F>(f), args = std::make_tuple(std::forward<Args>(args)...)]() {
+          return std::apply(f, args);
+        });
 
     std::future result = task->get_future();
 
@@ -72,7 +74,7 @@ private:
 
   std::mutex m_mutex;
   std::condition_variable m_condition;
-  bool m_terminate = false;
+  bool m_terminate;
 };
 
 #endif // UTILITY_THREAD_POOL_H_

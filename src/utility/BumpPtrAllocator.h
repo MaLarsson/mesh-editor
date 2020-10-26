@@ -12,10 +12,10 @@ class BumpPtrAllocator {
   static constexpr int slab_size = 4096;
 
 public:
-  BumpPtrAllocator() = default;
+  BumpPtrAllocator() : m_head(nullptr), m_end(nullptr) {}
 
   ~BumpPtrAllocator() {
-    for (void* slab : slabs) {
+    for (void* slab : m_slabs) {
       free(slab);
       DEBUG_REMOVE_MEM_USAGE(slab_size);
     }
@@ -27,15 +27,15 @@ public:
   BumpPtrAllocator& operator=(BumpPtrAllocator&&) = delete;
 
   void* allocate(int size) {
-    if (size >= (end - head)) {
-      head = static_cast<std::byte*>(malloc(slab_size));
-      end = head + slab_size;
-      slabs.push_back(head);
+    if (size >= (m_end - m_head)) {
+      m_head = static_cast<std::byte*>(malloc(slab_size));
+      m_end = m_head + slab_size;
+      m_slabs.push_back(m_head);
       DEBUG_ADD_MEM_USAGE(slab_size);
     }
 
-    void* ptr = head;
-    head += size;
+    void* ptr = m_head;
+    m_head += size;
 
     return ptr;
   }
@@ -46,9 +46,9 @@ public:
   }
 
 private:
-  SmallVector<void*> slabs;
-  std::byte* head = nullptr;
-  std::byte* end = nullptr;
+  SmallVector<void*> m_slabs;
+  std::byte* m_head;
+  std::byte* m_end;
 };
 
 #endif // UTILITY_BUMP_PTR_ALLOCATOR_H_
