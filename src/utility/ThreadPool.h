@@ -21,13 +21,14 @@ public:
         for (;;) {
           std::function<void()> task;
 
-          std::unique_lock lock(m_mutex);
-          m_condition.wait(lock, [this]() { return m_terminate || m_tasks.empty(); });
+          {
+            std::unique_lock lock(m_mutex);
+            m_condition.wait(lock, [this]() { return m_terminate || !m_tasks.empty(); });
 
-          if (m_terminate && m_tasks.empty()) return;
+            if (m_terminate && m_tasks.empty()) return;
 
-          task = std::move(m_tasks.pop());
-	  lock.release();
+            task = std::move(m_tasks.pop());
+          }
 
           task();
         }
@@ -49,21 +50,20 @@ public:
   }
 
   template <typename F, typename... Args>
-  auto enqueue(F&& f, Args&&... args) -> std::future<std::result_of_t<F(Args...)>> {
-
-    auto task = std::make_shared<std::packaged_task<std::result_of_t<F(Args...)>()>>(
+  auto enqueue(F&& f, Args&&... args) {
+    auto task = std::make_shared<std::packaged_task<std::invoke_result_t<F, Args...>()>>(
         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
 
-    std::future res = task->get_future();
+    std::future result = task->get_future();
 
     {
       std::scoped_lock lock(m_mutex);
-      tasks.emplace([task]() { (*task)(); });
+      m_tasks.emplace([task]() { (*task)(); });
     }
 
-    condition.notify_one();
+    m_condition.notify_one();
 
-    return res;
+    return result;
   }
 
 private:

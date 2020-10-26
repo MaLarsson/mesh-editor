@@ -30,6 +30,9 @@ void Parser::parse() {
   }
 
   ThreadPool pool(4);
+  auto result = pool.enqueue([](int n) { return n; }, 10);
+
+  std::cout << "thread pool result: " << result.get() << '\n';
 }
 
 } // namespace ifc

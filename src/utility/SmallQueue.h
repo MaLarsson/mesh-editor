@@ -15,7 +15,7 @@ public:
 
   template <typename... Args>
   T& emplace(Args&&... args) {
-    m_data.emplace_back(std::forward<Args>(args)...);
+    return m_data.emplace_back(std::forward<Args>(args)...);
   }
 
 private:
