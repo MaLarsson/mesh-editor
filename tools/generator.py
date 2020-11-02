@@ -10,6 +10,8 @@ class Tok(Enum):
     KW_WHERE = 34
     KW_FIXED = 40
     KW_OF = 41
+    #KW_OPTIONAL
+    #KW_EXISTS
 
     KW_REAL = 50
     KW_INTEGER = 51
@@ -25,8 +27,11 @@ class Tok(Enum):
 
     KW_OR = 35
     KW_AND = 36
+    #KW_NOT
     KW_SIZEOF = 37
     KW_SELF = 38
+    #KW_TYPEOF
+    #KW_QUERY
 
     NUMBER = 10
     STRING_LITERAL = 13
@@ -44,7 +49,14 @@ class Tok(Enum):
     LESS_THAN = 16
     GREATER_OR_EQUAL = 17
     LESS_OR_EQUAL = 18
+    #<>
+    #<*
 
+    #:=
+    #*
+    DOT = 19
+    PIPE = 28
+    BACKSLASH = 29
     COMMA = 14
     WHITESPACE = 5
     EQUAL = 6
@@ -107,6 +119,7 @@ class Lexer(object):
             tok = self.token()
             if tok is None: break
             yield tok
+            if tok.kind == Tok.UNKNOWN: break
 
 
 if __name__ == "__main__":
@@ -152,6 +165,9 @@ if __name__ == "__main__":
         (r":", Tok.COLON),
         (r";", Tok.SEMI_COLON),
         (r",", Tok.COMMA),
+        (r"\.", Tok.DOT),
+        (r"\|", Tok.PIPE),
+        (r"\\", Tok.BACKSLASH),
         (r"\?", Tok.QUESTION_MARK),
 
         (r">=", Tok.GREATER_OR_EQUAL),
