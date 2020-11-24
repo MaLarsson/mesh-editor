@@ -1,6 +1,7 @@
 from pathlib import Path
 from enum import Enum
 from re import compile as regex_compile
+from subprocess import call
 
 
 class Tok(Enum):
@@ -12,6 +13,7 @@ class Tok(Enum):
     KW_END_SCHEMA = 6
 
     KW_WHERE = 7
+    KW_INVERSE = 65 # TODO
     KW_FIXED = 8
     KW_OF = 9
     KW_OPTIONAL = 10
@@ -134,6 +136,22 @@ class Parser(object):
         self.lexer = Lexer(rules, file_name)
         self.primitives = primitives
         self.types = []
+        self.entity_pointers = []
+        self.forward_entities = []
+        self.entities = []
+
+    def write_to_file(self):
+        self.__write_to_file("ForwardTemplate.h", "../src/import/ifc/external/Forward.h", self.forward_entities)
+        self.__write_to_file("PointersTemplate.h", "../src/import/ifc/external/Pointers.h", self.entity_pointers)
+        self.__write_to_file("TypesTemplate.h", "../src/import/ifc/external/Types.h", self.types)
+        self.__write_to_file("EntitiesTemplate.h", "../src/import/ifc/external/Entities.h", self.entities)
+
+    def __write_to_file(self, template, output, elements):
+        temp_file = Path("temp")
+        temp_file.write_text(Path(template).read_text().format("\n".join(elements)))
+        with open(output, "w") as f:
+            call(["clang-format", "temp"], stdout=f)
+        temp_file.unlink()
 
     def parse(self):
         token_generator = self.lexer.tokenize()
@@ -181,7 +199,7 @@ class Parser(object):
                 elif tok.kind == Tok.R_PAREN:
                     break
 
-            self.types.append("enum class {} {{ {} }};".format(identifier, ", ".join(value_types)))
+            self.types.append("\nenum class {} {{ {} }};\n".format(identifier, ", ".join(value_types)))
         elif tok.kind == Tok.KW_SELECT:
             assert next(token_generator).kind == Tok.L_PAREN
 
@@ -192,9 +210,9 @@ class Parser(object):
                 elif tok.kind == Tok.R_PAREN:
                     break
 
-            self.types.append("using {} = std::variant<{}>;".format(identifier, ", ".join(value_types)))
+            self.types.append("\nusing {} = std::variant<{}>;\n".format(identifier, ", ".join(value_types)))
         elif tok.kind == Tok.KW_LOGICAL:
-            self.types.append("enum class {} {{ TRUE, FALSE, UNKNOWN }};".format(identifier))
+            self.types.append("\nenum class {} {{ TRUE, FALSE, UNKNOWN }};\n".format(identifier))
         elif tok.kind == Tok.KW_SET:
             assert next(token_generator).kind == Tok.L_BRACKET
             assert next(token_generator).kind == Tok.NUMBER
@@ -211,13 +229,33 @@ class Parser(object):
 
     def __parse_entity(self, token_generator):
         tok = next(token_generator)
+        class_identifier = tok.value
         assert tok.kind == Tok.IDENTIFIER
 
+        super_type = "IfcEntity"
+        thing = ""
+
+        self.forward_entities.append("struct {};".format(tok.value))
+        self.entity_pointers.append("using {} = internal::{}*;".format(tok.value, tok.value))
         print(tok.value)
 
         for tok in token_generator:
-            if tok.kind == Tok.KW_END_ENTITY:
+            if tok.kind == Tok.KW_SUBTYPE:
+                assert next(token_generator).kind == Tok.KW_OF
+                assert next(token_generator).kind == Tok.L_PAREN
+
+                tok = next(token_generator)
+                assert tok.kind == Tok.IDENTIFIER
+                super_type = tok.value
+
+                assert next(token_generator).kind == Tok.R_PAREN
+                assert next(token_generator).kind == Tok.SEMI_COLON
+
+            elif tok.kind in [Tok.KW_END_ENTITY, Tok.KW_WHERE, Tok.KW_INVERSE]:
                 break
+
+        #thing = "IfcActor Actor;IfcText Text;"
+        self.entities.append("\nstruct {} : {} {{{}}};\n".format(class_identifier, super_type, thing))
 
 
 if __name__ == "__main__":
@@ -231,6 +269,7 @@ if __name__ == "__main__":
         (r"\bEND_SCHEMA\b", Tok.KW_END_SCHEMA),
 
         (r"\bWHERE\b", Tok.KW_WHERE),
+        (r"\bINVERSE\b", Tok.KW_INVERSE),
         (r"\bFIXED\b", Tok.KW_FIXED),
         (r"\bOF\b", Tok.KW_OF),
         (r"\bOPTIONAL\b", Tok.KW_OPTIONAL),
@@ -308,3 +347,4 @@ if __name__ == "__main__":
 
     parser = Parser(rules, primitives, "ifc.exp")
     parser.parse()
+    parser.write_to_file()
