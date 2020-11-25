@@ -16,389 +16,917 @@ namespace ifc::internal {
 
 struct IfcEntity {};
 
-struct IfcActionRequest : IfcControl {};
+struct IfcActionRequest : IfcControl {
+  IfcActionRequestTypeEnum PredefinedType;
+  IfcLabel Status;
+  IfcText LongDescription;
+};
 
-struct IfcActor : IfcObject {};
+struct IfcActor : IfcObject {
+  IfcActorSelect TheActor;
+};
 
-struct IfcActorRole : IfcEntity {};
+struct IfcActorRole : IfcEntity {
+  IfcRoleEnum Role;
+  IfcLabel UserDefinedRole;
+  IfcText Description;
+};
 
-struct IfcActuator : IfcDistributionControlElement {};
+struct IfcActuator : IfcDistributionControlElement {
+  IfcActuatorTypeEnum PredefinedType;
+};
 
-struct IfcActuatorType : IfcDistributionControlElementType {};
+struct IfcActuatorType : IfcDistributionControlElementType {
+  IfcActuatorTypeEnum PredefinedType;
+};
 
-struct IfcAddress : IfcEntity {};
+struct IfcAddress : IfcEntity {
+  IfcAddressTypeEnum Purpose;
+  IfcText Description;
+  IfcLabel UserDefinedPurpose;
+};
 
 struct IfcAdvancedBrep : IfcManifoldSolidBrep {};
 
-struct IfcAdvancedBrepWithVoids : IfcAdvancedBrep {};
+struct IfcAdvancedBrepWithVoids : IfcAdvancedBrep {
+  std::unordered_set<IfcClosedShell> Voids;
+};
 
 struct IfcAdvancedFace : IfcFaceSurface {};
 
-struct IfcAirTerminal : IfcFlowTerminal {};
+struct IfcAirTerminal : IfcFlowTerminal {
+  IfcAirTerminalTypeEnum PredefinedType;
+};
 
-struct IfcAirTerminalBox : IfcFlowController {};
+struct IfcAirTerminalBox : IfcFlowController {
+  IfcAirTerminalBoxTypeEnum PredefinedType;
+};
 
-struct IfcAirTerminalBoxType : IfcFlowControllerType {};
+struct IfcAirTerminalBoxType : IfcFlowControllerType {
+  IfcAirTerminalBoxTypeEnum PredefinedType;
+};
 
-struct IfcAirTerminalType : IfcFlowTerminalType {};
+struct IfcAirTerminalType : IfcFlowTerminalType {
+  IfcAirTerminalTypeEnum PredefinedType;
+};
 
-struct IfcAirToAirHeatRecovery : IfcEnergyConversionDevice {};
+struct IfcAirToAirHeatRecovery : IfcEnergyConversionDevice {
+  IfcAirToAirHeatRecoveryTypeEnum PredefinedType;
+};
 
-struct IfcAirToAirHeatRecoveryType : IfcEnergyConversionDeviceType {};
+struct IfcAirToAirHeatRecoveryType : IfcEnergyConversionDeviceType {
+  IfcAirToAirHeatRecoveryTypeEnum PredefinedType;
+};
 
-struct IfcAlarm : IfcDistributionControlElement {};
+struct IfcAlarm : IfcDistributionControlElement {
+  IfcAlarmTypeEnum PredefinedType;
+};
 
-struct IfcAlarmType : IfcDistributionControlElementType {};
+struct IfcAlarmType : IfcDistributionControlElementType {
+  IfcAlarmTypeEnum PredefinedType;
+};
 
-struct IfcAlignment : IfcLinearPositioningElement {};
+struct IfcAlignment : IfcLinearPositioningElement {
+  IfcAlignmentTypeEnum PredefinedType;
+};
 
-struct IfcAlignment2DHorizontal : IfcGeometricRepresentationItem {};
+struct IfcAlignment2DHorizontal : IfcGeometricRepresentationItem {
+  IfcLengthMeasure StartDistAlong;
+  SmallVector<IfcAlignment2DHorizontalSegment, 4> Segments;
+};
 
-struct IfcAlignment2DHorizontalSegment : IfcAlignment2DSegment {};
+struct IfcAlignment2DHorizontalSegment : IfcAlignment2DSegment {
+  IfcCurveSegment2D CurveGeometry;
+};
 
-struct IfcAlignment2DSegment : IfcGeometricRepresentationItem {};
+struct IfcAlignment2DSegment : IfcGeometricRepresentationItem {
+  IfcBoolean TangentialContinuity;
+  IfcLabel StartTag;
+  IfcLabel EndTag;
+};
 
-struct IfcAlignment2DVerSegCircularArc : IfcAlignment2DVerticalSegment {};
+struct IfcAlignment2DVerSegCircularArc : IfcAlignment2DVerticalSegment {
+  IfcPositiveLengthMeasure Radius;
+  IfcBoolean IsConvex;
+};
 
 struct IfcAlignment2DVerSegLine : IfcAlignment2DVerticalSegment {};
 
-struct IfcAlignment2DVerSegParabolicArc : IfcAlignment2DVerticalSegment {};
+struct IfcAlignment2DVerSegParabolicArc : IfcAlignment2DVerticalSegment {
+  IfcPositiveLengthMeasure ParabolaConstant;
+  IfcBoolean IsConvex;
+};
 
-struct IfcAlignment2DVertical : IfcGeometricRepresentationItem {};
+struct IfcAlignment2DVertical : IfcGeometricRepresentationItem {
+  SmallVector<IfcAlignment2DVerticalSegment, 4> Segments;
+};
 
-struct IfcAlignment2DVerticalSegment : IfcAlignment2DSegment {};
+struct IfcAlignment2DVerticalSegment : IfcAlignment2DSegment {
+  IfcLengthMeasure StartDistAlong;
+  IfcPositiveLengthMeasure HorizontalLength;
+  IfcLengthMeasure StartHeight;
+  IfcRatioMeasure StartGradient;
+};
 
-struct IfcAlignmentCurve : IfcBoundedCurve {};
+struct IfcAlignmentCurve : IfcBoundedCurve {
+  IfcAlignment2DHorizontal Horizontal;
+  IfcAlignment2DVertical Vertical;
+  IfcLabel Tag;
+};
 
 struct IfcAnnotation : IfcProduct {};
 
-struct IfcAnnotationFillArea : IfcGeometricRepresentationItem {};
+struct IfcAnnotationFillArea : IfcGeometricRepresentationItem {
+  IfcCurve OuterBoundary;
+  std::unordered_set<IfcCurve> InnerBoundaries;
+};
 
-struct IfcApplication : IfcEntity {};
+struct IfcApplication : IfcEntity {
+  IfcOrganization ApplicationDeveloper;
+  IfcLabel Version;
+  IfcLabel ApplicationFullName;
+  IfcIdentifier ApplicationIdentifier;
+};
 
-struct IfcAppliedValue : IfcEntity {};
+struct IfcAppliedValue : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  IfcAppliedValueSelect AppliedValue;
+  IfcMeasureWithUnit UnitBasis;
+  IfcDate ApplicableDate;
+  IfcDate FixedUntilDate;
+  IfcLabel Category;
+  IfcLabel Condition;
+  IfcArithmeticOperatorEnum ArithmeticOperator;
+  SmallVector<IfcAppliedValue, 4> Components;
+};
 
-struct IfcApproval : IfcEntity {};
+struct IfcApproval : IfcEntity {
+  IfcIdentifier Identifier;
+  IfcLabel Name;
+  IfcText Description;
+  IfcDateTime TimeOfApproval;
+  IfcLabel Status;
+  IfcLabel Level;
+  IfcText Qualifier;
+  IfcActorSelect RequestingApproval;
+  IfcActorSelect GivingApproval;
+};
 
-struct IfcApprovalRelationship : IfcResourceLevelRelationship {};
+struct IfcApprovalRelationship : IfcResourceLevelRelationship {
+  IfcApproval RelatingApproval;
+  std::unordered_set<IfcApproval> RelatedApprovals;
+};
 
-struct IfcArbitraryClosedProfileDef : IfcProfileDef {};
+struct IfcArbitraryClosedProfileDef : IfcProfileDef {
+  IfcCurve OuterCurve;
+};
 
-struct IfcArbitraryOpenProfileDef : IfcProfileDef {};
+struct IfcArbitraryOpenProfileDef : IfcProfileDef {
+  IfcBoundedCurve Curve;
+};
 
-struct IfcArbitraryProfileDefWithVoids : IfcArbitraryClosedProfileDef {};
+struct IfcArbitraryProfileDefWithVoids : IfcArbitraryClosedProfileDef {
+  std::unordered_set<IfcCurve> InnerCurves;
+};
 
-struct IfcAsset : IfcGroup {};
+struct IfcAsset : IfcGroup {
+  IfcIdentifier Identification;
+  IfcCostValue OriginalValue;
+  IfcCostValue CurrentValue;
+  IfcCostValue TotalReplacementCost;
+  IfcActorSelect Owner;
+  IfcActorSelect User;
+  IfcPerson ResponsiblePerson;
+  IfcDate IncorporationDate;
+  IfcCostValue DepreciatedValue;
+};
 
-struct IfcAsymmetricIShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcAsymmetricIShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure BottomFlangeWidth;
+  IfcPositiveLengthMeasure OverallDepth;
+  IfcPositiveLengthMeasure WebThickness;
+  IfcPositiveLengthMeasure BottomFlangeThickness;
+  IfcNonNegativeLengthMeasure BottomFlangeFilletRadius;
+  IfcPositiveLengthMeasure TopFlangeWidth;
+  IfcPositiveLengthMeasure TopFlangeThickness;
+  IfcNonNegativeLengthMeasure TopFlangeFilletRadius;
+  IfcNonNegativeLengthMeasure BottomFlangeEdgeRadius;
+  IfcPlaneAngleMeasure BottomFlangeSlope;
+  IfcNonNegativeLengthMeasure TopFlangeEdgeRadius;
+  IfcPlaneAngleMeasure TopFlangeSlope;
+};
 
-struct IfcAudioVisualAppliance : IfcFlowTerminal {};
+struct IfcAudioVisualAppliance : IfcFlowTerminal {
+  IfcAudioVisualApplianceTypeEnum PredefinedType;
+};
 
-struct IfcAudioVisualApplianceType : IfcFlowTerminalType {};
+struct IfcAudioVisualApplianceType : IfcFlowTerminalType {
+  IfcAudioVisualApplianceTypeEnum PredefinedType;
+};
 
-struct IfcAxis1Placement : IfcPlacement {};
+struct IfcAxis1Placement : IfcPlacement {
+  IfcDirection Axis;
+};
 
-struct IfcAxis2Placement2D : IfcPlacement {};
+struct IfcAxis2Placement2D : IfcPlacement {
+  IfcDirection RefDirection;
+};
 
-struct IfcAxis2Placement3D : IfcPlacement {};
+struct IfcAxis2Placement3D : IfcPlacement {
+  IfcDirection Axis;
+  IfcDirection RefDirection;
+};
 
-struct IfcBSplineCurve : IfcBoundedCurve {};
+struct IfcBSplineCurve : IfcBoundedCurve {
+  IfcInteger Degree;
+  SmallVector<IfcCartesianPoint, 4> ControlPointsList;
+  IfcBSplineCurveForm CurveForm;
+  IfcLogical ClosedCurve;
+  IfcLogical SelfIntersect;
+};
 
-struct IfcBSplineCurveWithKnots : IfcBSplineCurve {};
+struct IfcBSplineCurveWithKnots : IfcBSplineCurve {
+  SmallVector<IfcInteger, 4> KnotMultiplicities;
+  SmallVector<IfcParameterValue, 4> Knots;
+  IfcKnotType KnotSpec;
+};
 
-struct IfcBSplineSurface : IfcBoundedSurface {};
+struct IfcBSplineSurface : IfcBoundedSurface {
+  IfcInteger UDegree;
+  IfcInteger VDegree;
+  SmallVector<SmallVector<IfcCartesianPoint, 4>, 4> ControlPointsList;
+  IfcBSplineSurfaceForm SurfaceForm;
+  IfcLogical UClosed;
+  IfcLogical VClosed;
+  IfcLogical SelfIntersect;
+};
 
-struct IfcBSplineSurfaceWithKnots : IfcBSplineSurface {};
+struct IfcBSplineSurfaceWithKnots : IfcBSplineSurface {
+  SmallVector<IfcInteger, 4> UMultiplicities;
+  SmallVector<IfcInteger, 4> VMultiplicities;
+  SmallVector<IfcParameterValue, 4> UKnots;
+  SmallVector<IfcParameterValue, 4> VKnots;
+  IfcKnotType KnotSpec;
+};
 
-struct IfcBeam : IfcBuildingElement {};
+struct IfcBeam : IfcBuildingElement {
+  IfcBeamTypeEnum PredefinedType;
+};
 
 struct IfcBeamStandardCase : IfcBeam {};
 
-struct IfcBeamType : IfcBuildingElementType {};
+struct IfcBeamType : IfcBuildingElementType {
+  IfcBeamTypeEnum PredefinedType;
+};
 
-struct IfcBlobTexture : IfcSurfaceTexture {};
+struct IfcBlobTexture : IfcSurfaceTexture {
+  IfcIdentifier RasterFormat;
+  IfcBinary RasterCode;
+};
 
-struct IfcBlock : IfcCsgPrimitive3D {};
+struct IfcBlock : IfcCsgPrimitive3D {
+  IfcPositiveLengthMeasure XLength;
+  IfcPositiveLengthMeasure YLength;
+  IfcPositiveLengthMeasure ZLength;
+};
 
-struct IfcBoiler : IfcEnergyConversionDevice {};
+struct IfcBoiler : IfcEnergyConversionDevice {
+  IfcBoilerTypeEnum PredefinedType;
+};
 
-struct IfcBoilerType : IfcEnergyConversionDeviceType {};
+struct IfcBoilerType : IfcEnergyConversionDeviceType {
+  IfcBoilerTypeEnum PredefinedType;
+};
 
 struct IfcBooleanClippingResult : IfcBooleanResult {};
 
-struct IfcBooleanResult : IfcGeometricRepresentationItem {};
+struct IfcBooleanResult : IfcGeometricRepresentationItem {
+  IfcBooleanOperator Operator;
+  IfcBooleanOperand FirstOperand;
+  IfcBooleanOperand SecondOperand;
+};
 
-struct IfcBoundaryCondition : IfcEntity {};
+struct IfcBoundaryCondition : IfcEntity {
+  IfcLabel Name;
+};
 
 struct IfcBoundaryCurve : IfcCompositeCurveOnSurface {};
 
-struct IfcBoundaryEdgeCondition : IfcBoundaryCondition {};
+struct IfcBoundaryEdgeCondition : IfcBoundaryCondition {
+  IfcModulusOfTranslationalSubgradeReactionSelect TranslationalStiffnessByLengthX;
+  IfcModulusOfTranslationalSubgradeReactionSelect TranslationalStiffnessByLengthY;
+  IfcModulusOfTranslationalSubgradeReactionSelect TranslationalStiffnessByLengthZ;
+  IfcModulusOfRotationalSubgradeReactionSelect RotationalStiffnessByLengthX;
+  IfcModulusOfRotationalSubgradeReactionSelect RotationalStiffnessByLengthY;
+  IfcModulusOfRotationalSubgradeReactionSelect RotationalStiffnessByLengthZ;
+};
 
-struct IfcBoundaryFaceCondition : IfcBoundaryCondition {};
+struct IfcBoundaryFaceCondition : IfcBoundaryCondition {
+  IfcModulusOfSubgradeReactionSelect TranslationalStiffnessByAreaX;
+  IfcModulusOfSubgradeReactionSelect TranslationalStiffnessByAreaY;
+  IfcModulusOfSubgradeReactionSelect TranslationalStiffnessByAreaZ;
+};
 
-struct IfcBoundaryNodeCondition : IfcBoundaryCondition {};
+struct IfcBoundaryNodeCondition : IfcBoundaryCondition {
+  IfcTranslationalStiffnessSelect TranslationalStiffnessX;
+  IfcTranslationalStiffnessSelect TranslationalStiffnessY;
+  IfcTranslationalStiffnessSelect TranslationalStiffnessZ;
+  IfcRotationalStiffnessSelect RotationalStiffnessX;
+  IfcRotationalStiffnessSelect RotationalStiffnessY;
+  IfcRotationalStiffnessSelect RotationalStiffnessZ;
+};
 
-struct IfcBoundaryNodeConditionWarping : IfcBoundaryNodeCondition {};
+struct IfcBoundaryNodeConditionWarping : IfcBoundaryNodeCondition {
+  IfcWarpingStiffnessSelect WarpingStiffness;
+};
 
 struct IfcBoundedCurve : IfcCurve {};
 
 struct IfcBoundedSurface : IfcSurface {};
 
-struct IfcBoundingBox : IfcGeometricRepresentationItem {};
+struct IfcBoundingBox : IfcGeometricRepresentationItem {
+  IfcCartesianPoint Corner;
+  IfcPositiveLengthMeasure XDim;
+  IfcPositiveLengthMeasure YDim;
+  IfcPositiveLengthMeasure ZDim;
+};
 
-struct IfcBoxedHalfSpace : IfcHalfSpaceSolid {};
+struct IfcBoxedHalfSpace : IfcHalfSpaceSolid {
+  IfcBoundingBox Enclosure;
+};
 
-struct IfcBuilding : IfcSpatialStructureElement {};
+struct IfcBuilding : IfcSpatialStructureElement {
+  IfcLengthMeasure ElevationOfRefHeight;
+  IfcLengthMeasure ElevationOfTerrain;
+  IfcPostalAddress BuildingAddress;
+};
 
 struct IfcBuildingElement : IfcElement {};
 
-struct IfcBuildingElementPart : IfcElementComponent {};
+struct IfcBuildingElementPart : IfcElementComponent {
+  IfcBuildingElementPartTypeEnum PredefinedType;
+};
 
-struct IfcBuildingElementPartType : IfcElementComponentType {};
+struct IfcBuildingElementPartType : IfcElementComponentType {
+  IfcBuildingElementPartTypeEnum PredefinedType;
+};
 
-struct IfcBuildingElementProxy : IfcBuildingElement {};
+struct IfcBuildingElementProxy : IfcBuildingElement {
+  IfcBuildingElementProxyTypeEnum PredefinedType;
+};
 
-struct IfcBuildingElementProxyType : IfcBuildingElementType {};
+struct IfcBuildingElementProxyType : IfcBuildingElementType {
+  IfcBuildingElementProxyTypeEnum PredefinedType;
+};
 
 struct IfcBuildingElementType : IfcElementType {};
 
-struct IfcBuildingStorey : IfcSpatialStructureElement {};
+struct IfcBuildingStorey : IfcSpatialStructureElement {
+  IfcLengthMeasure Elevation;
+};
 
-struct IfcBuildingSystem : IfcSystem {};
+struct IfcBuildingSystem : IfcSystem {
+  IfcBuildingSystemTypeEnum PredefinedType;
+  IfcLabel LongName;
+};
 
-struct IfcBurner : IfcEnergyConversionDevice {};
+struct IfcBurner : IfcEnergyConversionDevice {
+  IfcBurnerTypeEnum PredefinedType;
+};
 
-struct IfcBurnerType : IfcEnergyConversionDeviceType {};
+struct IfcBurnerType : IfcEnergyConversionDeviceType {
+  IfcBurnerTypeEnum PredefinedType;
+};
 
-struct IfcCShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcCShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Depth;
+  IfcPositiveLengthMeasure Width;
+  IfcPositiveLengthMeasure WallThickness;
+  IfcPositiveLengthMeasure Girth;
+  IfcNonNegativeLengthMeasure InternalFilletRadius;
+};
 
-struct IfcCableCarrierFitting : IfcFlowFitting {};
+struct IfcCableCarrierFitting : IfcFlowFitting {
+  IfcCableCarrierFittingTypeEnum PredefinedType;
+};
 
-struct IfcCableCarrierFittingType : IfcFlowFittingType {};
+struct IfcCableCarrierFittingType : IfcFlowFittingType {
+  IfcCableCarrierFittingTypeEnum PredefinedType;
+};
 
-struct IfcCableCarrierSegment : IfcFlowSegment {};
+struct IfcCableCarrierSegment : IfcFlowSegment {
+  IfcCableCarrierSegmentTypeEnum PredefinedType;
+};
 
-struct IfcCableCarrierSegmentType : IfcFlowSegmentType {};
+struct IfcCableCarrierSegmentType : IfcFlowSegmentType {
+  IfcCableCarrierSegmentTypeEnum PredefinedType;
+};
 
-struct IfcCableFitting : IfcFlowFitting {};
+struct IfcCableFitting : IfcFlowFitting {
+  IfcCableFittingTypeEnum PredefinedType;
+};
 
-struct IfcCableFittingType : IfcFlowFittingType {};
+struct IfcCableFittingType : IfcFlowFittingType {
+  IfcCableFittingTypeEnum PredefinedType;
+};
 
-struct IfcCableSegment : IfcFlowSegment {};
+struct IfcCableSegment : IfcFlowSegment {
+  IfcCableSegmentTypeEnum PredefinedType;
+};
 
-struct IfcCableSegmentType : IfcFlowSegmentType {};
+struct IfcCableSegmentType : IfcFlowSegmentType {
+  IfcCableSegmentTypeEnum PredefinedType;
+};
 
-struct IfcCartesianPoint : IfcPoint {};
+struct IfcCartesianPoint : IfcPoint {
+  SmallVector<IfcLengthMeasure, 3> Coordinates;
+};
 
 struct IfcCartesianPointList : IfcGeometricRepresentationItem {};
 
-struct IfcCartesianPointList2D : IfcCartesianPointList {};
+struct IfcCartesianPointList2D : IfcCartesianPointList {
+  SmallVector<SmallVector<IfcLengthMeasure, 2>, 4> CoordList;
+  SmallVector<IfcLabel, 4> TagList;
+};
 
-struct IfcCartesianPointList3D : IfcCartesianPointList {};
+struct IfcCartesianPointList3D : IfcCartesianPointList {
+  SmallVector<SmallVector<IfcLengthMeasure, 3>, 4> CoordList;
+  SmallVector<IfcLabel, 4> TagList;
+};
 
-struct IfcCartesianTransformationOperator : IfcGeometricRepresentationItem {};
+struct IfcCartesianTransformationOperator : IfcGeometricRepresentationItem {
+  IfcDirection Axis1;
+  IfcDirection Axis2;
+  IfcCartesianPoint LocalOrigin;
+  IfcReal Scale;
+};
 
 struct IfcCartesianTransformationOperator2D : IfcCartesianTransformationOperator {};
 
-struct IfcCartesianTransformationOperator2DnonUniform : IfcCartesianTransformationOperator2D {};
+struct IfcCartesianTransformationOperator2DnonUniform : IfcCartesianTransformationOperator2D {
+  IfcReal Scale2;
+};
 
-struct IfcCartesianTransformationOperator3D : IfcCartesianTransformationOperator {};
+struct IfcCartesianTransformationOperator3D : IfcCartesianTransformationOperator {
+  IfcDirection Axis3;
+};
 
-struct IfcCartesianTransformationOperator3DnonUniform : IfcCartesianTransformationOperator3D {};
+struct IfcCartesianTransformationOperator3DnonUniform : IfcCartesianTransformationOperator3D {
+  IfcReal Scale2;
+  IfcReal Scale3;
+};
 
-struct IfcCenterLineProfileDef : IfcArbitraryOpenProfileDef {};
+struct IfcCenterLineProfileDef : IfcArbitraryOpenProfileDef {
+  IfcPositiveLengthMeasure Thickness;
+};
 
-struct IfcChiller : IfcEnergyConversionDevice {};
+struct IfcChiller : IfcEnergyConversionDevice {
+  IfcChillerTypeEnum PredefinedType;
+};
 
-struct IfcChillerType : IfcEnergyConversionDeviceType {};
+struct IfcChillerType : IfcEnergyConversionDeviceType {
+  IfcChillerTypeEnum PredefinedType;
+};
 
-struct IfcChimney : IfcBuildingElement {};
+struct IfcChimney : IfcBuildingElement {
+  IfcChimneyTypeEnum PredefinedType;
+};
 
-struct IfcChimneyType : IfcBuildingElementType {};
+struct IfcChimneyType : IfcBuildingElementType {
+  IfcChimneyTypeEnum PredefinedType;
+};
 
-struct IfcCircle : IfcConic {};
+struct IfcCircle : IfcConic {
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcCircleHollowProfileDef : IfcCircleProfileDef {};
+struct IfcCircleHollowProfileDef : IfcCircleProfileDef {
+  IfcPositiveLengthMeasure WallThickness;
+};
 
-struct IfcCircleProfileDef : IfcParameterizedProfileDef {};
+struct IfcCircleProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcCircularArcSegment2D : IfcCurveSegment2D {};
+struct IfcCircularArcSegment2D : IfcCurveSegment2D {
+  IfcPositiveLengthMeasure Radius;
+  IfcBoolean IsCCW;
+};
 
 struct IfcCivilElement : IfcElement {};
 
 struct IfcCivilElementType : IfcElementType {};
 
-struct IfcClassification : IfcExternalInformation {};
+struct IfcClassification : IfcExternalInformation {
+  IfcLabel Source;
+  IfcLabel Edition;
+  IfcDate EditionDate;
+  IfcLabel Name;
+  IfcText Description;
+  IfcURIReference Location;
+  SmallVector<IfcIdentifier, 4> ReferenceTokens;
+};
 
-struct IfcClassificationReference : IfcExternalReference {};
+struct IfcClassificationReference : IfcExternalReference {
+  IfcClassificationReferenceSelect ReferencedSource;
+  IfcText Description;
+  IfcIdentifier Sort;
+};
 
 struct IfcClosedShell : IfcConnectedFaceSet {};
 
-struct IfcCoil : IfcEnergyConversionDevice {};
+struct IfcCoil : IfcEnergyConversionDevice {
+  IfcCoilTypeEnum PredefinedType;
+};
 
-struct IfcCoilType : IfcEnergyConversionDeviceType {};
+struct IfcCoilType : IfcEnergyConversionDeviceType {
+  IfcCoilTypeEnum PredefinedType;
+};
 
-struct IfcColourRgb : IfcColourSpecification {};
+struct IfcColourRgb : IfcColourSpecification {
+  IfcNormalisedRatioMeasure Red;
+  IfcNormalisedRatioMeasure Green;
+  IfcNormalisedRatioMeasure Blue;
+};
 
-struct IfcColourRgbList : IfcPresentationItem {};
+struct IfcColourRgbList : IfcPresentationItem {
+  SmallVector<SmallVector<IfcNormalisedRatioMeasure, 3>, 4> ColourList;
+};
 
-struct IfcColourSpecification : IfcPresentationItem {};
+struct IfcColourSpecification : IfcPresentationItem {
+  IfcLabel Name;
+};
 
-struct IfcColumn : IfcBuildingElement {};
+struct IfcColumn : IfcBuildingElement {
+  IfcColumnTypeEnum PredefinedType;
+};
 
 struct IfcColumnStandardCase : IfcColumn {};
 
-struct IfcColumnType : IfcBuildingElementType {};
+struct IfcColumnType : IfcBuildingElementType {
+  IfcColumnTypeEnum PredefinedType;
+};
 
-struct IfcCommunicationsAppliance : IfcFlowTerminal {};
+struct IfcCommunicationsAppliance : IfcFlowTerminal {
+  IfcCommunicationsApplianceTypeEnum PredefinedType;
+};
 
-struct IfcCommunicationsApplianceType : IfcFlowTerminalType {};
+struct IfcCommunicationsApplianceType : IfcFlowTerminalType {
+  IfcCommunicationsApplianceTypeEnum PredefinedType;
+};
 
-struct IfcComplexProperty : IfcProperty {};
+struct IfcComplexProperty : IfcProperty {
+  IfcIdentifier UsageName;
+  std::unordered_set<IfcProperty> HasProperties;
+};
 
-struct IfcComplexPropertyTemplate : IfcPropertyTemplate {};
+struct IfcComplexPropertyTemplate : IfcPropertyTemplate {
+  IfcLabel UsageName;
+  IfcComplexPropertyTemplateTypeEnum TemplateType;
+  std::unordered_set<IfcPropertyTemplate> HasPropertyTemplates;
+};
 
-struct IfcCompositeCurve : IfcBoundedCurve {};
+struct IfcCompositeCurve : IfcBoundedCurve {
+  SmallVector<IfcCompositeCurveSegment, 4> Segments;
+  IfcLogical SelfIntersect;
+};
 
 struct IfcCompositeCurveOnSurface : IfcCompositeCurve {};
 
-struct IfcCompositeCurveSegment : IfcGeometricRepresentationItem {};
+struct IfcCompositeCurveSegment : IfcGeometricRepresentationItem {
+  IfcTransitionCode Transition;
+  IfcBoolean SameSense;
+  IfcCurve ParentCurve;
+};
 
-struct IfcCompositeProfileDef : IfcProfileDef {};
+struct IfcCompositeProfileDef : IfcProfileDef {
+  std::unordered_set<IfcProfileDef> Profiles;
+  IfcLabel Label;
+};
 
-struct IfcCompressor : IfcFlowMovingDevice {};
+struct IfcCompressor : IfcFlowMovingDevice {
+  IfcCompressorTypeEnum PredefinedType;
+};
 
-struct IfcCompressorType : IfcFlowMovingDeviceType {};
+struct IfcCompressorType : IfcFlowMovingDeviceType {
+  IfcCompressorTypeEnum PredefinedType;
+};
 
-struct IfcCondenser : IfcEnergyConversionDevice {};
+struct IfcCondenser : IfcEnergyConversionDevice {
+  IfcCondenserTypeEnum PredefinedType;
+};
 
-struct IfcCondenserType : IfcEnergyConversionDeviceType {};
+struct IfcCondenserType : IfcEnergyConversionDeviceType {
+  IfcCondenserTypeEnum PredefinedType;
+};
 
-struct IfcConic : IfcCurve {};
+struct IfcConic : IfcCurve {
+  IfcAxis2Placement Position;
+};
 
-struct IfcConnectedFaceSet : IfcTopologicalRepresentationItem {};
+struct IfcConnectedFaceSet : IfcTopologicalRepresentationItem {
+  std::unordered_set<IfcFace> CfsFaces;
+};
 
-struct IfcConnectionCurveGeometry : IfcConnectionGeometry {};
+struct IfcConnectionCurveGeometry : IfcConnectionGeometry {
+  IfcCurveOrEdgeCurve CurveOnRelatingElement;
+  IfcCurveOrEdgeCurve CurveOnRelatedElement;
+};
 
 struct IfcConnectionGeometry : IfcEntity {};
 
-struct IfcConnectionPointEccentricity : IfcConnectionPointGeometry {};
+struct IfcConnectionPointEccentricity : IfcConnectionPointGeometry {
+  IfcLengthMeasure EccentricityInX;
+  IfcLengthMeasure EccentricityInY;
+  IfcLengthMeasure EccentricityInZ;
+};
 
-struct IfcConnectionPointGeometry : IfcConnectionGeometry {};
+struct IfcConnectionPointGeometry : IfcConnectionGeometry {
+  IfcPointOrVertexPoint PointOnRelatingElement;
+  IfcPointOrVertexPoint PointOnRelatedElement;
+};
 
-struct IfcConnectionSurfaceGeometry : IfcConnectionGeometry {};
+struct IfcConnectionSurfaceGeometry : IfcConnectionGeometry {
+  IfcSurfaceOrFaceSurface SurfaceOnRelatingElement;
+  IfcSurfaceOrFaceSurface SurfaceOnRelatedElement;
+};
 
-struct IfcConnectionVolumeGeometry : IfcConnectionGeometry {};
+struct IfcConnectionVolumeGeometry : IfcConnectionGeometry {
+  IfcSolidOrShell VolumeOnRelatingElement;
+  IfcSolidOrShell VolumeOnRelatedElement;
+};
 
-struct IfcConstraint : IfcEntity {};
+struct IfcConstraint : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  IfcConstraintEnum ConstraintGrade;
+  IfcLabel ConstraintSource;
+  IfcActorSelect CreatingActor;
+  IfcDateTime CreationTime;
+  IfcLabel UserDefinedGrade;
+};
 
-struct IfcConstructionEquipmentResource : IfcConstructionResource {};
+struct IfcConstructionEquipmentResource : IfcConstructionResource {
+  IfcConstructionEquipmentResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionEquipmentResourceType : IfcConstructionResourceType {};
+struct IfcConstructionEquipmentResourceType : IfcConstructionResourceType {
+  IfcConstructionEquipmentResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionMaterialResource : IfcConstructionResource {};
+struct IfcConstructionMaterialResource : IfcConstructionResource {
+  IfcConstructionMaterialResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionMaterialResourceType : IfcConstructionResourceType {};
+struct IfcConstructionMaterialResourceType : IfcConstructionResourceType {
+  IfcConstructionMaterialResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionProductResource : IfcConstructionResource {};
+struct IfcConstructionProductResource : IfcConstructionResource {
+  IfcConstructionProductResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionProductResourceType : IfcConstructionResourceType {};
+struct IfcConstructionProductResourceType : IfcConstructionResourceType {
+  IfcConstructionProductResourceTypeEnum PredefinedType;
+};
 
-struct IfcConstructionResource : IfcResource {};
+struct IfcConstructionResource : IfcResource {
+  IfcResourceTime Usage;
+  SmallVector<IfcAppliedValue, 4> BaseCosts;
+  IfcPhysicalQuantity BaseQuantity;
+};
 
-struct IfcConstructionResourceType : IfcTypeResource {};
+struct IfcConstructionResourceType : IfcTypeResource {
+  SmallVector<IfcAppliedValue, 4> BaseCosts;
+  IfcPhysicalQuantity BaseQuantity;
+};
 
-struct IfcContext : IfcObjectDefinition {};
+struct IfcContext : IfcObjectDefinition {
+  IfcLabel ObjectType;
+  IfcLabel LongName;
+  IfcLabel Phase;
+  std::unordered_set<IfcRepresentationContext> RepresentationContexts;
+  IfcUnitAssignment UnitsInContext;
+};
 
-struct IfcContextDependentUnit : IfcNamedUnit {};
+struct IfcContextDependentUnit : IfcNamedUnit {
+  IfcLabel Name;
+};
 
-struct IfcControl : IfcObject {};
+struct IfcControl : IfcObject {
+  IfcIdentifier Identification;
+};
 
-struct IfcController : IfcDistributionControlElement {};
+struct IfcController : IfcDistributionControlElement {
+  IfcControllerTypeEnum PredefinedType;
+};
 
-struct IfcControllerType : IfcDistributionControlElementType {};
+struct IfcControllerType : IfcDistributionControlElementType {
+  IfcControllerTypeEnum PredefinedType;
+};
 
-struct IfcConversionBasedUnit : IfcNamedUnit {};
+struct IfcConversionBasedUnit : IfcNamedUnit {
+  IfcLabel Name;
+  IfcMeasureWithUnit ConversionFactor;
+};
 
-struct IfcConversionBasedUnitWithOffset : IfcConversionBasedUnit {};
+struct IfcConversionBasedUnitWithOffset : IfcConversionBasedUnit {
+  IfcReal ConversionOffset;
+};
 
-struct IfcCooledBeam : IfcEnergyConversionDevice {};
+struct IfcCooledBeam : IfcEnergyConversionDevice {
+  IfcCooledBeamTypeEnum PredefinedType;
+};
 
-struct IfcCooledBeamType : IfcEnergyConversionDeviceType {};
+struct IfcCooledBeamType : IfcEnergyConversionDeviceType {
+  IfcCooledBeamTypeEnum PredefinedType;
+};
 
-struct IfcCoolingTower : IfcEnergyConversionDevice {};
+struct IfcCoolingTower : IfcEnergyConversionDevice {
+  IfcCoolingTowerTypeEnum PredefinedType;
+};
 
-struct IfcCoolingTowerType : IfcEnergyConversionDeviceType {};
+struct IfcCoolingTowerType : IfcEnergyConversionDeviceType {
+  IfcCoolingTowerTypeEnum PredefinedType;
+};
 
-struct IfcCoordinateOperation : IfcEntity {};
+struct IfcCoordinateOperation : IfcEntity {
+  IfcCoordinateReferenceSystemSelect SourceCRS;
+  IfcCoordinateReferenceSystem TargetCRS;
+};
 
-struct IfcCoordinateReferenceSystem : IfcEntity {};
+struct IfcCoordinateReferenceSystem : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  IfcIdentifier GeodeticDatum;
+  IfcIdentifier VerticalDatum;
+};
 
-struct IfcCostItem : IfcControl {};
+struct IfcCostItem : IfcControl {
+  IfcCostItemTypeEnum PredefinedType;
+  SmallVector<IfcCostValue, 4> CostValues;
+  SmallVector<IfcPhysicalQuantity, 4> CostQuantities;
+};
 
-struct IfcCostSchedule : IfcControl {};
+struct IfcCostSchedule : IfcControl {
+  IfcCostScheduleTypeEnum PredefinedType;
+  IfcLabel Status;
+  IfcDateTime SubmittedOn;
+  IfcDateTime UpdateDate;
+};
 
 struct IfcCostValue : IfcAppliedValue {};
 
-struct IfcCovering : IfcBuildingElement {};
+struct IfcCovering : IfcBuildingElement {
+  IfcCoveringTypeEnum PredefinedType;
+};
 
-struct IfcCoveringType : IfcBuildingElementType {};
+struct IfcCoveringType : IfcBuildingElementType {
+  IfcCoveringTypeEnum PredefinedType;
+};
 
-struct IfcCrewResource : IfcConstructionResource {};
+struct IfcCrewResource : IfcConstructionResource {
+  IfcCrewResourceTypeEnum PredefinedType;
+};
 
-struct IfcCrewResourceType : IfcConstructionResourceType {};
+struct IfcCrewResourceType : IfcConstructionResourceType {
+  IfcCrewResourceTypeEnum PredefinedType;
+};
 
-struct IfcCsgPrimitive3D : IfcGeometricRepresentationItem {};
+struct IfcCsgPrimitive3D : IfcGeometricRepresentationItem {
+  IfcAxis2Placement3D Position;
+};
 
-struct IfcCsgSolid : IfcSolidModel {};
+struct IfcCsgSolid : IfcSolidModel {
+  IfcCsgSelect TreeRootExpression;
+};
 
-struct IfcCurrencyRelationship : IfcResourceLevelRelationship {};
+struct IfcCurrencyRelationship : IfcResourceLevelRelationship {
+  IfcMonetaryUnit RelatingMonetaryUnit;
+  IfcMonetaryUnit RelatedMonetaryUnit;
+  IfcPositiveRatioMeasure ExchangeRate;
+  IfcDateTime RateDateTime;
+  IfcLibraryInformation RateSource;
+};
 
-struct IfcCurtainWall : IfcBuildingElement {};
+struct IfcCurtainWall : IfcBuildingElement {
+  IfcCurtainWallTypeEnum PredefinedType;
+};
 
-struct IfcCurtainWallType : IfcBuildingElementType {};
+struct IfcCurtainWallType : IfcBuildingElementType {
+  IfcCurtainWallTypeEnum PredefinedType;
+};
 
 struct IfcCurve : IfcGeometricRepresentationItem {};
 
-struct IfcCurveBoundedPlane : IfcBoundedSurface {};
+struct IfcCurveBoundedPlane : IfcBoundedSurface {
+  IfcPlane BasisSurface;
+  IfcCurve OuterBoundary;
+  std::unordered_set<IfcCurve> InnerBoundaries;
+};
 
-struct IfcCurveBoundedSurface : IfcBoundedSurface {};
+struct IfcCurveBoundedSurface : IfcBoundedSurface {
+  IfcSurface BasisSurface;
+  std::unordered_set<IfcBoundaryCurve> Boundaries;
+  IfcBoolean ImplicitOuter;
+};
 
-struct IfcCurveSegment2D : IfcBoundedCurve {};
+struct IfcCurveSegment2D : IfcBoundedCurve {
+  IfcCartesianPoint StartPoint;
+  IfcPlaneAngleMeasure StartDirection;
+  IfcPositiveLengthMeasure SegmentLength;
+};
 
-struct IfcCurveStyle : IfcPresentationStyle {};
+struct IfcCurveStyle : IfcPresentationStyle {
+  IfcCurveFontOrScaledCurveFontSelect CurveFont;
+  IfcSizeSelect CurveWidth;
+  IfcColour CurveColour;
+  IfcBoolean ModelOrDraughting;
+};
 
-struct IfcCurveStyleFont : IfcPresentationItem {};
+struct IfcCurveStyleFont : IfcPresentationItem {
+  IfcLabel Name;
+  SmallVector<IfcCurveStyleFontPattern, 4> PatternList;
+};
 
-struct IfcCurveStyleFontAndScaling : IfcPresentationItem {};
+struct IfcCurveStyleFontAndScaling : IfcPresentationItem {
+  IfcLabel Name;
+  IfcCurveStyleFontSelect CurveFont;
+  IfcPositiveRatioMeasure CurveFontScaling;
+};
 
-struct IfcCurveStyleFontPattern : IfcPresentationItem {};
+struct IfcCurveStyleFontPattern : IfcPresentationItem {
+  IfcLengthMeasure VisibleSegmentLength;
+  IfcPositiveLengthMeasure InvisibleSegmentLength;
+};
 
-struct IfcCylindricalSurface : IfcElementarySurface {};
+struct IfcCylindricalSurface : IfcElementarySurface {
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcDamper : IfcFlowController {};
+struct IfcDamper : IfcFlowController {
+  IfcDamperTypeEnum PredefinedType;
+};
 
-struct IfcDamperType : IfcFlowControllerType {};
+struct IfcDamperType : IfcFlowControllerType {
+  IfcDamperTypeEnum PredefinedType;
+};
 
-struct IfcDerivedProfileDef : IfcProfileDef {};
+struct IfcDerivedProfileDef : IfcProfileDef {
+  IfcProfileDef ParentProfile;
+  IfcCartesianTransformationOperator2D Operator;
+  IfcLabel Label;
+};
 
-struct IfcDerivedUnit : IfcEntity {};
+struct IfcDerivedUnit : IfcEntity {
+  std::unordered_set<IfcDerivedUnitElement> Elements;
+  IfcDerivedUnitEnum UnitType;
+  IfcLabel UserDefinedType;
+};
 
-struct IfcDerivedUnitElement : IfcEntity {};
+struct IfcDerivedUnitElement : IfcEntity {
+  IfcNamedUnit Unit;
+  int Exponent;
+};
 
-struct IfcDimensionalExponents : IfcEntity {};
+struct IfcDimensionalExponents : IfcEntity {
+  int LengthExponent;
+  int MassExponent;
+  int TimeExponent;
+  int ElectricCurrentExponent;
+  int ThermodynamicTemperatureExponent;
+  int AmountOfSubstanceExponent;
+  int LuminousIntensityExponent;
+};
 
-struct IfcDirection : IfcGeometricRepresentationItem {};
+struct IfcDirection : IfcGeometricRepresentationItem {
+  SmallVector<IfcReal, 3> DirectionRatios;
+};
 
-struct IfcDiscreteAccessory : IfcElementComponent {};
+struct IfcDiscreteAccessory : IfcElementComponent {
+  IfcDiscreteAccessoryTypeEnum PredefinedType;
+};
 
-struct IfcDiscreteAccessoryType : IfcElementComponentType {};
+struct IfcDiscreteAccessoryType : IfcElementComponentType {
+  IfcDiscreteAccessoryTypeEnum PredefinedType;
+};
 
-struct IfcDistanceExpression : IfcGeometricRepresentationItem {};
+struct IfcDistanceExpression : IfcGeometricRepresentationItem {
+  IfcLengthMeasure DistanceAlong;
+  IfcLengthMeasure OffsetLateral;
+  IfcLengthMeasure OffsetVertical;
+  IfcLengthMeasure OffsetLongitudinal;
+  IfcBoolean AlongHorizontal;
+};
 
-struct IfcDistributionChamberElement : IfcDistributionFlowElement {};
+struct IfcDistributionChamberElement : IfcDistributionFlowElement {
+  IfcDistributionChamberElementTypeEnum PredefinedType;
+};
 
-struct IfcDistributionChamberElementType : IfcDistributionFlowElementType {};
+struct IfcDistributionChamberElementType : IfcDistributionFlowElementType {
+  IfcDistributionChamberElementTypeEnum PredefinedType;
+};
 
 struct IfcDistributionCircuit : IfcDistributionSystem {};
 
@@ -414,125 +942,296 @@ struct IfcDistributionFlowElement : IfcDistributionElement {};
 
 struct IfcDistributionFlowElementType : IfcDistributionElementType {};
 
-struct IfcDistributionPort : IfcPort {};
+struct IfcDistributionPort : IfcPort {
+  IfcFlowDirectionEnum FlowDirection;
+  IfcDistributionPortTypeEnum PredefinedType;
+  IfcDistributionSystemEnum SystemType;
+};
 
-struct IfcDistributionSystem : IfcSystem {};
+struct IfcDistributionSystem : IfcSystem {
+  IfcLabel LongName;
+  IfcDistributionSystemEnum PredefinedType;
+};
 
-struct IfcDocumentInformation : IfcExternalInformation {};
+struct IfcDocumentInformation : IfcExternalInformation {
+  IfcIdentifier Identification;
+  IfcLabel Name;
+  IfcText Description;
+  IfcURIReference Location;
+  IfcText Purpose;
+  IfcText IntendedUse;
+  IfcText Scope;
+  IfcLabel Revision;
+  IfcActorSelect DocumentOwner;
+  std::unordered_set<IfcActorSelect> Editors;
+  IfcDateTime CreationTime;
+  IfcDateTime LastRevisionTime;
+  IfcIdentifier ElectronicFormat;
+  IfcDate ValidFrom;
+  IfcDate ValidUntil;
+  IfcDocumentConfidentialityEnum Confidentiality;
+  IfcDocumentStatusEnum Status;
+};
 
-struct IfcDocumentInformationRelationship : IfcResourceLevelRelationship {};
+struct IfcDocumentInformationRelationship : IfcResourceLevelRelationship {
+  IfcDocumentInformation RelatingDocument;
+  std::unordered_set<IfcDocumentInformation> RelatedDocuments;
+  IfcLabel RelationshipType;
+};
 
-struct IfcDocumentReference : IfcExternalReference {};
+struct IfcDocumentReference : IfcExternalReference {
+  IfcText Description;
+  IfcDocumentInformation ReferencedDocument;
+};
 
-struct IfcDoor : IfcBuildingElement {};
+struct IfcDoor : IfcBuildingElement {
+  IfcPositiveLengthMeasure OverallHeight;
+  IfcPositiveLengthMeasure OverallWidth;
+  IfcDoorTypeEnum PredefinedType;
+  IfcDoorTypeOperationEnum OperationType;
+  IfcLabel UserDefinedOperationType;
+};
 
-struct IfcDoorLiningProperties : IfcPreDefinedPropertySet {};
+struct IfcDoorLiningProperties : IfcPreDefinedPropertySet {
+  IfcPositiveLengthMeasure LiningDepth;
+  IfcNonNegativeLengthMeasure LiningThickness;
+  IfcPositiveLengthMeasure ThresholdDepth;
+  IfcNonNegativeLengthMeasure ThresholdThickness;
+  IfcNonNegativeLengthMeasure TransomThickness;
+  IfcLengthMeasure TransomOffset;
+  IfcLengthMeasure LiningOffset;
+  IfcLengthMeasure ThresholdOffset;
+  IfcPositiveLengthMeasure CasingThickness;
+  IfcPositiveLengthMeasure CasingDepth;
+  IfcShapeAspect ShapeAspectStyle;
+  IfcLengthMeasure LiningToPanelOffsetX;
+  IfcLengthMeasure LiningToPanelOffsetY;
+};
 
-struct IfcDoorPanelProperties : IfcPreDefinedPropertySet {};
+struct IfcDoorPanelProperties : IfcPreDefinedPropertySet {
+  IfcPositiveLengthMeasure PanelDepth;
+  IfcDoorPanelOperationEnum PanelOperation;
+  IfcNormalisedRatioMeasure PanelWidth;
+  IfcDoorPanelPositionEnum PanelPosition;
+  IfcShapeAspect ShapeAspectStyle;
+};
 
 struct IfcDoorStandardCase : IfcDoor {};
 
-struct IfcDoorStyle : IfcTypeProduct {};
+struct IfcDoorStyle : IfcTypeProduct {
+  IfcDoorStyleOperationEnum OperationType;
+  IfcDoorStyleConstructionEnum ConstructionType;
+  IfcBoolean ParameterTakesPrecedence;
+  IfcBoolean Sizeable;
+};
 
-struct IfcDoorType : IfcBuildingElementType {};
+struct IfcDoorType : IfcBuildingElementType {
+  IfcDoorTypeEnum PredefinedType;
+  IfcDoorTypeOperationEnum OperationType;
+  IfcBoolean ParameterTakesPrecedence;
+  IfcLabel UserDefinedOperationType;
+};
 
 struct IfcDraughtingPreDefinedColour : IfcPreDefinedColour {};
 
 struct IfcDraughtingPreDefinedCurveFont : IfcPreDefinedCurveFont {};
 
-struct IfcDuctFitting : IfcFlowFitting {};
+struct IfcDuctFitting : IfcFlowFitting {
+  IfcDuctFittingTypeEnum PredefinedType;
+};
 
-struct IfcDuctFittingType : IfcFlowFittingType {};
+struct IfcDuctFittingType : IfcFlowFittingType {
+  IfcDuctFittingTypeEnum PredefinedType;
+};
 
-struct IfcDuctSegment : IfcFlowSegment {};
+struct IfcDuctSegment : IfcFlowSegment {
+  IfcDuctSegmentTypeEnum PredefinedType;
+};
 
-struct IfcDuctSegmentType : IfcFlowSegmentType {};
+struct IfcDuctSegmentType : IfcFlowSegmentType {
+  IfcDuctSegmentTypeEnum PredefinedType;
+};
 
-struct IfcDuctSilencer : IfcFlowTreatmentDevice {};
+struct IfcDuctSilencer : IfcFlowTreatmentDevice {
+  IfcDuctSilencerTypeEnum PredefinedType;
+};
 
-struct IfcDuctSilencerType : IfcFlowTreatmentDeviceType {};
+struct IfcDuctSilencerType : IfcFlowTreatmentDeviceType {
+  IfcDuctSilencerTypeEnum PredefinedType;
+};
 
-struct IfcEdge : IfcTopologicalRepresentationItem {};
+struct IfcEdge : IfcTopologicalRepresentationItem {
+  IfcVertex EdgeStart;
+  IfcVertex EdgeEnd;
+};
 
-struct IfcEdgeCurve : IfcEdge {};
+struct IfcEdgeCurve : IfcEdge {
+  IfcCurve EdgeGeometry;
+  IfcBoolean SameSense;
+};
 
-struct IfcEdgeLoop : IfcLoop {};
+struct IfcEdgeLoop : IfcLoop {
+  SmallVector<IfcOrientedEdge, 4> EdgeList;
+};
 
-struct IfcElectricAppliance : IfcFlowTerminal {};
+struct IfcElectricAppliance : IfcFlowTerminal {
+  IfcElectricApplianceTypeEnum PredefinedType;
+};
 
-struct IfcElectricApplianceType : IfcFlowTerminalType {};
+struct IfcElectricApplianceType : IfcFlowTerminalType {
+  IfcElectricApplianceTypeEnum PredefinedType;
+};
 
-struct IfcElectricDistributionBoard : IfcFlowController {};
+struct IfcElectricDistributionBoard : IfcFlowController {
+  IfcElectricDistributionBoardTypeEnum PredefinedType;
+};
 
-struct IfcElectricDistributionBoardType : IfcFlowControllerType {};
+struct IfcElectricDistributionBoardType : IfcFlowControllerType {
+  IfcElectricDistributionBoardTypeEnum PredefinedType;
+};
 
-struct IfcElectricFlowStorageDevice : IfcFlowStorageDevice {};
+struct IfcElectricFlowStorageDevice : IfcFlowStorageDevice {
+  IfcElectricFlowStorageDeviceTypeEnum PredefinedType;
+};
 
-struct IfcElectricFlowStorageDeviceType : IfcFlowStorageDeviceType {};
+struct IfcElectricFlowStorageDeviceType : IfcFlowStorageDeviceType {
+  IfcElectricFlowStorageDeviceTypeEnum PredefinedType;
+};
 
-struct IfcElectricGenerator : IfcEnergyConversionDevice {};
+struct IfcElectricGenerator : IfcEnergyConversionDevice {
+  IfcElectricGeneratorTypeEnum PredefinedType;
+};
 
-struct IfcElectricGeneratorType : IfcEnergyConversionDeviceType {};
+struct IfcElectricGeneratorType : IfcEnergyConversionDeviceType {
+  IfcElectricGeneratorTypeEnum PredefinedType;
+};
 
-struct IfcElectricMotor : IfcEnergyConversionDevice {};
+struct IfcElectricMotor : IfcEnergyConversionDevice {
+  IfcElectricMotorTypeEnum PredefinedType;
+};
 
-struct IfcElectricMotorType : IfcEnergyConversionDeviceType {};
+struct IfcElectricMotorType : IfcEnergyConversionDeviceType {
+  IfcElectricMotorTypeEnum PredefinedType;
+};
 
-struct IfcElectricTimeControl : IfcFlowController {};
+struct IfcElectricTimeControl : IfcFlowController {
+  IfcElectricTimeControlTypeEnum PredefinedType;
+};
 
-struct IfcElectricTimeControlType : IfcFlowControllerType {};
+struct IfcElectricTimeControlType : IfcFlowControllerType {
+  IfcElectricTimeControlTypeEnum PredefinedType;
+};
 
-struct IfcElement : IfcProduct {};
+struct IfcElement : IfcProduct {
+  IfcIdentifier Tag;
+};
 
-struct IfcElementAssembly : IfcElement {};
+struct IfcElementAssembly : IfcElement {
+  IfcAssemblyPlaceEnum AssemblyPlace;
+  IfcElementAssemblyTypeEnum PredefinedType;
+};
 
-struct IfcElementAssemblyType : IfcElementType {};
+struct IfcElementAssemblyType : IfcElementType {
+  IfcElementAssemblyTypeEnum PredefinedType;
+};
 
 struct IfcElementComponent : IfcElement {};
 
 struct IfcElementComponentType : IfcElementType {};
 
-struct IfcElementQuantity : IfcQuantitySet {};
+struct IfcElementQuantity : IfcQuantitySet {
+  IfcLabel MethodOfMeasurement;
+  std::unordered_set<IfcPhysicalQuantity> Quantities;
+};
 
-struct IfcElementType : IfcTypeProduct {};
+struct IfcElementType : IfcTypeProduct {
+  IfcLabel ElementType;
+};
 
-struct IfcElementarySurface : IfcSurface {};
+struct IfcElementarySurface : IfcSurface {
+  IfcAxis2Placement3D Position;
+};
 
-struct IfcEllipse : IfcConic {};
+struct IfcEllipse : IfcConic {
+  IfcPositiveLengthMeasure SemiAxis1;
+  IfcPositiveLengthMeasure SemiAxis2;
+};
 
-struct IfcEllipseProfileDef : IfcParameterizedProfileDef {};
+struct IfcEllipseProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure SemiAxis1;
+  IfcPositiveLengthMeasure SemiAxis2;
+};
 
 struct IfcEnergyConversionDevice : IfcDistributionFlowElement {};
 
 struct IfcEnergyConversionDeviceType : IfcDistributionFlowElementType {};
 
-struct IfcEngine : IfcEnergyConversionDevice {};
+struct IfcEngine : IfcEnergyConversionDevice {
+  IfcEngineTypeEnum PredefinedType;
+};
 
-struct IfcEngineType : IfcEnergyConversionDeviceType {};
+struct IfcEngineType : IfcEnergyConversionDeviceType {
+  IfcEngineTypeEnum PredefinedType;
+};
 
-struct IfcEvaporativeCooler : IfcEnergyConversionDevice {};
+struct IfcEvaporativeCooler : IfcEnergyConversionDevice {
+  IfcEvaporativeCoolerTypeEnum PredefinedType;
+};
 
-struct IfcEvaporativeCoolerType : IfcEnergyConversionDeviceType {};
+struct IfcEvaporativeCoolerType : IfcEnergyConversionDeviceType {
+  IfcEvaporativeCoolerTypeEnum PredefinedType;
+};
 
-struct IfcEvaporator : IfcEnergyConversionDevice {};
+struct IfcEvaporator : IfcEnergyConversionDevice {
+  IfcEvaporatorTypeEnum PredefinedType;
+};
 
-struct IfcEvaporatorType : IfcEnergyConversionDeviceType {};
+struct IfcEvaporatorType : IfcEnergyConversionDeviceType {
+  IfcEvaporatorTypeEnum PredefinedType;
+};
 
-struct IfcEvent : IfcProcess {};
+struct IfcEvent : IfcProcess {
+  IfcEventTypeEnum PredefinedType;
+  IfcEventTriggerTypeEnum EventTriggerType;
+  IfcLabel UserDefinedEventTriggerType;
+  IfcEventTime EventOccurenceTime;
+};
 
-struct IfcEventTime : IfcSchedulingTime {};
+struct IfcEventTime : IfcSchedulingTime {
+  IfcDateTime ActualDate;
+  IfcDateTime EarlyDate;
+  IfcDateTime LateDate;
+  IfcDateTime ScheduleDate;
+};
 
-struct IfcEventType : IfcTypeProcess {};
+struct IfcEventType : IfcTypeProcess {
+  IfcEventTypeEnum PredefinedType;
+  IfcEventTriggerTypeEnum EventTriggerType;
+  IfcLabel UserDefinedEventTriggerType;
+};
 
-struct IfcExtendedProperties : IfcPropertyAbstraction {};
+struct IfcExtendedProperties : IfcPropertyAbstraction {
+  IfcIdentifier Name;
+  IfcText Description;
+  std::unordered_set<IfcProperty> Properties;
+};
 
 struct IfcExternalInformation : IfcEntity {};
 
-struct IfcExternalReference : IfcEntity {};
+struct IfcExternalReference : IfcEntity {
+  IfcURIReference Location;
+  IfcIdentifier Identification;
+  IfcLabel Name;
+};
 
-struct IfcExternalReferenceRelationship : IfcResourceLevelRelationship {};
+struct IfcExternalReferenceRelationship : IfcResourceLevelRelationship {
+  IfcExternalReference RelatingReference;
+  std::unordered_set<IfcResourceObjectSelect> RelatedResourceObjects;
+};
 
-struct IfcExternalSpatialElement : IfcExternalSpatialStructureElement {};
+struct IfcExternalSpatialElement : IfcExternalSpatialStructureElement {
+  IfcExternalSpatialElementTypeEnum PredefinedType;
+};
 
 struct IfcExternalSpatialStructureElement : IfcSpatialElement {};
 
@@ -542,33 +1241,65 @@ struct IfcExternallyDefinedSurfaceStyle : IfcExternalReference {};
 
 struct IfcExternallyDefinedTextFont : IfcExternalReference {};
 
-struct IfcExtrudedAreaSolid : IfcSweptAreaSolid {};
+struct IfcExtrudedAreaSolid : IfcSweptAreaSolid {
+  IfcDirection ExtrudedDirection;
+  IfcPositiveLengthMeasure Depth;
+};
 
-struct IfcExtrudedAreaSolidTapered : IfcExtrudedAreaSolid {};
+struct IfcExtrudedAreaSolidTapered : IfcExtrudedAreaSolid {
+  IfcProfileDef EndSweptArea;
+};
 
-struct IfcFace : IfcTopologicalRepresentationItem {};
+struct IfcFace : IfcTopologicalRepresentationItem {
+  std::unordered_set<IfcFaceBound> Bounds;
+};
 
-struct IfcFaceBasedSurfaceModel : IfcGeometricRepresentationItem {};
+struct IfcFaceBasedSurfaceModel : IfcGeometricRepresentationItem {
+  std::unordered_set<IfcConnectedFaceSet> FbsmFaces;
+};
 
-struct IfcFaceBound : IfcTopologicalRepresentationItem {};
+struct IfcFaceBound : IfcTopologicalRepresentationItem {
+  IfcLoop Bound;
+  IfcBoolean Orientation;
+};
 
 struct IfcFaceOuterBound : IfcFaceBound {};
 
-struct IfcFaceSurface : IfcFace {};
+struct IfcFaceSurface : IfcFace {
+  IfcSurface FaceSurface;
+  IfcBoolean SameSense;
+};
 
 struct IfcFacetedBrep : IfcManifoldSolidBrep {};
 
-struct IfcFacetedBrepWithVoids : IfcFacetedBrep {};
+struct IfcFacetedBrepWithVoids : IfcFacetedBrep {
+  std::unordered_set<IfcClosedShell> Voids;
+};
 
-struct IfcFailureConnectionCondition : IfcStructuralConnectionCondition {};
+struct IfcFailureConnectionCondition : IfcStructuralConnectionCondition {
+  IfcForceMeasure TensionFailureX;
+  IfcForceMeasure TensionFailureY;
+  IfcForceMeasure TensionFailureZ;
+  IfcForceMeasure CompressionFailureX;
+  IfcForceMeasure CompressionFailureY;
+  IfcForceMeasure CompressionFailureZ;
+};
 
-struct IfcFan : IfcFlowMovingDevice {};
+struct IfcFan : IfcFlowMovingDevice {
+  IfcFanTypeEnum PredefinedType;
+};
 
-struct IfcFanType : IfcFlowMovingDeviceType {};
+struct IfcFanType : IfcFlowMovingDeviceType {
+  IfcFanTypeEnum PredefinedType;
+};
 
-struct IfcFastener : IfcElementComponent {};
+struct IfcFastener : IfcElementComponent {
+  IfcFastenerTypeEnum PredefinedType;
+};
 
-struct IfcFastenerType : IfcElementComponentType {};
+struct IfcFastenerType : IfcElementComponentType {
+  IfcFastenerTypeEnum PredefinedType;
+};
 
 struct IfcFeatureElement : IfcElement {};
 
@@ -576,21 +1307,47 @@ struct IfcFeatureElementAddition : IfcFeatureElement {};
 
 struct IfcFeatureElementSubtraction : IfcFeatureElement {};
 
-struct IfcFillAreaStyle : IfcPresentationStyle {};
+struct IfcFillAreaStyle : IfcPresentationStyle {
+  std::unordered_set<IfcFillStyleSelect> FillStyles;
+  IfcBoolean ModelorDraughting;
+};
 
-struct IfcFillAreaStyleHatching : IfcGeometricRepresentationItem {};
+struct IfcFillAreaStyleHatching : IfcGeometricRepresentationItem {
+  IfcCurveStyle HatchLineAppearance;
+  IfcHatchLineDistanceSelect StartOfNextHatchLine;
+  IfcCartesianPoint PointOfReferenceHatchLine;
+  IfcCartesianPoint PatternStart;
+  IfcPlaneAngleMeasure HatchLineAngle;
+};
 
-struct IfcFillAreaStyleTiles : IfcGeometricRepresentationItem {};
+struct IfcFillAreaStyleTiles : IfcGeometricRepresentationItem {
+  SmallVector<IfcVector, 2> TilingPattern;
+  std::unordered_set<IfcStyledItem> Tiles;
+  IfcPositiveRatioMeasure TilingScale;
+};
 
-struct IfcFilter : IfcFlowTreatmentDevice {};
+struct IfcFilter : IfcFlowTreatmentDevice {
+  IfcFilterTypeEnum PredefinedType;
+};
 
-struct IfcFilterType : IfcFlowTreatmentDeviceType {};
+struct IfcFilterType : IfcFlowTreatmentDeviceType {
+  IfcFilterTypeEnum PredefinedType;
+};
 
-struct IfcFireSuppressionTerminal : IfcFlowTerminal {};
+struct IfcFireSuppressionTerminal : IfcFlowTerminal {
+  IfcFireSuppressionTerminalTypeEnum PredefinedType;
+};
 
-struct IfcFireSuppressionTerminalType : IfcFlowTerminalType {};
+struct IfcFireSuppressionTerminalType : IfcFlowTerminalType {
+  IfcFireSuppressionTerminalTypeEnum PredefinedType;
+};
 
-struct IfcFixedReferenceSweptAreaSolid : IfcSweptAreaSolid {};
+struct IfcFixedReferenceSweptAreaSolid : IfcSweptAreaSolid {
+  IfcCurve Directrix;
+  IfcParameterValue StartParam;
+  IfcParameterValue EndParam;
+  IfcDirection FixedReference;
+};
 
 struct IfcFlowController : IfcDistributionFlowElement {};
 
@@ -600,13 +1357,21 @@ struct IfcFlowFitting : IfcDistributionFlowElement {};
 
 struct IfcFlowFittingType : IfcDistributionFlowElementType {};
 
-struct IfcFlowInstrument : IfcDistributionControlElement {};
+struct IfcFlowInstrument : IfcDistributionControlElement {
+  IfcFlowInstrumentTypeEnum PredefinedType;
+};
 
-struct IfcFlowInstrumentType : IfcDistributionControlElementType {};
+struct IfcFlowInstrumentType : IfcDistributionControlElementType {
+  IfcFlowInstrumentTypeEnum PredefinedType;
+};
 
-struct IfcFlowMeter : IfcFlowController {};
+struct IfcFlowMeter : IfcFlowController {
+  IfcFlowMeterTypeEnum PredefinedType;
+};
 
-struct IfcFlowMeterType : IfcFlowControllerType {};
+struct IfcFlowMeterType : IfcFlowControllerType {
+  IfcFlowMeterTypeEnum PredefinedType;
+};
 
 struct IfcFlowMovingDevice : IfcDistributionFlowElement {};
 
@@ -628,317 +1393,756 @@ struct IfcFlowTreatmentDevice : IfcDistributionFlowElement {};
 
 struct IfcFlowTreatmentDeviceType : IfcDistributionFlowElementType {};
 
-struct IfcFooting : IfcBuildingElement {};
+struct IfcFooting : IfcBuildingElement {
+  IfcFootingTypeEnum PredefinedType;
+};
 
-struct IfcFootingType : IfcBuildingElementType {};
+struct IfcFootingType : IfcBuildingElementType {
+  IfcFootingTypeEnum PredefinedType;
+};
 
 struct IfcFurnishingElement : IfcElement {};
 
 struct IfcFurnishingElementType : IfcElementType {};
 
-struct IfcFurniture : IfcFurnishingElement {};
+struct IfcFurniture : IfcFurnishingElement {
+  IfcFurnitureTypeEnum PredefinedType;
+};
 
-struct IfcFurnitureType : IfcFurnishingElementType {};
+struct IfcFurnitureType : IfcFurnishingElementType {
+  IfcAssemblyPlaceEnum AssemblyPlace;
+  IfcFurnitureTypeEnum PredefinedType;
+};
 
-struct IfcGeographicElement : IfcElement {};
+struct IfcGeographicElement : IfcElement {
+  IfcGeographicElementTypeEnum PredefinedType;
+};
 
-struct IfcGeographicElementType : IfcElementType {};
+struct IfcGeographicElementType : IfcElementType {
+  IfcGeographicElementTypeEnum PredefinedType;
+};
 
 struct IfcGeometricCurveSet : IfcGeometricSet {};
 
-struct IfcGeometricRepresentationContext : IfcRepresentationContext {};
+struct IfcGeometricRepresentationContext : IfcRepresentationContext {
+  IfcDimensionCount CoordinateSpaceDimension;
+  IfcReal Precision;
+  IfcAxis2Placement WorldCoordinateSystem;
+  IfcDirection TrueNorth;
+};
 
 struct IfcGeometricRepresentationItem : IfcRepresentationItem {};
 
-struct IfcGeometricRepresentationSubContext : IfcGeometricRepresentationContext {};
+struct IfcGeometricRepresentationSubContext : IfcGeometricRepresentationContext {
+  IfcGeometricRepresentationContext ParentContext;
+  IfcPositiveRatioMeasure TargetScale;
+  IfcGeometricProjectionEnum TargetView;
+  IfcLabel UserDefinedTargetView;
+};
 
-struct IfcGeometricSet : IfcGeometricRepresentationItem {};
+struct IfcGeometricSet : IfcGeometricRepresentationItem {
+  std::unordered_set<IfcGeometricSetSelect> Elements;
+};
 
-struct IfcGrid : IfcPositioningElement {};
+struct IfcGrid : IfcPositioningElement {
+  SmallVector<IfcGridAxis, 4> UAxes;
+  SmallVector<IfcGridAxis, 4> VAxes;
+  SmallVector<IfcGridAxis, 4> WAxes;
+  IfcGridTypeEnum PredefinedType;
+};
 
-struct IfcGridAxis : IfcEntity {};
+struct IfcGridAxis : IfcEntity {
+  IfcLabel AxisTag;
+  IfcCurve AxisCurve;
+  IfcBoolean SameSense;
+};
 
-struct IfcGridPlacement : IfcObjectPlacement {};
+struct IfcGridPlacement : IfcObjectPlacement {
+  IfcVirtualGridIntersection PlacementLocation;
+  IfcGridPlacementDirectionSelect PlacementRefDirection;
+};
 
 struct IfcGroup : IfcObject {};
 
-struct IfcHalfSpaceSolid : IfcGeometricRepresentationItem {};
+struct IfcHalfSpaceSolid : IfcGeometricRepresentationItem {
+  IfcSurface BaseSurface;
+  IfcBoolean AgreementFlag;
+};
 
-struct IfcHeatExchanger : IfcEnergyConversionDevice {};
+struct IfcHeatExchanger : IfcEnergyConversionDevice {
+  IfcHeatExchangerTypeEnum PredefinedType;
+};
 
-struct IfcHeatExchangerType : IfcEnergyConversionDeviceType {};
+struct IfcHeatExchangerType : IfcEnergyConversionDeviceType {
+  IfcHeatExchangerTypeEnum PredefinedType;
+};
 
-struct IfcHumidifier : IfcEnergyConversionDevice {};
+struct IfcHumidifier : IfcEnergyConversionDevice {
+  IfcHumidifierTypeEnum PredefinedType;
+};
 
-struct IfcHumidifierType : IfcEnergyConversionDeviceType {};
+struct IfcHumidifierType : IfcEnergyConversionDeviceType {
+  IfcHumidifierTypeEnum PredefinedType;
+};
 
-struct IfcIShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcIShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure OverallWidth;
+  IfcPositiveLengthMeasure OverallDepth;
+  IfcPositiveLengthMeasure WebThickness;
+  IfcPositiveLengthMeasure FlangeThickness;
+  IfcNonNegativeLengthMeasure FilletRadius;
+  IfcNonNegativeLengthMeasure FlangeEdgeRadius;
+  IfcPlaneAngleMeasure FlangeSlope;
+};
 
-struct IfcImageTexture : IfcSurfaceTexture {};
+struct IfcImageTexture : IfcSurfaceTexture {
+  IfcURIReference URLReference;
+};
 
-struct IfcIndexedColourMap : IfcPresentationItem {};
+struct IfcIndexedColourMap : IfcPresentationItem {
+  IfcTessellatedFaceSet MappedTo;
+  IfcNormalisedRatioMeasure Opacity;
+  IfcColourRgbList Colours;
+  SmallVector<IfcPositiveInteger, 4> ColourIndex;
+};
 
-struct IfcIndexedPolyCurve : IfcBoundedCurve {};
+struct IfcIndexedPolyCurve : IfcBoundedCurve {
+  IfcCartesianPointList Points;
+  SmallVector<IfcSegmentIndexSelect, 4> Segments;
+  IfcBoolean SelfIntersect;
+};
 
-struct IfcIndexedPolygonalFace : IfcTessellatedItem {};
+struct IfcIndexedPolygonalFace : IfcTessellatedItem {
+  SmallVector<IfcPositiveInteger, 4> CoordIndex;
+};
 
-struct IfcIndexedPolygonalFaceWithVoids : IfcIndexedPolygonalFace {};
+struct IfcIndexedPolygonalFaceWithVoids : IfcIndexedPolygonalFace {
+  SmallVector<SmallVector<IfcPositiveInteger, 4>, 4> InnerCoordIndices;
+};
 
-struct IfcIndexedTextureMap : IfcTextureCoordinate {};
+struct IfcIndexedTextureMap : IfcTextureCoordinate {
+  IfcTessellatedFaceSet MappedTo;
+  IfcTextureVertexList TexCoords;
+};
 
-struct IfcIndexedTriangleTextureMap : IfcIndexedTextureMap {};
+struct IfcIndexedTriangleTextureMap : IfcIndexedTextureMap {
+  SmallVector<SmallVector<IfcPositiveInteger, 3>, 4> TexCoordIndex;
+};
 
-struct IfcInterceptor : IfcFlowTreatmentDevice {};
+struct IfcInterceptor : IfcFlowTreatmentDevice {
+  IfcInterceptorTypeEnum PredefinedType;
+};
 
-struct IfcInterceptorType : IfcFlowTreatmentDeviceType {};
+struct IfcInterceptorType : IfcFlowTreatmentDeviceType {
+  IfcInterceptorTypeEnum PredefinedType;
+};
 
 struct IfcIntersectionCurve : IfcSurfaceCurve {};
 
-struct IfcInventory : IfcGroup {};
+struct IfcInventory : IfcGroup {
+  IfcInventoryTypeEnum PredefinedType;
+  IfcActorSelect Jurisdiction;
+  std::unordered_set<IfcPerson> ResponsiblePersons;
+  IfcDate LastUpdateDate;
+  IfcCostValue CurrentValue;
+  IfcCostValue OriginalValue;
+};
 
-struct IfcIrregularTimeSeries : IfcTimeSeries {};
+struct IfcIrregularTimeSeries : IfcTimeSeries {
+  SmallVector<IfcIrregularTimeSeriesValue, 4> Values;
+};
 
-struct IfcIrregularTimeSeriesValue : IfcEntity {};
+struct IfcIrregularTimeSeriesValue : IfcEntity {
+  IfcDateTime TimeStamp;
+  SmallVector<IfcValue, 4> ListValues;
+};
 
-struct IfcJunctionBox : IfcFlowFitting {};
+struct IfcJunctionBox : IfcFlowFitting {
+  IfcJunctionBoxTypeEnum PredefinedType;
+};
 
-struct IfcJunctionBoxType : IfcFlowFittingType {};
+struct IfcJunctionBoxType : IfcFlowFittingType {
+  IfcJunctionBoxTypeEnum PredefinedType;
+};
 
-struct IfcLShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcLShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Depth;
+  IfcPositiveLengthMeasure Width;
+  IfcPositiveLengthMeasure Thickness;
+  IfcNonNegativeLengthMeasure FilletRadius;
+  IfcNonNegativeLengthMeasure EdgeRadius;
+  IfcPlaneAngleMeasure LegSlope;
+};
 
-struct IfcLaborResource : IfcConstructionResource {};
+struct IfcLaborResource : IfcConstructionResource {
+  IfcLaborResourceTypeEnum PredefinedType;
+};
 
-struct IfcLaborResourceType : IfcConstructionResourceType {};
+struct IfcLaborResourceType : IfcConstructionResourceType {
+  IfcLaborResourceTypeEnum PredefinedType;
+};
 
-struct IfcLagTime : IfcSchedulingTime {};
+struct IfcLagTime : IfcSchedulingTime {
+  IfcTimeOrRatioSelect LagValue;
+  IfcTaskDurationEnum DurationType;
+};
 
-struct IfcLamp : IfcFlowTerminal {};
+struct IfcLamp : IfcFlowTerminal {
+  IfcLampTypeEnum PredefinedType;
+};
 
-struct IfcLampType : IfcFlowTerminalType {};
+struct IfcLampType : IfcFlowTerminalType {
+  IfcLampTypeEnum PredefinedType;
+};
 
-struct IfcLibraryInformation : IfcExternalInformation {};
+struct IfcLibraryInformation : IfcExternalInformation {
+  IfcLabel Name;
+  IfcLabel Version;
+  IfcActorSelect Publisher;
+  IfcDateTime VersionDate;
+  IfcURIReference Location;
+  IfcText Description;
+};
 
-struct IfcLibraryReference : IfcExternalReference {};
+struct IfcLibraryReference : IfcExternalReference {
+  IfcText Description;
+  IfcLanguageId Language;
+  IfcLibraryInformation ReferencedLibrary;
+};
 
-struct IfcLightDistributionData : IfcEntity {};
+struct IfcLightDistributionData : IfcEntity {
+  IfcPlaneAngleMeasure MainPlaneAngle;
+  SmallVector<IfcPlaneAngleMeasure, 4> SecondaryPlaneAngle;
+  SmallVector<IfcLuminousIntensityDistributionMeasure, 4> LuminousIntensity;
+};
 
-struct IfcLightFixture : IfcFlowTerminal {};
+struct IfcLightFixture : IfcFlowTerminal {
+  IfcLightFixtureTypeEnum PredefinedType;
+};
 
-struct IfcLightFixtureType : IfcFlowTerminalType {};
+struct IfcLightFixtureType : IfcFlowTerminalType {
+  IfcLightFixtureTypeEnum PredefinedType;
+};
 
-struct IfcLightIntensityDistribution : IfcEntity {};
+struct IfcLightIntensityDistribution : IfcEntity {
+  IfcLightDistributionCurveEnum LightDistributionCurve;
+  SmallVector<IfcLightDistributionData, 4> DistributionData;
+};
 
-struct IfcLightSource : IfcGeometricRepresentationItem {};
+struct IfcLightSource : IfcGeometricRepresentationItem {
+  IfcLabel Name;
+  IfcColourRgb LightColour;
+  IfcNormalisedRatioMeasure AmbientIntensity;
+  IfcNormalisedRatioMeasure Intensity;
+};
 
 struct IfcLightSourceAmbient : IfcLightSource {};
 
-struct IfcLightSourceDirectional : IfcLightSource {};
+struct IfcLightSourceDirectional : IfcLightSource {
+  IfcDirection Orientation;
+};
 
-struct IfcLightSourceGoniometric : IfcLightSource {};
+struct IfcLightSourceGoniometric : IfcLightSource {
+  IfcAxis2Placement3D Position;
+  IfcColourRgb ColourAppearance;
+  IfcThermodynamicTemperatureMeasure ColourTemperature;
+  IfcLuminousFluxMeasure LuminousFlux;
+  IfcLightEmissionSourceEnum LightEmissionSource;
+  IfcLightDistributionDataSourceSelect LightDistributionDataSource;
+};
 
-struct IfcLightSourcePositional : IfcLightSource {};
+struct IfcLightSourcePositional : IfcLightSource {
+  IfcCartesianPoint Position;
+  IfcPositiveLengthMeasure Radius;
+  IfcReal ConstantAttenuation;
+  IfcReal DistanceAttenuation;
+  IfcReal QuadricAttenuation;
+};
 
-struct IfcLightSourceSpot : IfcLightSourcePositional {};
+struct IfcLightSourceSpot : IfcLightSourcePositional {
+  IfcDirection Orientation;
+  IfcReal ConcentrationExponent;
+  IfcPositivePlaneAngleMeasure SpreadAngle;
+  IfcPositivePlaneAngleMeasure BeamWidthAngle;
+};
 
-struct IfcLine : IfcCurve {};
+struct IfcLine : IfcCurve {
+  IfcCartesianPoint Pnt;
+  IfcVector Dir;
+};
 
 struct IfcLineSegment2D : IfcCurveSegment2D {};
 
-struct IfcLinearPlacement : IfcObjectPlacement {};
+struct IfcLinearPlacement : IfcObjectPlacement {
+  IfcCurve PlacementRelTo;
+  IfcDistanceExpression Distance;
+  IfcOrientationExpression Orientation;
+  IfcAxis2Placement3D CartesianPosition;
+};
 
-struct IfcLinearPositioningElement : IfcPositioningElement {};
+struct IfcLinearPositioningElement : IfcPositioningElement {
+  IfcCurve Axis;
+};
 
-struct IfcLocalPlacement : IfcObjectPlacement {};
+struct IfcLocalPlacement : IfcObjectPlacement {
+  IfcObjectPlacement PlacementRelTo;
+  IfcAxis2Placement RelativePlacement;
+};
 
 struct IfcLoop : IfcTopologicalRepresentationItem {};
 
-struct IfcManifoldSolidBrep : IfcSolidModel {};
+struct IfcManifoldSolidBrep : IfcSolidModel {
+  IfcClosedShell Outer;
+};
 
-struct IfcMapConversion : IfcCoordinateOperation {};
+struct IfcMapConversion : IfcCoordinateOperation {
+  IfcLengthMeasure Eastings;
+  IfcLengthMeasure Northings;
+  IfcLengthMeasure OrthogonalHeight;
+  IfcReal XAxisAbscissa;
+  IfcReal XAxisOrdinate;
+  IfcReal Scale;
+};
 
-struct IfcMappedItem : IfcRepresentationItem {};
+struct IfcMappedItem : IfcRepresentationItem {
+  IfcRepresentationMap MappingSource;
+  IfcCartesianTransformationOperator MappingTarget;
+};
 
-struct IfcMaterial : IfcMaterialDefinition {};
+struct IfcMaterial : IfcMaterialDefinition {
+  IfcLabel Name;
+  IfcText Description;
+  IfcLabel Category;
+};
 
-struct IfcMaterialClassificationRelationship : IfcEntity {};
+struct IfcMaterialClassificationRelationship : IfcEntity {
+  std::unordered_set<IfcClassificationSelect> MaterialClassifications;
+  IfcMaterial ClassifiedMaterial;
+};
 
-struct IfcMaterialConstituent : IfcMaterialDefinition {};
+struct IfcMaterialConstituent : IfcMaterialDefinition {
+  IfcLabel Name;
+  IfcText Description;
+  IfcMaterial Material;
+  IfcNormalisedRatioMeasure Fraction;
+  IfcLabel Category;
+};
 
-struct IfcMaterialConstituentSet : IfcMaterialDefinition {};
+struct IfcMaterialConstituentSet : IfcMaterialDefinition {
+  IfcLabel Name;
+  IfcText Description;
+  std::unordered_set<IfcMaterialConstituent> MaterialConstituents;
+};
 
 struct IfcMaterialDefinition : IfcEntity {};
 
-struct IfcMaterialDefinitionRepresentation : IfcProductRepresentation {};
+struct IfcMaterialDefinitionRepresentation : IfcProductRepresentation {
+  IfcMaterial RepresentedMaterial;
+};
 
-struct IfcMaterialLayer : IfcMaterialDefinition {};
+struct IfcMaterialLayer : IfcMaterialDefinition {
+  IfcMaterial Material;
+  IfcNonNegativeLengthMeasure LayerThickness;
+  IfcLogical IsVentilated;
+  IfcLabel Name;
+  IfcText Description;
+  IfcLabel Category;
+  IfcInteger Priority;
+};
 
-struct IfcMaterialLayerSet : IfcMaterialDefinition {};
+struct IfcMaterialLayerSet : IfcMaterialDefinition {
+  SmallVector<IfcMaterialLayer, 4> MaterialLayers;
+  IfcLabel LayerSetName;
+  IfcText Description;
+};
 
-struct IfcMaterialLayerSetUsage : IfcMaterialUsageDefinition {};
+struct IfcMaterialLayerSetUsage : IfcMaterialUsageDefinition {
+  IfcMaterialLayerSet ForLayerSet;
+  IfcLayerSetDirectionEnum LayerSetDirection;
+  IfcDirectionSenseEnum DirectionSense;
+  IfcLengthMeasure OffsetFromReferenceLine;
+  IfcPositiveLengthMeasure ReferenceExtent;
+};
 
-struct IfcMaterialLayerWithOffsets : IfcMaterialLayer {};
+struct IfcMaterialLayerWithOffsets : IfcMaterialLayer {
+  IfcLayerSetDirectionEnum OffsetDirection;
+  SmallVector<IfcLengthMeasure, 2> OffsetValues;
+};
 
-struct IfcMaterialList : IfcEntity {};
+struct IfcMaterialList : IfcEntity {
+  SmallVector<IfcMaterial, 4> Materials;
+};
 
-struct IfcMaterialProfile : IfcMaterialDefinition {};
+struct IfcMaterialProfile : IfcMaterialDefinition {
+  IfcLabel Name;
+  IfcText Description;
+  IfcMaterial Material;
+  IfcProfileDef Profile;
+  IfcInteger Priority;
+  IfcLabel Category;
+};
 
-struct IfcMaterialProfileSet : IfcMaterialDefinition {};
+struct IfcMaterialProfileSet : IfcMaterialDefinition {
+  IfcLabel Name;
+  IfcText Description;
+  SmallVector<IfcMaterialProfile, 4> MaterialProfiles;
+  IfcCompositeProfileDef CompositeProfile;
+};
 
-struct IfcMaterialProfileSetUsage : IfcMaterialUsageDefinition {};
+struct IfcMaterialProfileSetUsage : IfcMaterialUsageDefinition {
+  IfcMaterialProfileSet ForProfileSet;
+  IfcCardinalPointReference CardinalPoint;
+  IfcPositiveLengthMeasure ReferenceExtent;
+};
 
-struct IfcMaterialProfileSetUsageTapering : IfcMaterialProfileSetUsage {};
+struct IfcMaterialProfileSetUsageTapering : IfcMaterialProfileSetUsage {
+  IfcMaterialProfileSet ForProfileEndSet;
+  IfcCardinalPointReference CardinalEndPoint;
+};
 
-struct IfcMaterialProfileWithOffsets : IfcMaterialProfile {};
+struct IfcMaterialProfileWithOffsets : IfcMaterialProfile {
+  SmallVector<IfcLengthMeasure, 2> OffsetValues;
+};
 
-struct IfcMaterialProperties : IfcExtendedProperties {};
+struct IfcMaterialProperties : IfcExtendedProperties {
+  IfcMaterialDefinition Material;
+};
 
-struct IfcMaterialRelationship : IfcResourceLevelRelationship {};
+struct IfcMaterialRelationship : IfcResourceLevelRelationship {
+  IfcMaterial RelatingMaterial;
+  std::unordered_set<IfcMaterial> RelatedMaterials;
+  IfcLabel Expression;
+};
 
 struct IfcMaterialUsageDefinition : IfcEntity {};
 
-struct IfcMeasureWithUnit : IfcEntity {};
+struct IfcMeasureWithUnit : IfcEntity {
+  IfcValue ValueComponent;
+  IfcUnit UnitComponent;
+};
 
-struct IfcMechanicalFastener : IfcElementComponent {};
+struct IfcMechanicalFastener : IfcElementComponent {
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcPositiveLengthMeasure NominalLength;
+  IfcMechanicalFastenerTypeEnum PredefinedType;
+};
 
-struct IfcMechanicalFastenerType : IfcElementComponentType {};
+struct IfcMechanicalFastenerType : IfcElementComponentType {
+  IfcMechanicalFastenerTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcPositiveLengthMeasure NominalLength;
+};
 
-struct IfcMedicalDevice : IfcFlowTerminal {};
+struct IfcMedicalDevice : IfcFlowTerminal {
+  IfcMedicalDeviceTypeEnum PredefinedType;
+};
 
-struct IfcMedicalDeviceType : IfcFlowTerminalType {};
+struct IfcMedicalDeviceType : IfcFlowTerminalType {
+  IfcMedicalDeviceTypeEnum PredefinedType;
+};
 
-struct IfcMember : IfcBuildingElement {};
+struct IfcMember : IfcBuildingElement {
+  IfcMemberTypeEnum PredefinedType;
+};
 
 struct IfcMemberStandardCase : IfcMember {};
 
-struct IfcMemberType : IfcBuildingElementType {};
+struct IfcMemberType : IfcBuildingElementType {
+  IfcMemberTypeEnum PredefinedType;
+};
 
-struct IfcMetric : IfcConstraint {};
+struct IfcMetric : IfcConstraint {
+  IfcBenchmarkEnum Benchmark;
+  IfcLabel ValueSource;
+  IfcMetricValueSelect DataValue;
+  IfcReference ReferencePath;
+};
 
 struct IfcMirroredProfileDef : IfcDerivedProfileDef {};
 
-struct IfcMonetaryUnit : IfcEntity {};
+struct IfcMonetaryUnit : IfcEntity {
+  IfcLabel Currency;
+};
 
-struct IfcMotorConnection : IfcEnergyConversionDevice {};
+struct IfcMotorConnection : IfcEnergyConversionDevice {
+  IfcMotorConnectionTypeEnum PredefinedType;
+};
 
-struct IfcMotorConnectionType : IfcEnergyConversionDeviceType {};
+struct IfcMotorConnectionType : IfcEnergyConversionDeviceType {
+  IfcMotorConnectionTypeEnum PredefinedType;
+};
 
-struct IfcNamedUnit : IfcEntity {};
+struct IfcNamedUnit : IfcEntity {
+  IfcDimensionalExponents Dimensions;
+  IfcUnitEnum UnitType;
+};
 
-struct IfcObject : IfcObjectDefinition {};
+struct IfcObject : IfcObjectDefinition {
+  IfcLabel ObjectType;
+};
 
 struct IfcObjectDefinition : IfcRoot {};
 
 struct IfcObjectPlacement : IfcEntity {};
 
-struct IfcObjective : IfcConstraint {};
+struct IfcObjective : IfcConstraint {
+  SmallVector<IfcConstraint, 4> BenchmarkValues;
+  IfcLogicalOperatorEnum LogicalAggregator;
+  IfcObjectiveEnum ObjectiveQualifier;
+  IfcLabel UserDefinedQualifier;
+};
 
-struct IfcOccupant : IfcActor {};
+struct IfcOccupant : IfcActor {
+  IfcOccupantTypeEnum PredefinedType;
+};
 
-struct IfcOffsetCurve : IfcCurve {};
+struct IfcOffsetCurve : IfcCurve {
+  IfcCurve BasisCurve;
+};
 
-struct IfcOffsetCurve2D : IfcOffsetCurve {};
+struct IfcOffsetCurve2D : IfcOffsetCurve {
+  IfcLengthMeasure Distance;
+  IfcLogical SelfIntersect;
+};
 
-struct IfcOffsetCurve3D : IfcOffsetCurve {};
+struct IfcOffsetCurve3D : IfcOffsetCurve {
+  IfcLengthMeasure Distance;
+  IfcLogical SelfIntersect;
+  IfcDirection RefDirection;
+};
 
-struct IfcOffsetCurveByDistances : IfcOffsetCurve {};
+struct IfcOffsetCurveByDistances : IfcOffsetCurve {
+  SmallVector<IfcDistanceExpression, 4> OffsetValues;
+  IfcLabel Tag;
+};
 
 struct IfcOpenShell : IfcConnectedFaceSet {};
 
-struct IfcOpeningElement : IfcFeatureElementSubtraction {};
+struct IfcOpeningElement : IfcFeatureElementSubtraction {
+  IfcOpeningElementTypeEnum PredefinedType;
+};
 
 struct IfcOpeningStandardCase : IfcOpeningElement {};
 
-struct IfcOrganization : IfcEntity {};
+struct IfcOrganization : IfcEntity {
+  IfcIdentifier Identification;
+  IfcLabel Name;
+  IfcText Description;
+  SmallVector<IfcActorRole, 4> Roles;
+  SmallVector<IfcAddress, 4> Addresses;
+};
 
-struct IfcOrganizationRelationship : IfcResourceLevelRelationship {};
+struct IfcOrganizationRelationship : IfcResourceLevelRelationship {
+  IfcOrganization RelatingOrganization;
+  std::unordered_set<IfcOrganization> RelatedOrganizations;
+};
 
-struct IfcOrientationExpression : IfcGeometricRepresentationItem {};
+struct IfcOrientationExpression : IfcGeometricRepresentationItem {
+  IfcDirection LateralAxisDirection;
+  IfcDirection VerticalAxisDirection;
+};
 
-struct IfcOrientedEdge : IfcEdge {};
+struct IfcOrientedEdge : IfcEdge {
+  IfcEdge EdgeElement;
+  IfcBoolean Orientation;
+};
 
 struct IfcOuterBoundaryCurve : IfcBoundaryCurve {};
 
-struct IfcOutlet : IfcFlowTerminal {};
+struct IfcOutlet : IfcFlowTerminal {
+  IfcOutletTypeEnum PredefinedType;
+};
 
-struct IfcOutletType : IfcFlowTerminalType {};
+struct IfcOutletType : IfcFlowTerminalType {
+  IfcOutletTypeEnum PredefinedType;
+};
 
-struct IfcOwnerHistory : IfcEntity {};
+struct IfcOwnerHistory : IfcEntity {
+  IfcPersonAndOrganization OwningUser;
+  IfcApplication OwningApplication;
+  IfcStateEnum State;
+  IfcChangeActionEnum ChangeAction;
+  IfcTimeStamp LastModifiedDate;
+  IfcPersonAndOrganization LastModifyingUser;
+  IfcApplication LastModifyingApplication;
+  IfcTimeStamp CreationDate;
+};
 
-struct IfcParameterizedProfileDef : IfcProfileDef {};
+struct IfcParameterizedProfileDef : IfcProfileDef {
+  IfcAxis2Placement2D Position;
+};
 
-struct IfcPath : IfcTopologicalRepresentationItem {};
+struct IfcPath : IfcTopologicalRepresentationItem {
+  SmallVector<IfcOrientedEdge, 4> EdgeList;
+};
 
-struct IfcPcurve : IfcCurve {};
+struct IfcPcurve : IfcCurve {
+  IfcSurface BasisSurface;
+  IfcCurve ReferenceCurve;
+};
 
-struct IfcPerformanceHistory : IfcControl {};
+struct IfcPerformanceHistory : IfcControl {
+  IfcLabel LifeCyclePhase;
+  IfcPerformanceHistoryTypeEnum PredefinedType;
+};
 
-struct IfcPermeableCoveringProperties : IfcPreDefinedPropertySet {};
+struct IfcPermeableCoveringProperties : IfcPreDefinedPropertySet {
+  IfcPermeableCoveringOperationEnum OperationType;
+  IfcWindowPanelPositionEnum PanelPosition;
+  IfcPositiveLengthMeasure FrameDepth;
+  IfcPositiveLengthMeasure FrameThickness;
+  IfcShapeAspect ShapeAspectStyle;
+};
 
-struct IfcPermit : IfcControl {};
+struct IfcPermit : IfcControl {
+  IfcPermitTypeEnum PredefinedType;
+  IfcLabel Status;
+  IfcText LongDescription;
+};
 
-struct IfcPerson : IfcEntity {};
+struct IfcPerson : IfcEntity {
+  IfcIdentifier Identification;
+  IfcLabel FamilyName;
+  IfcLabel GivenName;
+  SmallVector<IfcLabel, 4> MiddleNames;
+  SmallVector<IfcLabel, 4> PrefixTitles;
+  SmallVector<IfcLabel, 4> SuffixTitles;
+  SmallVector<IfcActorRole, 4> Roles;
+  SmallVector<IfcAddress, 4> Addresses;
+};
 
-struct IfcPersonAndOrganization : IfcEntity {};
+struct IfcPersonAndOrganization : IfcEntity {
+  IfcPerson ThePerson;
+  IfcOrganization TheOrganization;
+  SmallVector<IfcActorRole, 4> Roles;
+};
 
-struct IfcPhysicalComplexQuantity : IfcPhysicalQuantity {};
+struct IfcPhysicalComplexQuantity : IfcPhysicalQuantity {
+  std::unordered_set<IfcPhysicalQuantity> HasQuantities;
+  IfcLabel Discrimination;
+  IfcLabel Quality;
+  IfcLabel Usage;
+};
 
-struct IfcPhysicalQuantity : IfcEntity {};
+struct IfcPhysicalQuantity : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+};
 
-struct IfcPhysicalSimpleQuantity : IfcPhysicalQuantity {};
+struct IfcPhysicalSimpleQuantity : IfcPhysicalQuantity {
+  IfcNamedUnit Unit;
+};
 
-struct IfcPile : IfcBuildingElement {};
+struct IfcPile : IfcBuildingElement {
+  IfcPileTypeEnum PredefinedType;
+  IfcPileConstructionEnum ConstructionType;
+};
 
-struct IfcPileType : IfcBuildingElementType {};
+struct IfcPileType : IfcBuildingElementType {
+  IfcPileTypeEnum PredefinedType;
+};
 
-struct IfcPipeFitting : IfcFlowFitting {};
+struct IfcPipeFitting : IfcFlowFitting {
+  IfcPipeFittingTypeEnum PredefinedType;
+};
 
-struct IfcPipeFittingType : IfcFlowFittingType {};
+struct IfcPipeFittingType : IfcFlowFittingType {
+  IfcPipeFittingTypeEnum PredefinedType;
+};
 
-struct IfcPipeSegment : IfcFlowSegment {};
+struct IfcPipeSegment : IfcFlowSegment {
+  IfcPipeSegmentTypeEnum PredefinedType;
+};
 
-struct IfcPipeSegmentType : IfcFlowSegmentType {};
+struct IfcPipeSegmentType : IfcFlowSegmentType {
+  IfcPipeSegmentTypeEnum PredefinedType;
+};
 
-struct IfcPixelTexture : IfcSurfaceTexture {};
+struct IfcPixelTexture : IfcSurfaceTexture {
+  IfcInteger Width;
+  IfcInteger Height;
+  IfcInteger ColourComponents;
+  SmallVector<IfcBinary, 4> Pixel;
+};
 
-struct IfcPlacement : IfcGeometricRepresentationItem {};
+struct IfcPlacement : IfcGeometricRepresentationItem {
+  IfcCartesianPoint Location;
+};
 
-struct IfcPlanarBox : IfcPlanarExtent {};
+struct IfcPlanarBox : IfcPlanarExtent {
+  IfcAxis2Placement Placement;
+};
 
-struct IfcPlanarExtent : IfcGeometricRepresentationItem {};
+struct IfcPlanarExtent : IfcGeometricRepresentationItem {
+  IfcLengthMeasure SizeInX;
+  IfcLengthMeasure SizeInY;
+};
 
 struct IfcPlane : IfcElementarySurface {};
 
-struct IfcPlate : IfcBuildingElement {};
+struct IfcPlate : IfcBuildingElement {
+  IfcPlateTypeEnum PredefinedType;
+};
 
 struct IfcPlateStandardCase : IfcPlate {};
 
-struct IfcPlateType : IfcBuildingElementType {};
+struct IfcPlateType : IfcBuildingElementType {
+  IfcPlateTypeEnum PredefinedType;
+};
 
 struct IfcPoint : IfcGeometricRepresentationItem {};
 
-struct IfcPointOnCurve : IfcPoint {};
+struct IfcPointOnCurve : IfcPoint {
+  IfcCurve BasisCurve;
+  IfcParameterValue PointParameter;
+};
 
-struct IfcPointOnSurface : IfcPoint {};
+struct IfcPointOnSurface : IfcPoint {
+  IfcSurface BasisSurface;
+  IfcParameterValue PointParameterU;
+  IfcParameterValue PointParameterV;
+};
 
-struct IfcPolyLoop : IfcLoop {};
+struct IfcPolyLoop : IfcLoop {
+  SmallVector<IfcCartesianPoint, 4> Polygon;
+};
 
-struct IfcPolygonalBoundedHalfSpace : IfcHalfSpaceSolid {};
+struct IfcPolygonalBoundedHalfSpace : IfcHalfSpaceSolid {
+  IfcAxis2Placement3D Position;
+  IfcBoundedCurve PolygonalBoundary;
+};
 
-struct IfcPolygonalFaceSet : IfcTessellatedFaceSet {};
+struct IfcPolygonalFaceSet : IfcTessellatedFaceSet {
+  IfcBoolean Closed;
+  SmallVector<IfcIndexedPolygonalFace, 4> Faces;
+  SmallVector<IfcPositiveInteger, 4> PnIndex;
+};
 
-struct IfcPolyline : IfcBoundedCurve {};
+struct IfcPolyline : IfcBoundedCurve {
+  SmallVector<IfcCartesianPoint, 4> Points;
+};
 
 struct IfcPort : IfcProduct {};
 
 struct IfcPositioningElement : IfcProduct {};
 
-struct IfcPostalAddress : IfcAddress {};
+struct IfcPostalAddress : IfcAddress {
+  IfcLabel InternalLocation;
+  SmallVector<IfcLabel, 4> AddressLines;
+  IfcLabel PostalBox;
+  IfcLabel Town;
+  IfcLabel Region;
+  IfcLabel PostalCode;
+  IfcLabel Country;
+};
 
 struct IfcPreDefinedColour : IfcPreDefinedItem {};
 
 struct IfcPreDefinedCurveFont : IfcPreDefinedItem {};
 
-struct IfcPreDefinedItem : IfcPresentationItem {};
+struct IfcPreDefinedItem : IfcPresentationItem {
+  IfcLabel Name;
+};
 
 struct IfcPreDefinedProperties : IfcPropertyAbstraction {};
 
@@ -948,423 +2152,1029 @@ struct IfcPreDefinedTextFont : IfcPreDefinedItem {};
 
 struct IfcPresentationItem : IfcEntity {};
 
-struct IfcPresentationLayerAssignment : IfcEntity {};
+struct IfcPresentationLayerAssignment : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  std::unordered_set<IfcLayeredItem> AssignedItems;
+  IfcIdentifier Identifier;
+};
 
-struct IfcPresentationLayerWithStyle : IfcPresentationLayerAssignment {};
+struct IfcPresentationLayerWithStyle : IfcPresentationLayerAssignment {
+  IfcLogical LayerOn;
+  IfcLogical LayerFrozen;
+  IfcLogical LayerBlocked;
+  std::unordered_set<IfcPresentationStyle> LayerStyles;
+};
 
-struct IfcPresentationStyle : IfcEntity {};
+struct IfcPresentationStyle : IfcEntity {
+  IfcLabel Name;
+};
 
-struct IfcPresentationStyleAssignment : IfcEntity {};
+struct IfcPresentationStyleAssignment : IfcEntity {
+  std::unordered_set<IfcPresentationStyleSelect> Styles;
+};
 
-struct IfcProcedure : IfcProcess {};
+struct IfcProcedure : IfcProcess {
+  IfcProcedureTypeEnum PredefinedType;
+};
 
-struct IfcProcedureType : IfcTypeProcess {};
+struct IfcProcedureType : IfcTypeProcess {
+  IfcProcedureTypeEnum PredefinedType;
+};
 
-struct IfcProcess : IfcObject {};
+struct IfcProcess : IfcObject {
+  IfcIdentifier Identification;
+  IfcText LongDescription;
+};
 
-struct IfcProduct : IfcObject {};
+struct IfcProduct : IfcObject {
+  IfcObjectPlacement ObjectPlacement;
+  IfcProductRepresentation Representation;
+};
 
 struct IfcProductDefinitionShape : IfcProductRepresentation {};
 
-struct IfcProductRepresentation : IfcEntity {};
+struct IfcProductRepresentation : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  SmallVector<IfcRepresentation, 4> Representations;
+};
 
-struct IfcProfileDef : IfcEntity {};
+struct IfcProfileDef : IfcEntity {
+  IfcProfileTypeEnum ProfileType;
+  IfcLabel ProfileName;
+};
 
-struct IfcProfileProperties : IfcExtendedProperties {};
+struct IfcProfileProperties : IfcExtendedProperties {
+  IfcProfileDef ProfileDefinition;
+};
 
 struct IfcProject : IfcContext {};
 
 struct IfcProjectLibrary : IfcContext {};
 
-struct IfcProjectOrder : IfcControl {};
+struct IfcProjectOrder : IfcControl {
+  IfcProjectOrderTypeEnum PredefinedType;
+  IfcLabel Status;
+  IfcText LongDescription;
+};
 
-struct IfcProjectedCRS : IfcCoordinateReferenceSystem {};
+struct IfcProjectedCRS : IfcCoordinateReferenceSystem {
+  IfcIdentifier MapProjection;
+  IfcIdentifier MapZone;
+  IfcNamedUnit MapUnit;
+};
 
-struct IfcProjectionElement : IfcFeatureElementAddition {};
+struct IfcProjectionElement : IfcFeatureElementAddition {
+  IfcProjectionElementTypeEnum PredefinedType;
+};
 
-struct IfcProperty : IfcPropertyAbstraction {};
+struct IfcProperty : IfcPropertyAbstraction {
+  IfcIdentifier Name;
+  IfcText Description;
+};
 
 struct IfcPropertyAbstraction : IfcEntity {};
 
-struct IfcPropertyBoundedValue : IfcSimpleProperty {};
+struct IfcPropertyBoundedValue : IfcSimpleProperty {
+  IfcValue UpperBoundValue;
+  IfcValue LowerBoundValue;
+  IfcUnit Unit;
+  IfcValue SetPointValue;
+};
 
 struct IfcPropertyDefinition : IfcRoot {};
 
-struct IfcPropertyDependencyRelationship : IfcResourceLevelRelationship {};
+struct IfcPropertyDependencyRelationship : IfcResourceLevelRelationship {
+  IfcProperty DependingProperty;
+  IfcProperty DependantProperty;
+  IfcText Expression;
+};
 
-struct IfcPropertyEnumeratedValue : IfcSimpleProperty {};
+struct IfcPropertyEnumeratedValue : IfcSimpleProperty {
+  SmallVector<IfcValue, 4> EnumerationValues;
+  IfcPropertyEnumeration EnumerationReference;
+};
 
-struct IfcPropertyEnumeration : IfcPropertyAbstraction {};
+struct IfcPropertyEnumeration : IfcPropertyAbstraction {
+  IfcLabel Name;
+  SmallVector<IfcValue, 4> EnumerationValues;
+  IfcUnit Unit;
+};
 
-struct IfcPropertyListValue : IfcSimpleProperty {};
+struct IfcPropertyListValue : IfcSimpleProperty {
+  SmallVector<IfcValue, 4> ListValues;
+  IfcUnit Unit;
+};
 
-struct IfcPropertyReferenceValue : IfcSimpleProperty {};
+struct IfcPropertyReferenceValue : IfcSimpleProperty {
+  IfcText UsageName;
+  IfcObjectReferenceSelect PropertyReference;
+};
 
-struct IfcPropertySet : IfcPropertySetDefinition {};
+struct IfcPropertySet : IfcPropertySetDefinition {
+  std::unordered_set<IfcProperty> HasProperties;
+};
 
 struct IfcPropertySetDefinition : IfcPropertyDefinition {};
 
-struct IfcPropertySetTemplate : IfcPropertyTemplateDefinition {};
+struct IfcPropertySetTemplate : IfcPropertyTemplateDefinition {
+  IfcPropertySetTemplateTypeEnum TemplateType;
+  IfcIdentifier ApplicableEntity;
+  std::unordered_set<IfcPropertyTemplate> HasPropertyTemplates;
+};
 
-struct IfcPropertySingleValue : IfcSimpleProperty {};
+struct IfcPropertySingleValue : IfcSimpleProperty {
+  IfcValue NominalValue;
+  IfcUnit Unit;
+};
 
-struct IfcPropertyTableValue : IfcSimpleProperty {};
+struct IfcPropertyTableValue : IfcSimpleProperty {
+  SmallVector<IfcValue, 4> DefiningValues;
+  SmallVector<IfcValue, 4> DefinedValues;
+  IfcText Expression;
+  IfcUnit DefiningUnit;
+  IfcUnit DefinedUnit;
+  IfcCurveInterpolationEnum CurveInterpolation;
+};
 
 struct IfcPropertyTemplate : IfcPropertyTemplateDefinition {};
 
 struct IfcPropertyTemplateDefinition : IfcPropertyDefinition {};
 
-struct IfcProtectiveDevice : IfcFlowController {};
+struct IfcProtectiveDevice : IfcFlowController {
+  IfcProtectiveDeviceTypeEnum PredefinedType;
+};
 
-struct IfcProtectiveDeviceTrippingUnit : IfcDistributionControlElement {};
+struct IfcProtectiveDeviceTrippingUnit : IfcDistributionControlElement {
+  IfcProtectiveDeviceTrippingUnitTypeEnum PredefinedType;
+};
 
-struct IfcProtectiveDeviceTrippingUnitType : IfcDistributionControlElementType {};
+struct IfcProtectiveDeviceTrippingUnitType : IfcDistributionControlElementType {
+  IfcProtectiveDeviceTrippingUnitTypeEnum PredefinedType;
+};
 
-struct IfcProtectiveDeviceType : IfcFlowControllerType {};
+struct IfcProtectiveDeviceType : IfcFlowControllerType {
+  IfcProtectiveDeviceTypeEnum PredefinedType;
+};
 
-struct IfcProxy : IfcProduct {};
+struct IfcProxy : IfcProduct {
+  IfcObjectTypeEnum ProxyType;
+  IfcLabel Tag;
+};
 
-struct IfcPump : IfcFlowMovingDevice {};
+struct IfcPump : IfcFlowMovingDevice {
+  IfcPumpTypeEnum PredefinedType;
+};
 
-struct IfcPumpType : IfcFlowMovingDeviceType {};
+struct IfcPumpType : IfcFlowMovingDeviceType {
+  IfcPumpTypeEnum PredefinedType;
+};
 
-struct IfcQuantityArea : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityArea : IfcPhysicalSimpleQuantity {
+  IfcAreaMeasure AreaValue;
+  IfcLabel Formula;
+};
 
-struct IfcQuantityCount : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityCount : IfcPhysicalSimpleQuantity {
+  IfcCountMeasure CountValue;
+  IfcLabel Formula;
+};
 
-struct IfcQuantityLength : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityLength : IfcPhysicalSimpleQuantity {
+  IfcLengthMeasure LengthValue;
+  IfcLabel Formula;
+};
 
 struct IfcQuantitySet : IfcPropertySetDefinition {};
 
-struct IfcQuantityTime : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityTime : IfcPhysicalSimpleQuantity {
+  IfcTimeMeasure TimeValue;
+  IfcLabel Formula;
+};
 
-struct IfcQuantityVolume : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityVolume : IfcPhysicalSimpleQuantity {
+  IfcVolumeMeasure VolumeValue;
+  IfcLabel Formula;
+};
 
-struct IfcQuantityWeight : IfcPhysicalSimpleQuantity {};
+struct IfcQuantityWeight : IfcPhysicalSimpleQuantity {
+  IfcMassMeasure WeightValue;
+  IfcLabel Formula;
+};
 
-struct IfcRailing : IfcBuildingElement {};
+struct IfcRailing : IfcBuildingElement {
+  IfcRailingTypeEnum PredefinedType;
+};
 
-struct IfcRailingType : IfcBuildingElementType {};
+struct IfcRailingType : IfcBuildingElementType {
+  IfcRailingTypeEnum PredefinedType;
+};
 
-struct IfcRamp : IfcBuildingElement {};
+struct IfcRamp : IfcBuildingElement {
+  IfcRampTypeEnum PredefinedType;
+};
 
-struct IfcRampFlight : IfcBuildingElement {};
+struct IfcRampFlight : IfcBuildingElement {
+  IfcRampFlightTypeEnum PredefinedType;
+};
 
-struct IfcRampFlightType : IfcBuildingElementType {};
+struct IfcRampFlightType : IfcBuildingElementType {
+  IfcRampFlightTypeEnum PredefinedType;
+};
 
-struct IfcRampType : IfcBuildingElementType {};
+struct IfcRampType : IfcBuildingElementType {
+  IfcRampTypeEnum PredefinedType;
+};
 
-struct IfcRationalBSplineCurveWithKnots : IfcBSplineCurveWithKnots {};
+struct IfcRationalBSplineCurveWithKnots : IfcBSplineCurveWithKnots {
+  SmallVector<IfcReal, 4> WeightsData;
+};
 
-struct IfcRationalBSplineSurfaceWithKnots : IfcBSplineSurfaceWithKnots {};
+struct IfcRationalBSplineSurfaceWithKnots : IfcBSplineSurfaceWithKnots {
+  SmallVector<SmallVector<IfcReal, 4>, 4> WeightsData;
+};
 
-struct IfcRectangleHollowProfileDef : IfcRectangleProfileDef {};
+struct IfcRectangleHollowProfileDef : IfcRectangleProfileDef {
+  IfcPositiveLengthMeasure WallThickness;
+  IfcNonNegativeLengthMeasure InnerFilletRadius;
+  IfcNonNegativeLengthMeasure OuterFilletRadius;
+};
 
-struct IfcRectangleProfileDef : IfcParameterizedProfileDef {};
+struct IfcRectangleProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure XDim;
+  IfcPositiveLengthMeasure YDim;
+};
 
-struct IfcRectangularPyramid : IfcCsgPrimitive3D {};
+struct IfcRectangularPyramid : IfcCsgPrimitive3D {
+  IfcPositiveLengthMeasure XLength;
+  IfcPositiveLengthMeasure YLength;
+  IfcPositiveLengthMeasure Height;
+};
 
-struct IfcRectangularTrimmedSurface : IfcBoundedSurface {};
+struct IfcRectangularTrimmedSurface : IfcBoundedSurface {
+  IfcSurface BasisSurface;
+  IfcParameterValue U1;
+  IfcParameterValue V1;
+  IfcParameterValue U2;
+  IfcParameterValue V2;
+  IfcBoolean Usense;
+  IfcBoolean Vsense;
+};
 
-struct IfcRecurrencePattern : IfcEntity {};
+struct IfcRecurrencePattern : IfcEntity {
+  IfcRecurrenceTypeEnum RecurrenceType;
+  std::unordered_set<IfcDayInMonthNumber> DayComponent;
+  std::unordered_set<IfcDayInWeekNumber> WeekdayComponent;
+  std::unordered_set<IfcMonthInYearNumber> MonthComponent;
+  IfcInteger Position;
+  IfcInteger Interval;
+  IfcInteger Occurrences;
+  SmallVector<IfcTimePeriod, 4> TimePeriods;
+};
 
-struct IfcReference : IfcEntity {};
+struct IfcReference : IfcEntity {
+  IfcIdentifier TypeIdentifier;
+  IfcIdentifier AttributeIdentifier;
+  IfcLabel InstanceName;
+  SmallVector<IfcInteger, 4> ListPositions;
+  IfcReference InnerReference;
+};
 
-struct IfcReferent : IfcPositioningElement {};
+struct IfcReferent : IfcPositioningElement {
+  IfcReferentTypeEnum PredefinedType;
+  IfcLengthMeasure RestartDistance;
+};
 
-struct IfcRegularTimeSeries : IfcTimeSeries {};
+struct IfcRegularTimeSeries : IfcTimeSeries {
+  IfcTimeMeasure TimeStep;
+  SmallVector<IfcTimeSeriesValue, 4> Values;
+};
 
-struct IfcReinforcementBarProperties : IfcPreDefinedProperties {};
+struct IfcReinforcementBarProperties : IfcPreDefinedProperties {
+  IfcAreaMeasure TotalCrossSectionArea;
+  IfcLabel SteelGrade;
+  IfcReinforcingBarSurfaceEnum BarSurface;
+  IfcLengthMeasure EffectiveDepth;
+  IfcPositiveLengthMeasure NominalBarDiameter;
+  IfcCountMeasure BarCount;
+};
 
-struct IfcReinforcementDefinitionProperties : IfcPreDefinedPropertySet {};
+struct IfcReinforcementDefinitionProperties : IfcPreDefinedPropertySet {
+  IfcLabel DefinitionType;
+  SmallVector<IfcSectionReinforcementProperties, 4> ReinforcementSectionDefinitions;
+};
 
-struct IfcReinforcingBar : IfcReinforcingElement {};
+struct IfcReinforcingBar : IfcReinforcingElement {
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcAreaMeasure CrossSectionArea;
+  IfcPositiveLengthMeasure BarLength;
+  IfcReinforcingBarTypeEnum PredefinedType;
+  IfcReinforcingBarSurfaceEnum BarSurface;
+};
 
-struct IfcReinforcingBarType : IfcReinforcingElementType {};
+struct IfcReinforcingBarType : IfcReinforcingElementType {
+  IfcReinforcingBarTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcAreaMeasure CrossSectionArea;
+  IfcPositiveLengthMeasure BarLength;
+  IfcReinforcingBarSurfaceEnum BarSurface;
+  IfcLabel BendingShapeCode;
+  SmallVector<IfcBendingParameterSelect, 4> BendingParameters;
+};
 
-struct IfcReinforcingElement : IfcElementComponent {};
+struct IfcReinforcingElement : IfcElementComponent {
+  IfcLabel SteelGrade;
+};
 
 struct IfcReinforcingElementType : IfcElementComponentType {};
 
-struct IfcReinforcingMesh : IfcReinforcingElement {};
+struct IfcReinforcingMesh : IfcReinforcingElement {
+  IfcPositiveLengthMeasure MeshLength;
+  IfcPositiveLengthMeasure MeshWidth;
+  IfcPositiveLengthMeasure LongitudinalBarNominalDiameter;
+  IfcPositiveLengthMeasure TransverseBarNominalDiameter;
+  IfcAreaMeasure LongitudinalBarCrossSectionArea;
+  IfcAreaMeasure TransverseBarCrossSectionArea;
+  IfcPositiveLengthMeasure LongitudinalBarSpacing;
+  IfcPositiveLengthMeasure TransverseBarSpacing;
+  IfcReinforcingMeshTypeEnum PredefinedType;
+};
 
-struct IfcReinforcingMeshType : IfcReinforcingElementType {};
+struct IfcReinforcingMeshType : IfcReinforcingElementType {
+  IfcReinforcingMeshTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure MeshLength;
+  IfcPositiveLengthMeasure MeshWidth;
+  IfcPositiveLengthMeasure LongitudinalBarNominalDiameter;
+  IfcPositiveLengthMeasure TransverseBarNominalDiameter;
+  IfcAreaMeasure LongitudinalBarCrossSectionArea;
+  IfcAreaMeasure TransverseBarCrossSectionArea;
+  IfcPositiveLengthMeasure LongitudinalBarSpacing;
+  IfcPositiveLengthMeasure TransverseBarSpacing;
+  IfcLabel BendingShapeCode;
+  SmallVector<IfcBendingParameterSelect, 4> BendingParameters;
+};
 
-struct IfcRelAggregates : IfcRelDecomposes {};
+struct IfcRelAggregates : IfcRelDecomposes {
+  IfcObjectDefinition RelatingObject;
+  std::unordered_set<IfcObjectDefinition> RelatedObjects;
+};
 
-struct IfcRelAssigns : IfcRelationship {};
+struct IfcRelAssigns : IfcRelationship {
+  std::unordered_set<IfcObjectDefinition> RelatedObjects;
+  IfcObjectTypeEnum RelatedObjectsType;
+};
 
-struct IfcRelAssignsToActor : IfcRelAssigns {};
+struct IfcRelAssignsToActor : IfcRelAssigns {
+  IfcActor RelatingActor;
+  IfcActorRole ActingRole;
+};
 
-struct IfcRelAssignsToControl : IfcRelAssigns {};
+struct IfcRelAssignsToControl : IfcRelAssigns {
+  IfcControl RelatingControl;
+};
 
-struct IfcRelAssignsToGroup : IfcRelAssigns {};
+struct IfcRelAssignsToGroup : IfcRelAssigns {
+  IfcGroup RelatingGroup;
+};
 
-struct IfcRelAssignsToGroupByFactor : IfcRelAssignsToGroup {};
+struct IfcRelAssignsToGroupByFactor : IfcRelAssignsToGroup {
+  IfcRatioMeasure Factor;
+};
 
-struct IfcRelAssignsToProcess : IfcRelAssigns {};
+struct IfcRelAssignsToProcess : IfcRelAssigns {
+  IfcProcessSelect RelatingProcess;
+  IfcMeasureWithUnit QuantityInProcess;
+};
 
-struct IfcRelAssignsToProduct : IfcRelAssigns {};
+struct IfcRelAssignsToProduct : IfcRelAssigns {
+  IfcProductSelect RelatingProduct;
+};
 
-struct IfcRelAssignsToResource : IfcRelAssigns {};
+struct IfcRelAssignsToResource : IfcRelAssigns {
+  IfcResourceSelect RelatingResource;
+};
 
-struct IfcRelAssociates : IfcRelationship {};
+struct IfcRelAssociates : IfcRelationship {
+  std::unordered_set<IfcDefinitionSelect> RelatedObjects;
+};
 
-struct IfcRelAssociatesApproval : IfcRelAssociates {};
+struct IfcRelAssociatesApproval : IfcRelAssociates {
+  IfcApproval RelatingApproval;
+};
 
-struct IfcRelAssociatesClassification : IfcRelAssociates {};
+struct IfcRelAssociatesClassification : IfcRelAssociates {
+  IfcClassificationSelect RelatingClassification;
+};
 
-struct IfcRelAssociatesConstraint : IfcRelAssociates {};
+struct IfcRelAssociatesConstraint : IfcRelAssociates {
+  IfcLabel Intent;
+  IfcConstraint RelatingConstraint;
+};
 
-struct IfcRelAssociatesDocument : IfcRelAssociates {};
+struct IfcRelAssociatesDocument : IfcRelAssociates {
+  IfcDocumentSelect RelatingDocument;
+};
 
-struct IfcRelAssociatesLibrary : IfcRelAssociates {};
+struct IfcRelAssociatesLibrary : IfcRelAssociates {
+  IfcLibrarySelect RelatingLibrary;
+};
 
-struct IfcRelAssociatesMaterial : IfcRelAssociates {};
+struct IfcRelAssociatesMaterial : IfcRelAssociates {
+  IfcMaterialSelect RelatingMaterial;
+};
 
 struct IfcRelConnects : IfcRelationship {};
 
-struct IfcRelConnectsElements : IfcRelConnects {};
+struct IfcRelConnectsElements : IfcRelConnects {
+  IfcConnectionGeometry ConnectionGeometry;
+  IfcElement RelatingElement;
+  IfcElement RelatedElement;
+};
 
-struct IfcRelConnectsPathElements : IfcRelConnectsElements {};
+struct IfcRelConnectsPathElements : IfcRelConnectsElements {
+  SmallVector<IfcInteger, 4> RelatingPriorities;
+  SmallVector<IfcInteger, 4> RelatedPriorities;
+  IfcConnectionTypeEnum RelatedConnectionType;
+  IfcConnectionTypeEnum RelatingConnectionType;
+};
 
-struct IfcRelConnectsPortToElement : IfcRelConnects {};
+struct IfcRelConnectsPortToElement : IfcRelConnects {
+  IfcPort RelatingPort;
+  IfcDistributionElement RelatedElement;
+};
 
-struct IfcRelConnectsPorts : IfcRelConnects {};
+struct IfcRelConnectsPorts : IfcRelConnects {
+  IfcPort RelatingPort;
+  IfcPort RelatedPort;
+  IfcElement RealizingElement;
+};
 
-struct IfcRelConnectsStructuralActivity : IfcRelConnects {};
+struct IfcRelConnectsStructuralActivity : IfcRelConnects {
+  IfcStructuralActivityAssignmentSelect RelatingElement;
+  IfcStructuralActivity RelatedStructuralActivity;
+};
 
-struct IfcRelConnectsStructuralMember : IfcRelConnects {};
+struct IfcRelConnectsStructuralMember : IfcRelConnects {
+  IfcStructuralMember RelatingStructuralMember;
+  IfcStructuralConnection RelatedStructuralConnection;
+  IfcBoundaryCondition AppliedCondition;
+  IfcStructuralConnectionCondition AdditionalConditions;
+  IfcLengthMeasure SupportedLength;
+  IfcAxis2Placement3D ConditionCoordinateSystem;
+};
 
-struct IfcRelConnectsWithEccentricity : IfcRelConnectsStructuralMember {};
+struct IfcRelConnectsWithEccentricity : IfcRelConnectsStructuralMember {
+  IfcConnectionGeometry ConnectionConstraint;
+};
 
-struct IfcRelConnectsWithRealizingElements : IfcRelConnectsElements {};
+struct IfcRelConnectsWithRealizingElements : IfcRelConnectsElements {
+  std::unordered_set<IfcElement> RealizingElements;
+  IfcLabel ConnectionType;
+};
 
-struct IfcRelContainedInSpatialStructure : IfcRelConnects {};
+struct IfcRelContainedInSpatialStructure : IfcRelConnects {
+  std::unordered_set<IfcProduct> RelatedElements;
+  IfcSpatialElement RelatingStructure;
+};
 
-struct IfcRelCoversBldgElements : IfcRelConnects {};
+struct IfcRelCoversBldgElements : IfcRelConnects {
+  IfcElement RelatingBuildingElement;
+  std::unordered_set<IfcCovering> RelatedCoverings;
+};
 
-struct IfcRelCoversSpaces : IfcRelConnects {};
+struct IfcRelCoversSpaces : IfcRelConnects {
+  IfcSpace RelatingSpace;
+  std::unordered_set<IfcCovering> RelatedCoverings;
+};
 
-struct IfcRelDeclares : IfcRelationship {};
+struct IfcRelDeclares : IfcRelationship {
+  IfcContext RelatingContext;
+  std::unordered_set<IfcDefinitionSelect> RelatedDefinitions;
+};
 
 struct IfcRelDecomposes : IfcRelationship {};
 
 struct IfcRelDefines : IfcRelationship {};
 
-struct IfcRelDefinesByObject : IfcRelDefines {};
+struct IfcRelDefinesByObject : IfcRelDefines {
+  std::unordered_set<IfcObject> RelatedObjects;
+  IfcObject RelatingObject;
+};
 
-struct IfcRelDefinesByProperties : IfcRelDefines {};
+struct IfcRelDefinesByProperties : IfcRelDefines {
+  std::unordered_set<IfcObjectDefinition> RelatedObjects;
+  IfcPropertySetDefinitionSelect RelatingPropertyDefinition;
+};
 
-struct IfcRelDefinesByTemplate : IfcRelDefines {};
+struct IfcRelDefinesByTemplate : IfcRelDefines {
+  std::unordered_set<IfcPropertySetDefinition> RelatedPropertySets;
+  IfcPropertySetTemplate RelatingTemplate;
+};
 
-struct IfcRelDefinesByType : IfcRelDefines {};
+struct IfcRelDefinesByType : IfcRelDefines {
+  std::unordered_set<IfcObject> RelatedObjects;
+  IfcTypeObject RelatingType;
+};
 
-struct IfcRelFillsElement : IfcRelConnects {};
+struct IfcRelFillsElement : IfcRelConnects {
+  IfcOpeningElement RelatingOpeningElement;
+  IfcElement RelatedBuildingElement;
+};
 
-struct IfcRelFlowControlElements : IfcRelConnects {};
+struct IfcRelFlowControlElements : IfcRelConnects {
+  std::unordered_set<IfcDistributionControlElement> RelatedControlElements;
+  IfcDistributionFlowElement RelatingFlowElement;
+};
 
-struct IfcRelInterferesElements : IfcRelConnects {};
+struct IfcRelInterferesElements : IfcRelConnects {
+  IfcElement RelatingElement;
+  IfcElement RelatedElement;
+  IfcConnectionGeometry InterferenceGeometry;
+  IfcIdentifier InterferenceType;
+  IfcLogical ImpliedOrder;
+};
 
-struct IfcRelNests : IfcRelDecomposes {};
+struct IfcRelNests : IfcRelDecomposes {
+  IfcObjectDefinition RelatingObject;
+  SmallVector<IfcObjectDefinition, 4> RelatedObjects;
+};
 
-struct IfcRelProjectsElement : IfcRelDecomposes {};
+struct IfcRelProjectsElement : IfcRelDecomposes {
+  IfcElement RelatingElement;
+  IfcFeatureElementAddition RelatedFeatureElement;
+};
 
-struct IfcRelReferencedInSpatialStructure : IfcRelConnects {};
+struct IfcRelReferencedInSpatialStructure : IfcRelConnects {
+  std::unordered_set<IfcProduct> RelatedElements;
+  IfcSpatialElement RelatingStructure;
+};
 
-struct IfcRelSequence : IfcRelConnects {};
+struct IfcRelSequence : IfcRelConnects {
+  IfcProcess RelatingProcess;
+  IfcProcess RelatedProcess;
+  IfcLagTime TimeLag;
+  IfcSequenceEnum SequenceType;
+  IfcLabel UserDefinedSequenceType;
+};
 
-struct IfcRelServicesBuildings : IfcRelConnects {};
+struct IfcRelServicesBuildings : IfcRelConnects {
+  IfcSystem RelatingSystem;
+  std::unordered_set<IfcSpatialElement> RelatedBuildings;
+};
 
-struct IfcRelSpaceBoundary : IfcRelConnects {};
+struct IfcRelSpaceBoundary : IfcRelConnects {
+  IfcSpaceBoundarySelect RelatingSpace;
+  IfcElement RelatedBuildingElement;
+  IfcConnectionGeometry ConnectionGeometry;
+  IfcPhysicalOrVirtualEnum PhysicalOrVirtualBoundary;
+  IfcInternalOrExternalEnum InternalOrExternalBoundary;
+};
 
-struct IfcRelSpaceBoundary1stLevel : IfcRelSpaceBoundary {};
+struct IfcRelSpaceBoundary1stLevel : IfcRelSpaceBoundary {
+  IfcRelSpaceBoundary1stLevel ParentBoundary;
+};
 
-struct IfcRelSpaceBoundary2ndLevel : IfcRelSpaceBoundary1stLevel {};
+struct IfcRelSpaceBoundary2ndLevel : IfcRelSpaceBoundary1stLevel {
+  IfcRelSpaceBoundary2ndLevel CorrespondingBoundary;
+};
 
-struct IfcRelVoidsElement : IfcRelDecomposes {};
+struct IfcRelVoidsElement : IfcRelDecomposes {
+  IfcElement RelatingBuildingElement;
+  IfcFeatureElementSubtraction RelatedOpeningElement;
+};
 
 struct IfcRelationship : IfcRoot {};
 
-struct IfcReparametrisedCompositeCurveSegment : IfcCompositeCurveSegment {};
+struct IfcReparametrisedCompositeCurveSegment : IfcCompositeCurveSegment {
+  IfcParameterValue ParamLength;
+};
 
-struct IfcRepresentation : IfcEntity {};
+struct IfcRepresentation : IfcEntity {
+  IfcRepresentationContext ContextOfItems;
+  IfcLabel RepresentationIdentifier;
+  IfcLabel RepresentationType;
+  std::unordered_set<IfcRepresentationItem> Items;
+};
 
-struct IfcRepresentationContext : IfcEntity {};
+struct IfcRepresentationContext : IfcEntity {
+  IfcLabel ContextIdentifier;
+  IfcLabel ContextType;
+};
 
 struct IfcRepresentationItem : IfcEntity {};
 
-struct IfcRepresentationMap : IfcEntity {};
+struct IfcRepresentationMap : IfcEntity {
+  IfcAxis2Placement MappingOrigin;
+  IfcRepresentation MappedRepresentation;
+};
 
-struct IfcResource : IfcObject {};
+struct IfcResource : IfcObject {
+  IfcIdentifier Identification;
+  IfcText LongDescription;
+};
 
-struct IfcResourceApprovalRelationship : IfcResourceLevelRelationship {};
+struct IfcResourceApprovalRelationship : IfcResourceLevelRelationship {
+  std::unordered_set<IfcResourceObjectSelect> RelatedResourceObjects;
+  IfcApproval RelatingApproval;
+};
 
-struct IfcResourceConstraintRelationship : IfcResourceLevelRelationship {};
+struct IfcResourceConstraintRelationship : IfcResourceLevelRelationship {
+  IfcConstraint RelatingConstraint;
+  std::unordered_set<IfcResourceObjectSelect> RelatedResourceObjects;
+};
 
-struct IfcResourceLevelRelationship : IfcEntity {};
+struct IfcResourceLevelRelationship : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+};
 
-struct IfcResourceTime : IfcSchedulingTime {};
+struct IfcResourceTime : IfcSchedulingTime {
+  IfcDuration ScheduleWork;
+  IfcPositiveRatioMeasure ScheduleUsage;
+  IfcDateTime ScheduleStart;
+  IfcDateTime ScheduleFinish;
+  IfcLabel ScheduleContour;
+  IfcDuration LevelingDelay;
+  IfcBoolean IsOverAllocated;
+  IfcDateTime StatusTime;
+  IfcDuration ActualWork;
+  IfcPositiveRatioMeasure ActualUsage;
+  IfcDateTime ActualStart;
+  IfcDateTime ActualFinish;
+  IfcDuration RemainingWork;
+  IfcPositiveRatioMeasure RemainingUsage;
+  IfcPositiveRatioMeasure Completion;
+};
 
-struct IfcRevolvedAreaSolid : IfcSweptAreaSolid {};
+struct IfcRevolvedAreaSolid : IfcSweptAreaSolid {
+  IfcAxis1Placement Axis;
+  IfcPlaneAngleMeasure Angle;
+};
 
-struct IfcRevolvedAreaSolidTapered : IfcRevolvedAreaSolid {};
+struct IfcRevolvedAreaSolidTapered : IfcRevolvedAreaSolid {
+  IfcProfileDef EndSweptArea;
+};
 
-struct IfcRightCircularCone : IfcCsgPrimitive3D {};
+struct IfcRightCircularCone : IfcCsgPrimitive3D {
+  IfcPositiveLengthMeasure Height;
+  IfcPositiveLengthMeasure BottomRadius;
+};
 
-struct IfcRightCircularCylinder : IfcCsgPrimitive3D {};
+struct IfcRightCircularCylinder : IfcCsgPrimitive3D {
+  IfcPositiveLengthMeasure Height;
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcRoof : IfcBuildingElement {};
+struct IfcRoof : IfcBuildingElement {
+  IfcRoofTypeEnum PredefinedType;
+};
 
-struct IfcRoofType : IfcBuildingElementType {};
+struct IfcRoofType : IfcBuildingElementType {
+  IfcRoofTypeEnum PredefinedType;
+};
 
-struct IfcRoot : IfcEntity {};
+struct IfcRoot : IfcEntity {
+  IfcGloballyUniqueId GlobalId;
+  IfcOwnerHistory OwnerHistory;
+  IfcLabel Name;
+  IfcText Description;
+};
 
-struct IfcRoundedRectangleProfileDef : IfcRectangleProfileDef {};
+struct IfcRoundedRectangleProfileDef : IfcRectangleProfileDef {
+  IfcPositiveLengthMeasure RoundingRadius;
+};
 
-struct IfcSIUnit : IfcNamedUnit {};
+struct IfcSIUnit : IfcNamedUnit {
+  IfcSIPrefix Prefix;
+  IfcSIUnitName Name;
+};
 
-struct IfcSanitaryTerminal : IfcFlowTerminal {};
+struct IfcSanitaryTerminal : IfcFlowTerminal {
+  IfcSanitaryTerminalTypeEnum PredefinedType;
+};
 
-struct IfcSanitaryTerminalType : IfcFlowTerminalType {};
+struct IfcSanitaryTerminalType : IfcFlowTerminalType {
+  IfcSanitaryTerminalTypeEnum PredefinedType;
+};
 
-struct IfcSchedulingTime : IfcEntity {};
+struct IfcSchedulingTime : IfcEntity {
+  IfcLabel Name;
+  IfcDataOriginEnum DataOrigin;
+  IfcLabel UserDefinedDataOrigin;
+};
 
 struct IfcSeamCurve : IfcSurfaceCurve {};
 
-struct IfcSectionProperties : IfcPreDefinedProperties {};
+struct IfcSectionProperties : IfcPreDefinedProperties {
+  IfcSectionTypeEnum SectionType;
+  IfcProfileDef StartProfile;
+  IfcProfileDef EndProfile;
+};
 
-struct IfcSectionReinforcementProperties : IfcPreDefinedProperties {};
+struct IfcSectionReinforcementProperties : IfcPreDefinedProperties {
+  IfcLengthMeasure LongitudinalStartPosition;
+  IfcLengthMeasure LongitudinalEndPosition;
+  IfcLengthMeasure TransversePosition;
+  IfcReinforcingBarRoleEnum ReinforcementRole;
+  IfcSectionProperties SectionDefinition;
+  std::unordered_set<IfcReinforcementBarProperties> CrossSectionReinforcementDefinitions;
+};
 
-struct IfcSectionedSolid : IfcSolidModel {};
+struct IfcSectionedSolid : IfcSolidModel {
+  IfcCurve Directrix;
+  SmallVector<IfcProfileDef, 4> CrossSections;
+};
 
-struct IfcSectionedSolidHorizontal : IfcSectionedSolid {};
+struct IfcSectionedSolidHorizontal : IfcSectionedSolid {
+  SmallVector<IfcDistanceExpression, 4> CrossSectionPositions;
+  IfcBoolean FixedAxisVertical;
+};
 
-struct IfcSectionedSpine : IfcGeometricRepresentationItem {};
+struct IfcSectionedSpine : IfcGeometricRepresentationItem {
+  IfcCompositeCurve SpineCurve;
+  SmallVector<IfcProfileDef, 4> CrossSections;
+  SmallVector<IfcAxis2Placement3D, 4> CrossSectionPositions;
+};
 
-struct IfcSensor : IfcDistributionControlElement {};
+struct IfcSensor : IfcDistributionControlElement {
+  IfcSensorTypeEnum PredefinedType;
+};
 
-struct IfcSensorType : IfcDistributionControlElementType {};
+struct IfcSensorType : IfcDistributionControlElementType {
+  IfcSensorTypeEnum PredefinedType;
+};
 
-struct IfcShadingDevice : IfcBuildingElement {};
+struct IfcShadingDevice : IfcBuildingElement {
+  IfcShadingDeviceTypeEnum PredefinedType;
+};
 
-struct IfcShadingDeviceType : IfcBuildingElementType {};
+struct IfcShadingDeviceType : IfcBuildingElementType {
+  IfcShadingDeviceTypeEnum PredefinedType;
+};
 
-struct IfcShapeAspect : IfcEntity {};
+struct IfcShapeAspect : IfcEntity {
+  SmallVector<IfcShapeModel, 4> ShapeRepresentations;
+  IfcLabel Name;
+  IfcText Description;
+  IfcLogical ProductDefinitional;
+  IfcProductRepresentationSelect PartOfProductDefinitionShape;
+};
 
 struct IfcShapeModel : IfcRepresentation {};
 
 struct IfcShapeRepresentation : IfcShapeModel {};
 
-struct IfcShellBasedSurfaceModel : IfcGeometricRepresentationItem {};
+struct IfcShellBasedSurfaceModel : IfcGeometricRepresentationItem {
+  std::unordered_set<IfcShell> SbsmBoundary;
+};
 
 struct IfcSimpleProperty : IfcProperty {};
 
-struct IfcSimplePropertyTemplate : IfcPropertyTemplate {};
+struct IfcSimplePropertyTemplate : IfcPropertyTemplate {
+  IfcSimplePropertyTemplateTypeEnum TemplateType;
+  IfcLabel PrimaryMeasureType;
+  IfcLabel SecondaryMeasureType;
+  IfcPropertyEnumeration Enumerators;
+  IfcUnit PrimaryUnit;
+  IfcUnit SecondaryUnit;
+  IfcLabel Expression;
+  IfcStateEnum AccessState;
+};
 
-struct IfcSite : IfcSpatialStructureElement {};
+struct IfcSite : IfcSpatialStructureElement {
+  IfcCompoundPlaneAngleMeasure RefLatitude;
+  IfcCompoundPlaneAngleMeasure RefLongitude;
+  IfcLengthMeasure RefElevation;
+  IfcLabel LandTitleNumber;
+  IfcPostalAddress SiteAddress;
+};
 
-struct IfcSlab : IfcBuildingElement {};
+struct IfcSlab : IfcBuildingElement {
+  IfcSlabTypeEnum PredefinedType;
+};
 
 struct IfcSlabElementedCase : IfcSlab {};
 
 struct IfcSlabStandardCase : IfcSlab {};
 
-struct IfcSlabType : IfcBuildingElementType {};
+struct IfcSlabType : IfcBuildingElementType {
+  IfcSlabTypeEnum PredefinedType;
+};
 
-struct IfcSlippageConnectionCondition : IfcStructuralConnectionCondition {};
+struct IfcSlippageConnectionCondition : IfcStructuralConnectionCondition {
+  IfcLengthMeasure SlippageX;
+  IfcLengthMeasure SlippageY;
+  IfcLengthMeasure SlippageZ;
+};
 
-struct IfcSolarDevice : IfcEnergyConversionDevice {};
+struct IfcSolarDevice : IfcEnergyConversionDevice {
+  IfcSolarDeviceTypeEnum PredefinedType;
+};
 
-struct IfcSolarDeviceType : IfcEnergyConversionDeviceType {};
+struct IfcSolarDeviceType : IfcEnergyConversionDeviceType {
+  IfcSolarDeviceTypeEnum PredefinedType;
+};
 
 struct IfcSolidModel : IfcGeometricRepresentationItem {};
 
-struct IfcSpace : IfcSpatialStructureElement {};
+struct IfcSpace : IfcSpatialStructureElement {
+  IfcSpaceTypeEnum PredefinedType;
+  IfcLengthMeasure ElevationWithFlooring;
+};
 
-struct IfcSpaceHeater : IfcFlowTerminal {};
+struct IfcSpaceHeater : IfcFlowTerminal {
+  IfcSpaceHeaterTypeEnum PredefinedType;
+};
 
-struct IfcSpaceHeaterType : IfcFlowTerminalType {};
+struct IfcSpaceHeaterType : IfcFlowTerminalType {
+  IfcSpaceHeaterTypeEnum PredefinedType;
+};
 
-struct IfcSpaceType : IfcSpatialStructureElementType {};
+struct IfcSpaceType : IfcSpatialStructureElementType {
+  IfcSpaceTypeEnum PredefinedType;
+  IfcLabel LongName;
+};
 
-struct IfcSpatialElement : IfcProduct {};
+struct IfcSpatialElement : IfcProduct {
+  IfcLabel LongName;
+};
 
-struct IfcSpatialElementType : IfcTypeProduct {};
+struct IfcSpatialElementType : IfcTypeProduct {
+  IfcLabel ElementType;
+};
 
-struct IfcSpatialStructureElement : IfcSpatialElement {};
+struct IfcSpatialStructureElement : IfcSpatialElement {
+  IfcElementCompositionEnum CompositionType;
+};
 
 struct IfcSpatialStructureElementType : IfcSpatialElementType {};
 
-struct IfcSpatialZone : IfcSpatialElement {};
+struct IfcSpatialZone : IfcSpatialElement {
+  IfcSpatialZoneTypeEnum PredefinedType;
+};
 
-struct IfcSpatialZoneType : IfcSpatialElementType {};
+struct IfcSpatialZoneType : IfcSpatialElementType {
+  IfcSpatialZoneTypeEnum PredefinedType;
+  IfcLabel LongName;
+};
 
-struct IfcSphere : IfcCsgPrimitive3D {};
+struct IfcSphere : IfcCsgPrimitive3D {
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcSphericalSurface : IfcElementarySurface {};
+struct IfcSphericalSurface : IfcElementarySurface {
+  IfcPositiveLengthMeasure Radius;
+};
 
-struct IfcStackTerminal : IfcFlowTerminal {};
+struct IfcStackTerminal : IfcFlowTerminal {
+  IfcStackTerminalTypeEnum PredefinedType;
+};
 
-struct IfcStackTerminalType : IfcFlowTerminalType {};
+struct IfcStackTerminalType : IfcFlowTerminalType {
+  IfcStackTerminalTypeEnum PredefinedType;
+};
 
-struct IfcStair : IfcBuildingElement {};
+struct IfcStair : IfcBuildingElement {
+  IfcStairTypeEnum PredefinedType;
+};
 
-struct IfcStairFlight : IfcBuildingElement {};
+struct IfcStairFlight : IfcBuildingElement {
+  IfcInteger NumberOfRisers;
+  IfcInteger NumberOfTreads;
+  IfcPositiveLengthMeasure RiserHeight;
+  IfcPositiveLengthMeasure TreadLength;
+  IfcStairFlightTypeEnum PredefinedType;
+};
 
-struct IfcStairFlightType : IfcBuildingElementType {};
+struct IfcStairFlightType : IfcBuildingElementType {
+  IfcStairFlightTypeEnum PredefinedType;
+};
 
-struct IfcStairType : IfcBuildingElementType {};
+struct IfcStairType : IfcBuildingElementType {
+  IfcStairTypeEnum PredefinedType;
+};
 
-struct IfcStructuralAction : IfcStructuralActivity {};
+struct IfcStructuralAction : IfcStructuralActivity {
+  IfcBoolean DestabilizingLoad;
+};
 
-struct IfcStructuralActivity : IfcProduct {};
+struct IfcStructuralActivity : IfcProduct {
+  IfcStructuralLoad AppliedLoad;
+  IfcGlobalOrLocalEnum GlobalOrLocal;
+};
 
-struct IfcStructuralAnalysisModel : IfcSystem {};
+struct IfcStructuralAnalysisModel : IfcSystem {
+  IfcAnalysisModelTypeEnum PredefinedType;
+  IfcAxis2Placement3D OrientationOf2DPlane;
+  std::unordered_set<IfcStructuralLoadGroup> LoadedBy;
+  std::unordered_set<IfcStructuralResultGroup> HasResults;
+  IfcObjectPlacement SharedPlacement;
+};
 
-struct IfcStructuralConnection : IfcStructuralItem {};
+struct IfcStructuralConnection : IfcStructuralItem {
+  IfcBoundaryCondition AppliedCondition;
+};
 
-struct IfcStructuralConnectionCondition : IfcEntity {};
+struct IfcStructuralConnectionCondition : IfcEntity {
+  IfcLabel Name;
+};
 
-struct IfcStructuralCurveAction : IfcStructuralAction {};
+struct IfcStructuralCurveAction : IfcStructuralAction {
+  IfcProjectedOrTrueLengthEnum ProjectedOrTrue;
+  IfcStructuralCurveActivityTypeEnum PredefinedType;
+};
 
-struct IfcStructuralCurveConnection : IfcStructuralConnection {};
+struct IfcStructuralCurveConnection : IfcStructuralConnection {
+  IfcDirection Axis;
+};
 
-struct IfcStructuralCurveMember : IfcStructuralMember {};
+struct IfcStructuralCurveMember : IfcStructuralMember {
+  IfcStructuralCurveMemberTypeEnum PredefinedType;
+  IfcDirection Axis;
+};
 
 struct IfcStructuralCurveMemberVarying : IfcStructuralCurveMember {};
 
-struct IfcStructuralCurveReaction : IfcStructuralReaction {};
+struct IfcStructuralCurveReaction : IfcStructuralReaction {
+  IfcStructuralCurveActivityTypeEnum PredefinedType;
+};
 
 struct IfcStructuralItem : IfcProduct {};
 
 struct IfcStructuralLinearAction : IfcStructuralCurveAction {};
 
-struct IfcStructuralLoad : IfcEntity {};
+struct IfcStructuralLoad : IfcEntity {
+  IfcLabel Name;
+};
 
-struct IfcStructuralLoadCase : IfcStructuralLoadGroup {};
+struct IfcStructuralLoadCase : IfcStructuralLoadGroup {
+  SmallVector<IfcRatioMeasure, 3> SelfWeightCoefficients;
+};
 
-struct IfcStructuralLoadConfiguration : IfcStructuralLoad {};
+struct IfcStructuralLoadConfiguration : IfcStructuralLoad {
+  SmallVector<IfcStructuralLoadOrResult, 4> Values;
+  SmallVector<SmallVector<IfcLengthMeasure, 2>, 4> Locations;
+};
 
-struct IfcStructuralLoadGroup : IfcGroup {};
+struct IfcStructuralLoadGroup : IfcGroup {
+  IfcLoadGroupTypeEnum PredefinedType;
+  IfcActionTypeEnum ActionType;
+  IfcActionSourceTypeEnum ActionSource;
+  IfcRatioMeasure Coefficient;
+  IfcLabel Purpose;
+};
 
-struct IfcStructuralLoadLinearForce : IfcStructuralLoadStatic {};
+struct IfcStructuralLoadLinearForce : IfcStructuralLoadStatic {
+  IfcLinearForceMeasure LinearForceX;
+  IfcLinearForceMeasure LinearForceY;
+  IfcLinearForceMeasure LinearForceZ;
+  IfcLinearMomentMeasure LinearMomentX;
+  IfcLinearMomentMeasure LinearMomentY;
+  IfcLinearMomentMeasure LinearMomentZ;
+};
 
 struct IfcStructuralLoadOrResult : IfcStructuralLoad {};
 
-struct IfcStructuralLoadPlanarForce : IfcStructuralLoadStatic {};
+struct IfcStructuralLoadPlanarForce : IfcStructuralLoadStatic {
+  IfcPlanarForceMeasure PlanarForceX;
+  IfcPlanarForceMeasure PlanarForceY;
+  IfcPlanarForceMeasure PlanarForceZ;
+};
 
-struct IfcStructuralLoadSingleDisplacement : IfcStructuralLoadStatic {};
+struct IfcStructuralLoadSingleDisplacement : IfcStructuralLoadStatic {
+  IfcLengthMeasure DisplacementX;
+  IfcLengthMeasure DisplacementY;
+  IfcLengthMeasure DisplacementZ;
+  IfcPlaneAngleMeasure RotationalDisplacementRX;
+  IfcPlaneAngleMeasure RotationalDisplacementRY;
+  IfcPlaneAngleMeasure RotationalDisplacementRZ;
+};
 
-struct IfcStructuralLoadSingleDisplacementDistortion : IfcStructuralLoadSingleDisplacement {};
+struct IfcStructuralLoadSingleDisplacementDistortion : IfcStructuralLoadSingleDisplacement {
+  IfcCurvatureMeasure Distortion;
+};
 
-struct IfcStructuralLoadSingleForce : IfcStructuralLoadStatic {};
+struct IfcStructuralLoadSingleForce : IfcStructuralLoadStatic {
+  IfcForceMeasure ForceX;
+  IfcForceMeasure ForceY;
+  IfcForceMeasure ForceZ;
+  IfcTorqueMeasure MomentX;
+  IfcTorqueMeasure MomentY;
+  IfcTorqueMeasure MomentZ;
+};
 
-struct IfcStructuralLoadSingleForceWarping : IfcStructuralLoadSingleForce {};
+struct IfcStructuralLoadSingleForceWarping : IfcStructuralLoadSingleForce {
+  IfcWarpingMomentMeasure WarpingMoment;
+};
 
 struct IfcStructuralLoadStatic : IfcStructuralLoadOrResult {};
 
-struct IfcStructuralLoadTemperature : IfcStructuralLoadStatic {};
+struct IfcStructuralLoadTemperature : IfcStructuralLoadStatic {
+  IfcThermodynamicTemperatureMeasure DeltaTConstant;
+  IfcThermodynamicTemperatureMeasure DeltaTY;
+  IfcThermodynamicTemperatureMeasure DeltaTZ;
+};
 
 struct IfcStructuralMember : IfcStructuralItem {};
 
@@ -1372,251 +3182,649 @@ struct IfcStructuralPlanarAction : IfcStructuralSurfaceAction {};
 
 struct IfcStructuralPointAction : IfcStructuralAction {};
 
-struct IfcStructuralPointConnection : IfcStructuralConnection {};
+struct IfcStructuralPointConnection : IfcStructuralConnection {
+  IfcAxis2Placement3D ConditionCoordinateSystem;
+};
 
 struct IfcStructuralPointReaction : IfcStructuralReaction {};
 
 struct IfcStructuralReaction : IfcStructuralActivity {};
 
-struct IfcStructuralResultGroup : IfcGroup {};
+struct IfcStructuralResultGroup : IfcGroup {
+  IfcAnalysisTheoryTypeEnum TheoryType;
+  IfcStructuralLoadGroup ResultForLoadGroup;
+  IfcBoolean IsLinear;
+};
 
-struct IfcStructuralSurfaceAction : IfcStructuralAction {};
+struct IfcStructuralSurfaceAction : IfcStructuralAction {
+  IfcProjectedOrTrueLengthEnum ProjectedOrTrue;
+  IfcStructuralSurfaceActivityTypeEnum PredefinedType;
+};
 
 struct IfcStructuralSurfaceConnection : IfcStructuralConnection {};
 
-struct IfcStructuralSurfaceMember : IfcStructuralMember {};
+struct IfcStructuralSurfaceMember : IfcStructuralMember {
+  IfcStructuralSurfaceMemberTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure Thickness;
+};
 
 struct IfcStructuralSurfaceMemberVarying : IfcStructuralSurfaceMember {};
 
-struct IfcStructuralSurfaceReaction : IfcStructuralReaction {};
+struct IfcStructuralSurfaceReaction : IfcStructuralReaction {
+  IfcStructuralSurfaceActivityTypeEnum PredefinedType;
+};
 
 struct IfcStyleModel : IfcRepresentation {};
 
-struct IfcStyledItem : IfcRepresentationItem {};
+struct IfcStyledItem : IfcRepresentationItem {
+  IfcRepresentationItem Item;
+  std::unordered_set<IfcStyleAssignmentSelect> Styles;
+  IfcLabel Name;
+};
 
 struct IfcStyledRepresentation : IfcStyleModel {};
 
-struct IfcSubContractResource : IfcConstructionResource {};
+struct IfcSubContractResource : IfcConstructionResource {
+  IfcSubContractResourceTypeEnum PredefinedType;
+};
 
-struct IfcSubContractResourceType : IfcConstructionResourceType {};
+struct IfcSubContractResourceType : IfcConstructionResourceType {
+  IfcSubContractResourceTypeEnum PredefinedType;
+};
 
-struct IfcSubedge : IfcEdge {};
+struct IfcSubedge : IfcEdge {
+  IfcEdge ParentEdge;
+};
 
 struct IfcSurface : IfcGeometricRepresentationItem {};
 
-struct IfcSurfaceCurve : IfcCurve {};
+struct IfcSurfaceCurve : IfcCurve {
+  IfcCurve Curve3D;
+  SmallVector<IfcPcurve, 2> AssociatedGeometry;
+  IfcPreferredSurfaceCurveRepresentation MasterRepresentation;
+};
 
-struct IfcSurfaceCurveSweptAreaSolid : IfcSweptAreaSolid {};
+struct IfcSurfaceCurveSweptAreaSolid : IfcSweptAreaSolid {
+  IfcCurve Directrix;
+  IfcParameterValue StartParam;
+  IfcParameterValue EndParam;
+  IfcSurface ReferenceSurface;
+};
 
-struct IfcSurfaceFeature : IfcFeatureElement {};
+struct IfcSurfaceFeature : IfcFeatureElement {
+  IfcSurfaceFeatureTypeEnum PredefinedType;
+};
 
-struct IfcSurfaceOfLinearExtrusion : IfcSweptSurface {};
+struct IfcSurfaceOfLinearExtrusion : IfcSweptSurface {
+  IfcDirection ExtrudedDirection;
+  IfcLengthMeasure Depth;
+};
 
-struct IfcSurfaceOfRevolution : IfcSweptSurface {};
+struct IfcSurfaceOfRevolution : IfcSweptSurface {
+  IfcAxis1Placement AxisPosition;
+};
 
-struct IfcSurfaceReinforcementArea : IfcStructuralLoadOrResult {};
+struct IfcSurfaceReinforcementArea : IfcStructuralLoadOrResult {
+  SmallVector<IfcLengthMeasure, 3> SurfaceReinforcement1;
+  SmallVector<IfcLengthMeasure, 3> SurfaceReinforcement2;
+  IfcRatioMeasure ShearReinforcement;
+};
 
-struct IfcSurfaceStyle : IfcPresentationStyle {};
+struct IfcSurfaceStyle : IfcPresentationStyle {
+  IfcSurfaceSide Side;
+  std::unordered_set<IfcSurfaceStyleElementSelect> Styles;
+};
 
-struct IfcSurfaceStyleLighting : IfcPresentationItem {};
+struct IfcSurfaceStyleLighting : IfcPresentationItem {
+  IfcColourRgb DiffuseTransmissionColour;
+  IfcColourRgb DiffuseReflectionColour;
+  IfcColourRgb TransmissionColour;
+  IfcColourRgb ReflectanceColour;
+};
 
-struct IfcSurfaceStyleRefraction : IfcPresentationItem {};
+struct IfcSurfaceStyleRefraction : IfcPresentationItem {
+  IfcReal RefractionIndex;
+  IfcReal DispersionFactor;
+};
 
-struct IfcSurfaceStyleRendering : IfcSurfaceStyleShading {};
+struct IfcSurfaceStyleRendering : IfcSurfaceStyleShading {
+  IfcColourOrFactor DiffuseColour;
+  IfcColourOrFactor TransmissionColour;
+  IfcColourOrFactor DiffuseTransmissionColour;
+  IfcColourOrFactor ReflectionColour;
+  IfcColourOrFactor SpecularColour;
+  IfcSpecularHighlightSelect SpecularHighlight;
+  IfcReflectanceMethodEnum ReflectanceMethod;
+};
 
-struct IfcSurfaceStyleShading : IfcPresentationItem {};
+struct IfcSurfaceStyleShading : IfcPresentationItem {
+  IfcColourRgb SurfaceColour;
+  IfcNormalisedRatioMeasure Transparency;
+};
 
-struct IfcSurfaceStyleWithTextures : IfcPresentationItem {};
+struct IfcSurfaceStyleWithTextures : IfcPresentationItem {
+  SmallVector<IfcSurfaceTexture, 4> Textures;
+};
 
-struct IfcSurfaceTexture : IfcPresentationItem {};
+struct IfcSurfaceTexture : IfcPresentationItem {
+  IfcBoolean RepeatS;
+  IfcBoolean RepeatT;
+  IfcIdentifier Mode;
+  IfcCartesianTransformationOperator2D TextureTransform;
+  SmallVector<IfcIdentifier, 4> Parameter;
+};
 
-struct IfcSweptAreaSolid : IfcSolidModel {};
+struct IfcSweptAreaSolid : IfcSolidModel {
+  IfcProfileDef SweptArea;
+  IfcAxis2Placement3D Position;
+};
 
-struct IfcSweptDiskSolid : IfcSolidModel {};
+struct IfcSweptDiskSolid : IfcSolidModel {
+  IfcCurve Directrix;
+  IfcPositiveLengthMeasure Radius;
+  IfcPositiveLengthMeasure InnerRadius;
+  IfcParameterValue StartParam;
+  IfcParameterValue EndParam;
+};
 
-struct IfcSweptDiskSolidPolygonal : IfcSweptDiskSolid {};
+struct IfcSweptDiskSolidPolygonal : IfcSweptDiskSolid {
+  IfcPositiveLengthMeasure FilletRadius;
+};
 
-struct IfcSweptSurface : IfcSurface {};
+struct IfcSweptSurface : IfcSurface {
+  IfcProfileDef SweptCurve;
+  IfcAxis2Placement3D Position;
+};
 
-struct IfcSwitchingDevice : IfcFlowController {};
+struct IfcSwitchingDevice : IfcFlowController {
+  IfcSwitchingDeviceTypeEnum PredefinedType;
+};
 
-struct IfcSwitchingDeviceType : IfcFlowControllerType {};
+struct IfcSwitchingDeviceType : IfcFlowControllerType {
+  IfcSwitchingDeviceTypeEnum PredefinedType;
+};
 
 struct IfcSystem : IfcGroup {};
 
-struct IfcSystemFurnitureElement : IfcFurnishingElement {};
+struct IfcSystemFurnitureElement : IfcFurnishingElement {
+  IfcSystemFurnitureElementTypeEnum PredefinedType;
+};
 
-struct IfcSystemFurnitureElementType : IfcFurnishingElementType {};
+struct IfcSystemFurnitureElementType : IfcFurnishingElementType {
+  IfcSystemFurnitureElementTypeEnum PredefinedType;
+};
 
-struct IfcTShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcTShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Depth;
+  IfcPositiveLengthMeasure FlangeWidth;
+  IfcPositiveLengthMeasure WebThickness;
+  IfcPositiveLengthMeasure FlangeThickness;
+  IfcNonNegativeLengthMeasure FilletRadius;
+  IfcNonNegativeLengthMeasure FlangeEdgeRadius;
+  IfcNonNegativeLengthMeasure WebEdgeRadius;
+  IfcPlaneAngleMeasure WebSlope;
+  IfcPlaneAngleMeasure FlangeSlope;
+};
 
-struct IfcTable : IfcEntity {};
+struct IfcTable : IfcEntity {
+  IfcLabel Name;
+  SmallVector<IfcTableRow, 4> Rows;
+  SmallVector<IfcTableColumn, 4> Columns;
+};
 
-struct IfcTableColumn : IfcEntity {};
+struct IfcTableColumn : IfcEntity {
+  IfcIdentifier Identifier;
+  IfcLabel Name;
+  IfcText Description;
+  IfcUnit Unit;
+  IfcReference ReferencePath;
+};
 
-struct IfcTableRow : IfcEntity {};
+struct IfcTableRow : IfcEntity {
+  SmallVector<IfcValue, 4> RowCells;
+  IfcBoolean IsHeading;
+};
 
-struct IfcTank : IfcFlowStorageDevice {};
+struct IfcTank : IfcFlowStorageDevice {
+  IfcTankTypeEnum PredefinedType;
+};
 
-struct IfcTankType : IfcFlowStorageDeviceType {};
+struct IfcTankType : IfcFlowStorageDeviceType {
+  IfcTankTypeEnum PredefinedType;
+};
 
-struct IfcTask : IfcProcess {};
+struct IfcTask : IfcProcess {
+  IfcLabel Status;
+  IfcLabel WorkMethod;
+  IfcBoolean IsMilestone;
+  IfcInteger Priority;
+  IfcTaskTime TaskTime;
+  IfcTaskTypeEnum PredefinedType;
+};
 
-struct IfcTaskTime : IfcSchedulingTime {};
+struct IfcTaskTime : IfcSchedulingTime {
+  IfcTaskDurationEnum DurationType;
+  IfcDuration ScheduleDuration;
+  IfcDateTime ScheduleStart;
+  IfcDateTime ScheduleFinish;
+  IfcDateTime EarlyStart;
+  IfcDateTime EarlyFinish;
+  IfcDateTime LateStart;
+  IfcDateTime LateFinish;
+  IfcDuration FreeFloat;
+  IfcDuration TotalFloat;
+  IfcBoolean IsCritical;
+  IfcDateTime StatusTime;
+  IfcDuration ActualDuration;
+  IfcDateTime ActualStart;
+  IfcDateTime ActualFinish;
+  IfcDuration RemainingTime;
+  IfcPositiveRatioMeasure Completion;
+};
 
-struct IfcTaskTimeRecurring : IfcTaskTime {};
+struct IfcTaskTimeRecurring : IfcTaskTime {
+  IfcRecurrencePattern Recurrence;
+};
 
-struct IfcTaskType : IfcTypeProcess {};
+struct IfcTaskType : IfcTypeProcess {
+  IfcTaskTypeEnum PredefinedType;
+  IfcLabel WorkMethod;
+};
 
-struct IfcTelecomAddress : IfcAddress {};
+struct IfcTelecomAddress : IfcAddress {
+  SmallVector<IfcLabel, 4> TelephoneNumbers;
+  SmallVector<IfcLabel, 4> FacsimileNumbers;
+  IfcLabel PagerNumber;
+  SmallVector<IfcLabel, 4> ElectronicMailAddresses;
+  IfcURIReference WWWHomePageURL;
+  SmallVector<IfcURIReference, 4> MessagingIDs;
+};
 
-struct IfcTendon : IfcReinforcingElement {};
+struct IfcTendon : IfcReinforcingElement {
+  IfcTendonTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcAreaMeasure CrossSectionArea;
+  IfcForceMeasure TensionForce;
+  IfcPressureMeasure PreStress;
+  IfcNormalisedRatioMeasure FrictionCoefficient;
+  IfcPositiveLengthMeasure AnchorageSlip;
+  IfcPositiveLengthMeasure MinCurvatureRadius;
+};
 
-struct IfcTendonAnchor : IfcReinforcingElement {};
+struct IfcTendonAnchor : IfcReinforcingElement {
+  IfcTendonAnchorTypeEnum PredefinedType;
+};
 
-struct IfcTendonAnchorType : IfcReinforcingElementType {};
+struct IfcTendonAnchorType : IfcReinforcingElementType {
+  IfcTendonAnchorTypeEnum PredefinedType;
+};
 
-struct IfcTendonType : IfcReinforcingElementType {};
+struct IfcTendonType : IfcReinforcingElementType {
+  IfcTendonTypeEnum PredefinedType;
+  IfcPositiveLengthMeasure NominalDiameter;
+  IfcAreaMeasure CrossSectionArea;
+  IfcPositiveLengthMeasure SheathDiameter;
+};
 
-struct IfcTessellatedFaceSet : IfcTessellatedItem {};
+struct IfcTessellatedFaceSet : IfcTessellatedItem {
+  IfcCartesianPointList3D Coordinates;
+};
 
 struct IfcTessellatedItem : IfcGeometricRepresentationItem {};
 
-struct IfcTextLiteral : IfcGeometricRepresentationItem {};
+struct IfcTextLiteral : IfcGeometricRepresentationItem {
+  IfcPresentableText Literal;
+  IfcAxis2Placement Placement;
+  IfcTextPath Path;
+};
 
-struct IfcTextLiteralWithExtent : IfcTextLiteral {};
+struct IfcTextLiteralWithExtent : IfcTextLiteral {
+  IfcPlanarExtent Extent;
+  IfcBoxAlignment BoxAlignment;
+};
 
-struct IfcTextStyle : IfcPresentationStyle {};
+struct IfcTextStyle : IfcPresentationStyle {
+  IfcTextStyleForDefinedFont TextCharacterAppearance;
+  IfcTextStyleTextModel TextStyle;
+  IfcTextFontSelect TextFontStyle;
+  IfcBoolean ModelOrDraughting;
+};
 
-struct IfcTextStyleFontModel : IfcPreDefinedTextFont {};
+struct IfcTextStyleFontModel : IfcPreDefinedTextFont {
+  SmallVector<IfcTextFontName, 4> FontFamily;
+  IfcFontStyle FontStyle;
+  IfcFontVariant FontVariant;
+  IfcFontWeight FontWeight;
+  IfcSizeSelect FontSize;
+};
 
-struct IfcTextStyleForDefinedFont : IfcPresentationItem {};
+struct IfcTextStyleForDefinedFont : IfcPresentationItem {
+  IfcColour Colour;
+  IfcColour BackgroundColour;
+};
 
-struct IfcTextStyleTextModel : IfcPresentationItem {};
+struct IfcTextStyleTextModel : IfcPresentationItem {
+  IfcSizeSelect TextIndent;
+  IfcTextAlignment TextAlign;
+  IfcTextDecoration TextDecoration;
+  IfcSizeSelect LetterSpacing;
+  IfcSizeSelect WordSpacing;
+  IfcTextTransformation TextTransform;
+  IfcSizeSelect LineHeight;
+};
 
-struct IfcTextureCoordinate : IfcPresentationItem {};
+struct IfcTextureCoordinate : IfcPresentationItem {
+  SmallVector<IfcSurfaceTexture, 4> Maps;
+};
 
-struct IfcTextureCoordinateGenerator : IfcTextureCoordinate {};
+struct IfcTextureCoordinateGenerator : IfcTextureCoordinate {
+  IfcLabel Mode;
+  SmallVector<IfcReal, 4> Parameter;
+};
 
-struct IfcTextureMap : IfcTextureCoordinate {};
+struct IfcTextureMap : IfcTextureCoordinate {
+  SmallVector<IfcTextureVertex, 4> Vertices;
+  IfcFace MappedTo;
+};
 
-struct IfcTextureVertex : IfcPresentationItem {};
+struct IfcTextureVertex : IfcPresentationItem {
+  SmallVector<IfcParameterValue, 2> Coordinates;
+};
 
-struct IfcTextureVertexList : IfcPresentationItem {};
+struct IfcTextureVertexList : IfcPresentationItem {
+  SmallVector<SmallVector<IfcParameterValue, 2>, 4> TexCoordsList;
+};
 
-struct IfcTimePeriod : IfcEntity {};
+struct IfcTimePeriod : IfcEntity {
+  IfcTime StartTime;
+  IfcTime EndTime;
+};
 
-struct IfcTimeSeries : IfcEntity {};
+struct IfcTimeSeries : IfcEntity {
+  IfcLabel Name;
+  IfcText Description;
+  IfcDateTime StartTime;
+  IfcDateTime EndTime;
+  IfcTimeSeriesDataTypeEnum TimeSeriesDataType;
+  IfcDataOriginEnum DataOrigin;
+  IfcLabel UserDefinedDataOrigin;
+  IfcUnit Unit;
+};
 
-struct IfcTimeSeriesValue : IfcEntity {};
+struct IfcTimeSeriesValue : IfcEntity {
+  SmallVector<IfcValue, 4> ListValues;
+};
 
 struct IfcTopologicalRepresentationItem : IfcRepresentationItem {};
 
 struct IfcTopologyRepresentation : IfcShapeModel {};
 
-struct IfcToroidalSurface : IfcElementarySurface {};
+struct IfcToroidalSurface : IfcElementarySurface {
+  IfcPositiveLengthMeasure MajorRadius;
+  IfcPositiveLengthMeasure MinorRadius;
+};
 
-struct IfcTransformer : IfcEnergyConversionDevice {};
+struct IfcTransformer : IfcEnergyConversionDevice {
+  IfcTransformerTypeEnum PredefinedType;
+};
 
-struct IfcTransformerType : IfcEnergyConversionDeviceType {};
+struct IfcTransformerType : IfcEnergyConversionDeviceType {
+  IfcTransformerTypeEnum PredefinedType;
+};
 
-struct IfcTransitionCurveSegment2D : IfcCurveSegment2D {};
+struct IfcTransitionCurveSegment2D : IfcCurveSegment2D {
+  IfcPositiveLengthMeasure StartRadius;
+  IfcPositiveLengthMeasure EndRadius;
+  IfcBoolean IsStartRadiusCCW;
+  IfcBoolean IsEndRadiusCCW;
+  IfcTransitionCurveType TransitionCurveType;
+};
 
-struct IfcTransportElement : IfcElement {};
+struct IfcTransportElement : IfcElement {
+  IfcTransportElementTypeEnum PredefinedType;
+};
 
-struct IfcTransportElementType : IfcElementType {};
+struct IfcTransportElementType : IfcElementType {
+  IfcTransportElementTypeEnum PredefinedType;
+};
 
-struct IfcTrapeziumProfileDef : IfcParameterizedProfileDef {};
+struct IfcTrapeziumProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure BottomXDim;
+  IfcPositiveLengthMeasure TopXDim;
+  IfcPositiveLengthMeasure YDim;
+  IfcLengthMeasure TopXOffset;
+};
 
-struct IfcTriangulatedFaceSet : IfcTessellatedFaceSet {};
+struct IfcTriangulatedFaceSet : IfcTessellatedFaceSet {
+  SmallVector<SmallVector<IfcParameterValue, 3>, 4> Normals;
+  IfcBoolean Closed;
+  SmallVector<SmallVector<IfcPositiveInteger, 3>, 4> CoordIndex;
+  SmallVector<IfcPositiveInteger, 4> PnIndex;
+};
 
-struct IfcTriangulatedIrregularNetwork : IfcTriangulatedFaceSet {};
+struct IfcTriangulatedIrregularNetwork : IfcTriangulatedFaceSet {
+  SmallVector<IfcInteger, 4> Flags;
+};
 
-struct IfcTrimmedCurve : IfcBoundedCurve {};
+struct IfcTrimmedCurve : IfcBoundedCurve {
+  IfcCurve BasisCurve;
+  std::unordered_set<IfcTrimmingSelect> Trim1;
+  std::unordered_set<IfcTrimmingSelect> Trim2;
+  IfcBoolean SenseAgreement;
+  IfcTrimmingPreference MasterRepresentation;
+};
 
-struct IfcTubeBundle : IfcEnergyConversionDevice {};
+struct IfcTubeBundle : IfcEnergyConversionDevice {
+  IfcTubeBundleTypeEnum PredefinedType;
+};
 
-struct IfcTubeBundleType : IfcEnergyConversionDeviceType {};
+struct IfcTubeBundleType : IfcEnergyConversionDeviceType {
+  IfcTubeBundleTypeEnum PredefinedType;
+};
 
-struct IfcTypeObject : IfcObjectDefinition {};
+struct IfcTypeObject : IfcObjectDefinition {
+  IfcIdentifier ApplicableOccurrence;
+  std::unordered_set<IfcPropertySetDefinition> HasPropertySets;
+};
 
-struct IfcTypeProcess : IfcTypeObject {};
+struct IfcTypeProcess : IfcTypeObject {
+  IfcIdentifier Identification;
+  IfcText LongDescription;
+  IfcLabel ProcessType;
+};
 
-struct IfcTypeProduct : IfcTypeObject {};
+struct IfcTypeProduct : IfcTypeObject {
+  SmallVector<IfcRepresentationMap, 4> RepresentationMaps;
+  IfcLabel Tag;
+};
 
-struct IfcTypeResource : IfcTypeObject {};
+struct IfcTypeResource : IfcTypeObject {
+  IfcIdentifier Identification;
+  IfcText LongDescription;
+  IfcLabel ResourceType;
+};
 
-struct IfcUShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcUShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Depth;
+  IfcPositiveLengthMeasure FlangeWidth;
+  IfcPositiveLengthMeasure WebThickness;
+  IfcPositiveLengthMeasure FlangeThickness;
+  IfcNonNegativeLengthMeasure FilletRadius;
+  IfcNonNegativeLengthMeasure EdgeRadius;
+  IfcPlaneAngleMeasure FlangeSlope;
+};
 
-struct IfcUnitAssignment : IfcEntity {};
+struct IfcUnitAssignment : IfcEntity {
+  std::unordered_set<IfcUnit> Units;
+};
 
-struct IfcUnitaryControlElement : IfcDistributionControlElement {};
+struct IfcUnitaryControlElement : IfcDistributionControlElement {
+  IfcUnitaryControlElementTypeEnum PredefinedType;
+};
 
-struct IfcUnitaryControlElementType : IfcDistributionControlElementType {};
+struct IfcUnitaryControlElementType : IfcDistributionControlElementType {
+  IfcUnitaryControlElementTypeEnum PredefinedType;
+};
 
-struct IfcUnitaryEquipment : IfcEnergyConversionDevice {};
+struct IfcUnitaryEquipment : IfcEnergyConversionDevice {
+  IfcUnitaryEquipmentTypeEnum PredefinedType;
+};
 
-struct IfcUnitaryEquipmentType : IfcEnergyConversionDeviceType {};
+struct IfcUnitaryEquipmentType : IfcEnergyConversionDeviceType {
+  IfcUnitaryEquipmentTypeEnum PredefinedType;
+};
 
-struct IfcValve : IfcFlowController {};
+struct IfcValve : IfcFlowController {
+  IfcValveTypeEnum PredefinedType;
+};
 
-struct IfcValveType : IfcFlowControllerType {};
+struct IfcValveType : IfcFlowControllerType {
+  IfcValveTypeEnum PredefinedType;
+};
 
-struct IfcVector : IfcGeometricRepresentationItem {};
+struct IfcVector : IfcGeometricRepresentationItem {
+  IfcDirection Orientation;
+  IfcLengthMeasure Magnitude;
+};
 
 struct IfcVertex : IfcTopologicalRepresentationItem {};
 
-struct IfcVertexLoop : IfcLoop {};
+struct IfcVertexLoop : IfcLoop {
+  IfcVertex LoopVertex;
+};
 
-struct IfcVertexPoint : IfcVertex {};
+struct IfcVertexPoint : IfcVertex {
+  IfcPoint VertexGeometry;
+};
 
-struct IfcVibrationIsolator : IfcElementComponent {};
+struct IfcVibrationIsolator : IfcElementComponent {
+  IfcVibrationIsolatorTypeEnum PredefinedType;
+};
 
-struct IfcVibrationIsolatorType : IfcElementComponentType {};
+struct IfcVibrationIsolatorType : IfcElementComponentType {
+  IfcVibrationIsolatorTypeEnum PredefinedType;
+};
 
 struct IfcVirtualElement : IfcElement {};
 
-struct IfcVirtualGridIntersection : IfcEntity {};
+struct IfcVirtualGridIntersection : IfcEntity {
+  SmallVector<IfcGridAxis, 2> IntersectingAxes;
+  SmallVector<IfcLengthMeasure, 3> OffsetDistances;
+};
 
-struct IfcVoidingFeature : IfcFeatureElementSubtraction {};
+struct IfcVoidingFeature : IfcFeatureElementSubtraction {
+  IfcVoidingFeatureTypeEnum PredefinedType;
+};
 
-struct IfcWall : IfcBuildingElement {};
+struct IfcWall : IfcBuildingElement {
+  IfcWallTypeEnum PredefinedType;
+};
 
 struct IfcWallElementedCase : IfcWall {};
 
 struct IfcWallStandardCase : IfcWall {};
 
-struct IfcWallType : IfcBuildingElementType {};
+struct IfcWallType : IfcBuildingElementType {
+  IfcWallTypeEnum PredefinedType;
+};
 
-struct IfcWasteTerminal : IfcFlowTerminal {};
+struct IfcWasteTerminal : IfcFlowTerminal {
+  IfcWasteTerminalTypeEnum PredefinedType;
+};
 
-struct IfcWasteTerminalType : IfcFlowTerminalType {};
+struct IfcWasteTerminalType : IfcFlowTerminalType {
+  IfcWasteTerminalTypeEnum PredefinedType;
+};
 
-struct IfcWindow : IfcBuildingElement {};
+struct IfcWindow : IfcBuildingElement {
+  IfcPositiveLengthMeasure OverallHeight;
+  IfcPositiveLengthMeasure OverallWidth;
+  IfcWindowTypeEnum PredefinedType;
+  IfcWindowTypePartitioningEnum PartitioningType;
+  IfcLabel UserDefinedPartitioningType;
+};
 
-struct IfcWindowLiningProperties : IfcPreDefinedPropertySet {};
+struct IfcWindowLiningProperties : IfcPreDefinedPropertySet {
+  IfcPositiveLengthMeasure LiningDepth;
+  IfcNonNegativeLengthMeasure LiningThickness;
+  IfcNonNegativeLengthMeasure TransomThickness;
+  IfcNonNegativeLengthMeasure MullionThickness;
+  IfcNormalisedRatioMeasure FirstTransomOffset;
+  IfcNormalisedRatioMeasure SecondTransomOffset;
+  IfcNormalisedRatioMeasure FirstMullionOffset;
+  IfcNormalisedRatioMeasure SecondMullionOffset;
+  IfcShapeAspect ShapeAspectStyle;
+  IfcLengthMeasure LiningOffset;
+  IfcLengthMeasure LiningToPanelOffsetX;
+  IfcLengthMeasure LiningToPanelOffsetY;
+};
 
-struct IfcWindowPanelProperties : IfcPreDefinedPropertySet {};
+struct IfcWindowPanelProperties : IfcPreDefinedPropertySet {
+  IfcWindowPanelOperationEnum OperationType;
+  IfcWindowPanelPositionEnum PanelPosition;
+  IfcPositiveLengthMeasure FrameDepth;
+  IfcPositiveLengthMeasure FrameThickness;
+  IfcShapeAspect ShapeAspectStyle;
+};
 
 struct IfcWindowStandardCase : IfcWindow {};
 
-struct IfcWindowStyle : IfcTypeProduct {};
+struct IfcWindowStyle : IfcTypeProduct {
+  IfcWindowStyleConstructionEnum ConstructionType;
+  IfcWindowStyleOperationEnum OperationType;
+  IfcBoolean ParameterTakesPrecedence;
+  IfcBoolean Sizeable;
+};
 
-struct IfcWindowType : IfcBuildingElementType {};
+struct IfcWindowType : IfcBuildingElementType {
+  IfcWindowTypeEnum PredefinedType;
+  IfcWindowTypePartitioningEnum PartitioningType;
+  IfcBoolean ParameterTakesPrecedence;
+  IfcLabel UserDefinedPartitioningType;
+};
 
-struct IfcWorkCalendar : IfcControl {};
+struct IfcWorkCalendar : IfcControl {
+  std::unordered_set<IfcWorkTime> WorkingTimes;
+  std::unordered_set<IfcWorkTime> ExceptionTimes;
+  IfcWorkCalendarTypeEnum PredefinedType;
+};
 
-struct IfcWorkControl : IfcControl {};
+struct IfcWorkControl : IfcControl {
+  IfcDateTime CreationDate;
+  std::unordered_set<IfcPerson> Creators;
+  IfcLabel Purpose;
+  IfcDuration Duration;
+  IfcDuration TotalFloat;
+  IfcDateTime StartTime;
+  IfcDateTime FinishTime;
+};
 
-struct IfcWorkPlan : IfcWorkControl {};
+struct IfcWorkPlan : IfcWorkControl {
+  IfcWorkPlanTypeEnum PredefinedType;
+};
 
-struct IfcWorkSchedule : IfcWorkControl {};
+struct IfcWorkSchedule : IfcWorkControl {
+  IfcWorkScheduleTypeEnum PredefinedType;
+};
 
-struct IfcWorkTime : IfcSchedulingTime {};
+struct IfcWorkTime : IfcSchedulingTime {
+  IfcRecurrencePattern RecurrencePattern;
+  IfcDate Start;
+  IfcDate Finish;
+};
 
-struct IfcZShapeProfileDef : IfcParameterizedProfileDef {};
+struct IfcZShapeProfileDef : IfcParameterizedProfileDef {
+  IfcPositiveLengthMeasure Depth;
+  IfcPositiveLengthMeasure FlangeWidth;
+  IfcPositiveLengthMeasure WebThickness;
+  IfcPositiveLengthMeasure FlangeThickness;
+  IfcNonNegativeLengthMeasure FilletRadius;
+  IfcNonNegativeLengthMeasure EdgeRadius;
+};
 
-struct IfcZone : IfcSystem {};
+struct IfcZone : IfcSystem {
+  IfcLabel LongName;
+};
 
 } // namespace ifc::internal
 

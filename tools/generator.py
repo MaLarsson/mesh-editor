@@ -13,71 +13,73 @@ class Tok(Enum):
     KW_END_SCHEMA = 6
 
     KW_WHERE = 7
-    KW_INVERSE = 65 # TODO
-    KW_FIXED = 8
-    KW_OF = 9
-    KW_OPTIONAL = 10
-    KW_EXISTS = 11
+    KW_INVERSE = 8
+    KW_UNIQUE = 9
+    KW_DERIVE = 10
+    KW_FIXED = 11
+    KW_OF = 12
+    KW_OPTIONAL = 13
+    KW_EXISTS = 14
 
-    KW_REAL = 12
-    KW_INTEGER = 13
-    KW_NUMBER = 14
-    KW_STRING = 15
-    KW_BINARY = 16
-    KW_BOOLEAN = 17
-    KW_LOGICAL = 18
-    KW_ARRAY = 19
-    KW_LIST = 20
-    KW_SET = 21
-    KW_ENUMERATION = 22
-    KW_SELECT = 23
+    KW_REAL = 15
+    KW_INTEGER = 16
+    KW_NUMBER = 17
+    KW_STRING = 18
+    KW_BINARY = 19
+    KW_BOOLEAN = 20
+    KW_LOGICAL = 21
+    KW_ARRAY = 22
+    KW_LIST = 23
+    KW_SET = 24
+    KW_ENUMERATION = 25
+    KW_SELECT = 26
 
-    KW_OR = 24
-    KW_AND = 25
-    KW_NOT = 26
-    KW_SIZEOF = 27
-    KW_SELF = 28
-    KW_ABSTRACT = 29
-    KW_SUBTYPE = 30
-    KW_TYPEOF = 31
-    KW_QUERY = 32
+    KW_OR = 27
+    KW_AND = 28
+    KW_NOT = 29
+    KW_SIZEOF = 30
+    KW_SELF = 31
+    KW_ABSTRACT = 32
+    KW_SUBTYPE = 33
+    KW_TYPEOF = 34
+    KW_QUERY = 35
 
-    NUMBER = 33
-    STRING_LITERAL = 34
-    COMMENT = 35
-    IDENTIFIER = 36
+    NUMBER = 36
+    STRING_LITERAL = 37
+    COMMENT = 38
+    IDENTIFIER = 39
 
-    L_CURLY = 37
-    R_CURLY = 38
-    L_BRACKET = 39
-    R_BRACKET = 40
-    L_PAREN = 41
-    R_PAREN = 42
+    L_CURLY = 40
+    R_CURLY = 41
+    L_BRACKET = 42
+    R_BRACKET = 43
+    L_PAREN = 44
+    R_PAREN = 45
 
-    GREATER_THAN = 43
-    LESS_THAN = 44
-    GREATER_OR_EQUAL = 45
-    LESS_OR_EQUAL = 46
-    DIAMOND = 47
-    LESS_STAR = 48
+    GREATER_THAN = 46
+    LESS_THAN = 47
+    GREATER_OR_EQUAL = 48
+    LESS_OR_EQUAL = 49
+    DIAMOND = 50
+    LESS_STAR = 51
 
-    PLUS = 49
-    MINUS = 50
-    TIMES = 51
-    DIVIDED = 52
+    PLUS = 52
+    MINUS = 53
+    TIMES = 54
+    DIVIDED = 55
 
-    ASSIGN = 53
-    DOT = 54
-    PIPE = 55
-    BACKSLASH = 56
-    COMMA = 57
-    WHITESPACE = 58
-    EQUAL = 59
-    COLON = 60
-    SEMI_COLON = 61
-    QUESTION_MARK = 62
-    UNKNOWN = 63
-    EOF = 64
+    ASSIGN = 56
+    DOT = 57
+    PIPE = 58
+    BACKSLASH = 59
+    COMMA = 60
+    WHITESPACE = 61
+    EQUAL = 62
+    COLON = 63
+    SEMI_COLON = 64
+    QUESTION_MARK = 65
+    UNKNOWN = 66
+    EOF = 67
 
 
 class Token(object):
@@ -170,8 +172,8 @@ class Parser(object):
 
         tok = next(token_generator)
 
-        if tok.kind in primitives:
-            self.types.append("using {} = {};".format(identifier, primitives[tok.kind]))
+        if tok.kind in self.primitives:
+            self.types.append("using {} = {};".format(identifier, self.primitives[tok.kind]))
         elif tok.kind == Tok.KW_LIST or tok.kind == Tok.KW_ARRAY:
             assert next(token_generator).kind == Tok.L_BRACKET
             assert next(token_generator).kind == Tok.NUMBER
@@ -186,7 +188,7 @@ class Parser(object):
             assert next(token_generator).kind == Tok.KW_OF
 
             tok = next(token_generator)
-            value_type = primitives[tok.kind] if tok.kind in primitives else tok.value
+            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
             self.types.append("using {} = SmallVector<{}, {}>;".format(identifier, value_type, count))
         elif tok.kind == Tok.KW_ENUMERATION:
             assert next(token_generator).kind == Tok.KW_OF
@@ -222,7 +224,7 @@ class Parser(object):
             assert next(token_generator).kind == Tok.KW_OF
 
             tok = next(token_generator)
-            value_type = primitives[tok.kind] if tok.kind in primitives else tok.value
+            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
             self.types.append("using {} = std::unordered_set<{}>;".format(identifier, value_type))
         elif tok.kind == Tok.IDENTIFIER:
             self.types.append("using {} = {};".format(identifier, tok.value))
@@ -237,7 +239,6 @@ class Parser(object):
 
         self.forward_entities.append("struct {};".format(tok.value))
         self.entity_pointers.append("using {} = internal::{}*;".format(tok.value, tok.value))
-        print(tok.value)
 
         for tok in token_generator:
             if tok.kind == Tok.KW_SUBTYPE:
@@ -249,13 +250,65 @@ class Parser(object):
                 super_type = tok.value
 
                 assert next(token_generator).kind == Tok.R_PAREN
-                assert next(token_generator).kind == Tok.SEMI_COLON
 
-            elif tok.kind in [Tok.KW_END_ENTITY, Tok.KW_WHERE, Tok.KW_INVERSE]:
+            elif tok.kind == Tok.SEMI_COLON:
                 break
 
-        #thing = "IfcActor Actor;IfcText Text;"
+        for tok in token_generator:
+            if tok.kind in [Tok.KW_END_ENTITY, Tok.KW_WHERE, Tok.KW_INVERSE, Tok.KW_UNIQUE, Tok.KW_DERIVE]:
+                break
+
+            elif tok.kind == Tok.IDENTIFIER:
+                assert next(token_generator).kind == Tok.COLON
+                member_type = self.__parse_member_type(token_generator)
+                assert member_type
+                thing += "{} {};".format(member_type, tok.value)
+
+                for tok in token_generator:
+                    if tok.kind == Tok.SEMI_COLON:
+                        break
+
         self.entities.append("\nstruct {} : {} {{{}}};\n".format(class_identifier, super_type, thing))
+
+    def __parse_member_type(self, token_generator):
+        tok = next(token_generator)
+
+        if tok.kind == Tok.KW_OPTIONAL or tok.kind == Tok.KW_UNIQUE:
+            return self.__parse_member_type(token_generator)
+        elif tok.kind in self.primitives:
+            return self.primitives[tok.kind]
+        elif tok.kind == Tok.KW_LOGICAL:
+            return "IfcLogical"
+        elif tok.kind == Tok.IDENTIFIER:
+            return tok.value
+        elif tok.kind == Tok.KW_LIST or tok.kind == Tok.KW_ARRAY:
+            assert next(token_generator).kind == Tok.L_BRACKET
+            assert next(token_generator).kind == Tok.NUMBER
+            assert next(token_generator).kind == Tok.COLON
+
+            tok = next(token_generator)
+            count = 4
+            if tok.kind == Tok.NUMBER:
+                count = tok.value
+
+            assert next(token_generator).kind == Tok.R_BRACKET
+            assert next(token_generator).kind == Tok.KW_OF
+
+            value_type = self.__parse_member_type(token_generator)
+            return "SmallVector<{}, {}>".format(value_type, count)
+        elif tok.kind == Tok.KW_SET:
+            assert next(token_generator).kind == Tok.L_BRACKET
+            assert next(token_generator).kind == Tok.NUMBER
+            assert next(token_generator).kind == Tok.COLON
+            next(token_generator)
+            assert next(token_generator).kind == Tok.R_BRACKET
+            assert next(token_generator).kind == Tok.KW_OF
+
+            tok = next(token_generator)
+            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
+            return "std::unordered_set<{}>".format(value_type)
+
+        return None
 
 
 if __name__ == "__main__":
@@ -270,6 +323,8 @@ if __name__ == "__main__":
 
         (r"\bWHERE\b", Tok.KW_WHERE),
         (r"\bINVERSE\b", Tok.KW_INVERSE),
+        (r"\bUNIQUE\b", Tok.KW_UNIQUE),
+        (r"\bDERIVE\b", Tok.KW_DERIVE),
         (r"\bFIXED\b", Tok.KW_FIXED),
         (r"\bOF\b", Tok.KW_OF),
         (r"\bOPTIONAL\b", Tok.KW_OPTIONAL),
