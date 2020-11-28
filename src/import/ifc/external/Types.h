@@ -3,8 +3,9 @@
 #ifndef IMPORT_IFC_EXTERNAL_TYPES_H_
 #define IMPORT_IFC_EXTERNAL_TYPES_H_
 
-#include "../../utility/SmallVector.h"
+#include "../../../utility/SmallVector.h"
 #include "Forward.h"
+#include "Pointers.h"
 
 #include <cstddef>
 #include <string>
@@ -17,11 +18,14 @@ using IfcAbsorbedDoseMeasure = double;
 using IfcAccelerationMeasure = double;
 using IfcAmountOfSubstanceMeasure = double;
 using IfcAngularVelocityMeasure = double;
+using IfcInteger = int;
+using IfcPositiveInteger = IfcInteger;
 using IfcArcIndex = SmallVector<IfcPositiveInteger, 3>;
 using IfcAreaDensityMeasure = double;
 using IfcAreaMeasure = double;
 using IfcBinary = SmallVector<std::byte, 4>;
 using IfcBoolean = bool;
+using IfcLabel = std::string;
 using IfcBoxAlignment = IfcLabel;
 using IfcCardinalPointReference = int;
 using IfcComplexNumber = SmallVector<double, 2>;
@@ -56,12 +60,10 @@ using IfcHeatingValueMeasure = double;
 using IfcIdentifier = std::string;
 using IfcIlluminanceMeasure = double;
 using IfcInductanceMeasure = double;
-using IfcInteger = int;
 using IfcIntegerCountRateMeasure = int;
 using IfcIonConcentrationMeasure = double;
 using IfcIsothermalMoistureCapacityMeasure = double;
 using IfcKinematicViscosityMeasure = double;
-using IfcLabel = std::string;
 using IfcLanguageId = IfcIdentifier;
 using IfcLengthMeasure = double;
 using IfcLineIndex = SmallVector<IfcPositiveInteger, 4>;
@@ -91,13 +93,13 @@ using IfcMomentOfInertiaMeasure = double;
 using IfcMonetaryMeasure = double;
 using IfcMonthInYearNumber = int;
 using IfcNonNegativeLengthMeasure = IfcLengthMeasure;
+using IfcRatioMeasure = double;
 using IfcNormalisedRatioMeasure = IfcRatioMeasure;
 using IfcNumericMeasure = double;
 using IfcPHMeasure = double;
 using IfcParameterValue = double;
 using IfcPlanarForceMeasure = double;
 using IfcPlaneAngleMeasure = double;
-using IfcPositiveInteger = IfcInteger;
 using IfcPositiveLengthMeasure = IfcLengthMeasure;
 using IfcPositivePlaneAngleMeasure = IfcPlaneAngleMeasure;
 using IfcPositiveRatioMeasure = IfcRatioMeasure;
@@ -106,7 +108,6 @@ using IfcPresentableText = std::string;
 using IfcPressureMeasure = double;
 using IfcPropertySetDefinitionSet = std::unordered_set<IfcPropertySetDefinition>;
 using IfcRadioActivityMeasure = double;
-using IfcRatioMeasure = double;
 using IfcReal = double;
 using IfcRotationalFrequencyMeasure = double;
 using IfcRotationalMassMeasure = double;
@@ -1159,7 +1160,7 @@ enum class IfcMemberTypeEnum {
 
 enum class IfcMotorConnectionTypeEnum { BELTDRIVE, COUPLING, DIRECTDRIVE, USERDEFINED, NOTDEFINED };
 
-enum class IfcNullStyle { NULL };
+enum class IfcNullStyle { IFC_NULL };
 
 enum class IfcObjectTypeEnum {
   PRODUCT,
@@ -1968,40 +1969,6 @@ enum class IfcWorkScheduleTypeEnum { ACTUAL, BASELINE, PLANNED, USERDEFINED, NOT
 
 using IfcActorSelect = std::variant<IfcOrganization, IfcPerson, IfcPersonAndOrganization>;
 
-using IfcAppliedValueSelect = std::variant<IfcMeasureWithUnit, IfcReference, IfcValue>;
-
-using IfcAxis2Placement = std::variant<IfcAxis2Placement2D, IfcAxis2Placement3D>;
-
-using IfcBendingParameterSelect = std::variant<IfcLengthMeasure, IfcPlaneAngleMeasure>;
-
-using IfcBooleanOperand = std::variant<IfcBooleanResult, IfcCsgPrimitive3D, IfcHalfSpaceSolid,
-                                       IfcSolidModel, IfcTessellatedFaceSet>;
-
-using IfcClassificationReferenceSelect =
-    std::variant<IfcClassification, IfcClassificationReference>;
-
-using IfcClassificationSelect = std::variant<IfcClassification, IfcClassificationReference>;
-
-using IfcColour = std::variant<IfcColourSpecification, IfcPreDefinedColour>;
-
-using IfcColourOrFactor = std::variant<IfcColourRgb, IfcNormalisedRatioMeasure>;
-
-using IfcCoordinateReferenceSystemSelect =
-    std::variant<IfcCoordinateReferenceSystem, IfcGeometricRepresentationContext>;
-
-using IfcCsgSelect = std::variant<IfcBooleanResult, IfcCsgPrimitive3D>;
-
-using IfcCurveFontOrScaledCurveFontSelect =
-    std::variant<IfcCurveStyleFontAndScaling, IfcCurveStyleFontSelect>;
-
-using IfcCurveOnSurface = std::variant<IfcCompositeCurveOnSurface, IfcPcurve, IfcSurfaceCurve>;
-
-using IfcCurveOrEdgeCurve = std::variant<IfcBoundedCurve, IfcEdgeCurve>;
-
-using IfcCurveStyleFontSelect = std::variant<IfcCurveStyleFont, IfcPreDefinedCurveFont>;
-
-using IfcDefinitionSelect = std::variant<IfcObjectDefinition, IfcPropertyDefinition>;
-
 using IfcDerivedMeasureValue = std::variant<
     IfcAbsorbedDoseMeasure, IfcAccelerationMeasure, IfcAngularVelocityMeasure,
     IfcAreaDensityMeasure, IfcCompoundPlaneAngleMeasure, IfcCurvatureMeasure,
@@ -2028,6 +1995,56 @@ using IfcDerivedMeasureValue = std::variant<
     IfcVaporPermeabilityMeasure, IfcVolumetricFlowRateMeasure, IfcWarpingConstantMeasure,
     IfcWarpingMomentMeasure>;
 
+using IfcMeasureValue =
+    std::variant<IfcAmountOfSubstanceMeasure, IfcAreaMeasure, IfcComplexNumber,
+                 IfcContextDependentMeasure, IfcCountMeasure, IfcDescriptiveMeasure,
+                 IfcElectricCurrentMeasure, IfcLengthMeasure, IfcLuminousIntensityMeasure,
+                 IfcMassMeasure, IfcNonNegativeLengthMeasure, IfcNormalisedRatioMeasure,
+                 IfcNumericMeasure, IfcParameterValue, IfcPlaneAngleMeasure,
+                 IfcPositiveLengthMeasure, IfcPositivePlaneAngleMeasure, IfcPositiveRatioMeasure,
+                 IfcRatioMeasure, IfcSolidAngleMeasure, IfcThermodynamicTemperatureMeasure,
+                 IfcTimeMeasure, IfcVolumeMeasure>;
+
+using IfcSimpleValue = std::variant<IfcBinary, IfcBoolean, IfcDate, IfcDateTime, IfcDuration,
+                                    IfcIdentifier, IfcInteger, IfcLabel, IfcLogical,
+                                    IfcPositiveInteger, IfcReal, IfcText, IfcTime, IfcTimeStamp>;
+
+using IfcValue = std::variant<IfcDerivedMeasureValue, IfcMeasureValue, IfcSimpleValue>;
+
+using IfcAppliedValueSelect = std::variant<IfcMeasureWithUnit, IfcReference, IfcValue>;
+
+using IfcAxis2Placement = std::variant<IfcAxis2Placement2D, IfcAxis2Placement3D>;
+
+using IfcBendingParameterSelect = std::variant<IfcLengthMeasure, IfcPlaneAngleMeasure>;
+
+using IfcBooleanOperand = std::variant<IfcBooleanResult, IfcCsgPrimitive3D, IfcHalfSpaceSolid,
+                                       IfcSolidModel, IfcTessellatedFaceSet>;
+
+using IfcClassificationReferenceSelect =
+    std::variant<IfcClassification, IfcClassificationReference>;
+
+using IfcClassificationSelect = std::variant<IfcClassification, IfcClassificationReference>;
+
+using IfcColour = std::variant<IfcColourSpecification, IfcPreDefinedColour>;
+
+using IfcColourOrFactor = std::variant<IfcColourRgb, IfcNormalisedRatioMeasure>;
+
+using IfcCoordinateReferenceSystemSelect =
+    std::variant<IfcCoordinateReferenceSystem, IfcGeometricRepresentationContext>;
+
+using IfcCsgSelect = std::variant<IfcBooleanResult, IfcCsgPrimitive3D>;
+
+using IfcCurveStyleFontSelect = std::variant<IfcCurveStyleFont, IfcPreDefinedCurveFont>;
+
+using IfcCurveFontOrScaledCurveFontSelect =
+    std::variant<IfcCurveStyleFontAndScaling, IfcCurveStyleFontSelect>;
+
+using IfcCurveOnSurface = std::variant<IfcCompositeCurveOnSurface, IfcPcurve, IfcSurfaceCurve>;
+
+using IfcCurveOrEdgeCurve = std::variant<IfcBoundedCurve, IfcEdgeCurve>;
+
+using IfcDefinitionSelect = std::variant<IfcObjectDefinition, IfcPropertyDefinition>;
+
 using IfcDocumentSelect = std::variant<IfcDocumentInformation, IfcDocumentReference>;
 
 using IfcFillStyleSelect = std::variant<IfcColour, IfcExternallyDefinedHatchStyle,
@@ -2048,16 +2065,6 @@ using IfcLightDistributionDataSourceSelect =
 
 using IfcMaterialSelect =
     std::variant<IfcMaterialDefinition, IfcMaterialList, IfcMaterialUsageDefinition>;
-
-using IfcMeasureValue =
-    std::variant<IfcAmountOfSubstanceMeasure, IfcAreaMeasure, IfcComplexNumber,
-                 IfcContextDependentMeasure, IfcCountMeasure, IfcDescriptiveMeasure,
-                 IfcElectricCurrentMeasure, IfcLengthMeasure, IfcLuminousIntensityMeasure,
-                 IfcMassMeasure, IfcNonNegativeLengthMeasure, IfcNormalisedRatioMeasure,
-                 IfcNumericMeasure, IfcParameterValue, IfcPlaneAngleMeasure,
-                 IfcPositiveLengthMeasure, IfcPositivePlaneAngleMeasure, IfcPositiveRatioMeasure,
-                 IfcRatioMeasure, IfcSolidAngleMeasure, IfcThermodynamicTemperatureMeasure,
-                 IfcTimeMeasure, IfcVolumeMeasure>;
 
 using IfcMetricValueSelect = std::variant<IfcAppliedValue, IfcMeasureWithUnit, IfcReference,
                                           IfcTable, IfcTimeSeries, IfcValue>;
@@ -2105,10 +2112,6 @@ using IfcSegmentIndexSelect = std::variant<IfcArcIndex, IfcLineIndex>;
 
 using IfcShell = std::variant<IfcClosedShell, IfcOpenShell>;
 
-using IfcSimpleValue = std::variant<IfcBinary, IfcBoolean, IfcDate, IfcDateTime, IfcDuration,
-                                    IfcIdentifier, IfcInteger, IfcLabel, IfcLogical,
-                                    IfcPositiveInteger, IfcReal, IfcText, IfcTime, IfcTimeStamp>;
-
 using IfcSizeSelect =
     std::variant<IfcDescriptiveMeasure, IfcLengthMeasure, IfcNormalisedRatioMeasure,
                  IfcPositiveLengthMeasure, IfcPositiveRatioMeasure, IfcRatioMeasure>;
@@ -2138,8 +2141,6 @@ using IfcTranslationalStiffnessSelect = std::variant<IfcBoolean, IfcLinearStiffn
 using IfcTrimmingSelect = std::variant<IfcCartesianPoint, IfcParameterValue>;
 
 using IfcUnit = std::variant<IfcDerivedUnit, IfcMonetaryUnit, IfcNamedUnit>;
-
-using IfcValue = std::variant<IfcDerivedMeasureValue, IfcMeasureValue, IfcSimpleValue>;
 
 using IfcVectorOrDirection = std::variant<IfcDirection, IfcVector>;
 

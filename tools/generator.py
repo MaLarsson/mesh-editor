@@ -133,6 +133,13 @@ class Lexer(object):
             if tok.kind == Tok.UNKNOWN: break
 
 
+class DepInfo(object):
+    def __init__(self, identifier, dependencies, data):
+        self.identifier = identifier
+        self.dependencies = dependencies
+        self.data = data
+
+
 class Parser(object):
     def __init__(self, rules, primitives, file_name):
         self.lexer = Lexer(rules, file_name)
@@ -145,8 +152,25 @@ class Parser(object):
     def write_to_file(self):
         self.__write_to_file("ForwardTemplate.h", "../src/import/ifc/external/Forward.h", self.forward_entities)
         self.__write_to_file("PointersTemplate.h", "../src/import/ifc/external/Pointers.h", self.entity_pointers)
-        self.__write_to_file("TypesTemplate.h", "../src/import/ifc/external/Types.h", self.types)
-        self.__write_to_file("EntitiesTemplate.h", "../src/import/ifc/external/Entities.h", self.entities)
+        self.__write_to_file("TypesTemplate.h", "../src/import/ifc/external/Types.h",
+                             self.__resolve_dependencies(self.types))
+        self.__write_to_file("EntitiesTemplate.h", "../src/import/ifc/external/Entities.h",
+                             self.__resolve_dependencies(self.entities))
+
+    def __resolve_dependencies(self, elements):
+        resolved = []
+        for info in elements:
+            self.__add_sorted(resolved, info, elements)
+        return resolved
+
+    def __add_sorted(self, resolved, info, elements):
+        if info.data not in resolved:
+            for dependency in info.dependencies:
+                for elem in elements:
+                    if elem.identifier == dependency:
+                        self.__add_sorted(resolved, elem, elements)
+            if info.data not in resolved:
+                resolved.append(info.data)
 
     def __write_to_file(self, template, output, elements):
         temp_file = Path("temp")
@@ -173,7 +197,8 @@ class Parser(object):
         tok = next(token_generator)
 
         if tok.kind in self.primitives:
-            self.types.append("using {} = {};".format(identifier, self.primitives[tok.kind]))
+            typedef = DepInfo(identifier, [], "using {} = {};".format(identifier, self.primitives[tok.kind]))
+            self.types.append(typedef)
         elif tok.kind == Tok.KW_LIST or tok.kind == Tok.KW_ARRAY:
             assert next(token_generator).kind == Tok.L_BRACKET
             assert next(token_generator).kind == Tok.NUMBER
@@ -188,8 +213,11 @@ class Parser(object):
             assert next(token_generator).kind == Tok.KW_OF
 
             tok = next(token_generator)
-            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
-            self.types.append("using {} = SmallVector<{}, {}>;".format(identifier, value_type, count))
+            is_primitive = tok.kind in self.primitives
+            value_type = self.primitives[tok.kind] if is_primitive else tok.value
+            typedef = DepInfo(identifier, [] if is_primitive else [tok.value],
+                              "using {} = SmallVector<{}, {}>;".format(identifier, value_type, count))
+            self.types.append(typedef)
         elif tok.kind == Tok.KW_ENUMERATION:
             assert next(token_generator).kind == Tok.KW_OF
             assert next(token_generator).kind == Tok.L_PAREN
@@ -197,11 +225,15 @@ class Parser(object):
             value_types = []
             for tok in token_generator:
                 if tok.kind == Tok.IDENTIFIER:
-                    value_types.append(tok.value)
+                    if tok.value == "NULL":
+                        value_types.append("IFC_NULL")
+                    else:
+                        value_types.append(tok.value)
                 elif tok.kind == Tok.R_PAREN:
                     break
 
-            self.types.append("\nenum class {} {{ {} }};\n".format(identifier, ", ".join(value_types)))
+            typedef = DepInfo(identifier, [], "\nenum class {} {{ {} }};\n".format(identifier, ", ".join(value_types)))
+            self.types.append(typedef)
         elif tok.kind == Tok.KW_SELECT:
             assert next(token_generator).kind == Tok.L_PAREN
 
@@ -212,9 +244,12 @@ class Parser(object):
                 elif tok.kind == Tok.R_PAREN:
                     break
 
-            self.types.append("\nusing {} = std::variant<{}>;\n".format(identifier, ", ".join(value_types)))
+            typedef = DepInfo(identifier, value_types,
+                              "\nusing {} = std::variant<{}>;\n".format(identifier, ", ".join(value_types)))
+            self.types.append(typedef)
         elif tok.kind == Tok.KW_LOGICAL:
-            self.types.append("\nenum class {} {{ TRUE, FALSE, UNKNOWN }};\n".format(identifier))
+            typedef = DepInfo(identifier, [], "\nenum class {} {{ TRUE, FALSE, UNKNOWN }};\n".format(identifier))
+            self.types.append(typedef)
         elif tok.kind == Tok.KW_SET:
             assert next(token_generator).kind == Tok.L_BRACKET
             assert next(token_generator).kind == Tok.NUMBER
@@ -224,18 +259,22 @@ class Parser(object):
             assert next(token_generator).kind == Tok.KW_OF
 
             tok = next(token_generator)
-            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
-            self.types.append("using {} = std::unordered_set<{}>;".format(identifier, value_type))
+            is_primitive = tok.kind in self.primitives
+            value_type = self.primitives[tok.kind] if is_primitive else tok.value
+            typedef = DepInfo(identifier, [] if is_primitive else [tok.value],
+                              "using {} = std::unordered_set<{}>;".format(identifier, value_type))
+            self.types.append(typedef)
         elif tok.kind == Tok.IDENTIFIER:
-            self.types.append("using {} = {};".format(identifier, tok.value))
+            typedef = DepInfo(identifier, [tok.value], "using {} = {};".format(identifier, tok.value))
+            self.types.append(typedef)
 
     def __parse_entity(self, token_generator):
         tok = next(token_generator)
-        class_identifier = tok.value
+        identifier = tok.value
         assert tok.kind == Tok.IDENTIFIER
 
         super_type = "IfcEntity"
-        thing = ""
+        members = ""
 
         self.forward_entities.append("struct {};".format(tok.value))
         self.entity_pointers.append("using {} = internal::{}*;".format(tok.value, tok.value))
@@ -262,13 +301,15 @@ class Parser(object):
                 assert next(token_generator).kind == Tok.COLON
                 member_type = self.__parse_member_type(token_generator)
                 assert member_type
-                thing += "{} {};".format(member_type, tok.value)
+                members += "{} {};".format(member_type, tok.value)
 
                 for tok in token_generator:
                     if tok.kind == Tok.SEMI_COLON:
                         break
 
-        self.entities.append("\nstruct {} : {} {{{}}};\n".format(class_identifier, super_type, thing))
+        entity = DepInfo(identifier, [super_type],
+                         "\nstruct {} : {} {{{}}};\n".format(identifier, "ifc::internal::" + super_type, members))
+        self.entities.append(entity)
 
     def __parse_member_type(self, token_generator):
         tok = next(token_generator)
@@ -278,9 +319,9 @@ class Parser(object):
         elif tok.kind in self.primitives:
             return self.primitives[tok.kind]
         elif tok.kind == Tok.KW_LOGICAL:
-            return "IfcLogical"
+            return "ifc::IfcLogical"
         elif tok.kind == Tok.IDENTIFIER:
-            return tok.value
+            return "ifc::" + tok.value
         elif tok.kind == Tok.KW_LIST or tok.kind == Tok.KW_ARRAY:
             assert next(token_generator).kind == Tok.L_BRACKET
             assert next(token_generator).kind == Tok.NUMBER
@@ -305,7 +346,7 @@ class Parser(object):
             assert next(token_generator).kind == Tok.KW_OF
 
             tok = next(token_generator)
-            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else tok.value
+            value_type = self.primitives[tok.kind] if tok.kind in self.primitives else "ifc::" + tok.value
             return "std::unordered_set<{}>".format(value_type)
 
         return None

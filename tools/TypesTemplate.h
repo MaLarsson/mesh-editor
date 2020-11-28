@@ -3,8 +3,9 @@
 #ifndef IMPORT_IFC_EXTERNAL_TYPES_H_
 #define IMPORT_IFC_EXTERNAL_TYPES_H_
 
-#include "../../utility/SmallVector.h"
+#include "../../../utility/SmallVector.h"
 #include "Forward.h"
+#include "Pointers.h"
 
 #include <cstddef>
 #include <string>

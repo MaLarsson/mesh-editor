@@ -3,7 +3,7 @@
 #ifndef IMPORT_IFC_EXTERNAL_FORWARD_H_
 #define IMPORT_IFC_EXTERNAL_FORWARD_H_
 
-#include "../../utility/SmallVector.h"
+#include "../../../utility/SmallVector.h"
 
 #include <cstddef>
 #include <string>
