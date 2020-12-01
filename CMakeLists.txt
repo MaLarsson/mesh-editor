@@ -64,3 +64,7 @@ add_executable(mesh_editor
 
 target_link_libraries(mesh_editor PRIVATE glfw glad)
 target_compile_features(mesh_editor PRIVATE cxx_std_17)
+
+if(MSVC)
+  target_compile_options(mesh_editor PRIVATE /bigobj)
+endif()

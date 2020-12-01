@@ -24,13 +24,14 @@ void Parser::parse() {
     if (tok.kind == tok::TOKEN_IDENTIFIER) {
       id = tok.value.number;
     } else if (tok.kind == tok::TOKEN_ENTITY) {
-      IfcEntity* entity = AllocateEntity("IFCCARTESIANPOINT", m_alloc); // TODO
-      m_entities.push_back(entity);
+      // IfcEntity entity = AllocateEntity("IFCCARTESIANPOINT", m_alloc);
+      m_entities.push_back(AllocateEntity(tok.value.string, m_alloc));
 
       // m_entities.insert(id, AllocateEntity(tok.value.string, m_alloc));
     }
   }
 
+  /*
   ThreadPool pool(4);
 
   int i = 100;
@@ -42,6 +43,7 @@ void Parser::parse() {
   for (auto& result : results) {
     std::cout << "thread pool result: " << result.get() << '\n';
   }
+  */
 }
 
 } // namespace ifc

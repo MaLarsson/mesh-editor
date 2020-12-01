@@ -3,8 +3,11 @@
 #ifndef IMPORT_IFC_EXTERNAL_POINTERS_H_
 #define IMPORT_IFC_EXTERNAL_POINTERS_H_
 
+#include "Forward.h"
+
 namespace ifc {
 
+using IfcEntity = internal::IfcEntity*;
 using IfcActionRequest = internal::IfcActionRequest*;
 using IfcActor = internal::IfcActor*;
 using IfcActorRole = internal::IfcActorRole*;

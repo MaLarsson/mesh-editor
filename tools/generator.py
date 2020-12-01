@@ -148,6 +148,7 @@ class Parser(object):
         self.entity_pointers = []
         self.forward_entities = []
         self.entities = []
+        self.factory_entities = []
 
     def write_to_file(self):
         self.__write_to_file("ForwardTemplate.h", "../src/import/ifc/external/Forward.h", self.forward_entities)
@@ -156,6 +157,7 @@ class Parser(object):
                              self.__resolve_dependencies(self.types))
         self.__write_to_file("EntitiesTemplate.h", "../src/import/ifc/external/Entities.h",
                              self.__resolve_dependencies(self.entities))
+        self.__write_to_file("FactoryTemplate.cpp", "../src/import/ifc/Factory.cpp", self.factory_entities, ",")
 
     def __resolve_dependencies(self, elements):
         resolved = []
@@ -172,9 +174,9 @@ class Parser(object):
             if info.data not in resolved:
                 resolved.append(info.data)
 
-    def __write_to_file(self, template, output, elements):
+    def __write_to_file(self, template, output, elements, delimiter="\n"):
         temp_file = Path("temp")
-        temp_file.write_text(Path(template).read_text().format("\n".join(elements)))
+        temp_file.write_text(Path(template).read_text().format(delimiter.join(elements)))
         with open(output, "w") as f:
             call(["clang-format", "temp"], stdout=f)
         temp_file.unlink()
@@ -276,6 +278,7 @@ class Parser(object):
         super_type = "IfcEntity"
         members = ""
 
+        self.factory_entities.append("{{\"{}\", IFC_ALLOCATE_ENTITY({})}}".format(tok.value.upper(), tok.value));
         self.forward_entities.append("struct {};".format(tok.value))
         self.entity_pointers.append("using {} = internal::{}*;".format(tok.value, tok.value))
 

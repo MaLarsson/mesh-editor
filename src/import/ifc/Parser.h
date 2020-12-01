@@ -5,7 +5,7 @@
 
 #include "../../utility/BumpPtrAllocator.h"
 #include "../../utility/SmallVector.h"
-#include "classes/Entities.h"
+#include "external/Entities.h"
 #include "Lexer.h"
 
 #include <memory>
@@ -22,7 +22,7 @@ public:
 private:
   BumpPtrAllocator m_alloc;
   Lexer m_lexer;
-  SmallVector<IfcEntity*, 0> m_entities;
+  SmallVector<IfcEntity, 0> m_entities;
 };
 
 } // namespace ifc

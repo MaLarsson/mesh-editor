@@ -12,6 +12,7 @@
 
 namespace ifc::internal {{
 
+struct IfcEntity;
 {}
 
 }} // namespace ifc::internal

@@ -12,6 +12,7 @@
 
 namespace ifc::internal {
 
+struct IfcEntity;
 struct IfcActionRequest;
 struct IfcActor;
 struct IfcActorRole;
